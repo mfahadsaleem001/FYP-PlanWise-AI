@@ -1,0 +1,498 @@
+/* ============================================================
+   PLANWISE AI - ADMIN TOPBAR
+   ============================================================ */
+
+.admin-topbar {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+
+  height: 72px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 0 1.5rem;
+
+  background: var(--color-surface);
+  border-bottom: 1px solid var(--color-border);
+}
+
+
+/* ============================================================
+   LEFT SIDE
+   ============================================================ */
+
+.admin-topbar-left {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+}
+
+.admin-topbar-heading {
+  display: flex;
+  flex-direction: column;
+}
+
+.admin-topbar-heading > span {
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+
+  color: var(--color-accent);
+}
+
+.admin-topbar-heading h2 {
+  margin: 0.2rem 0 0;
+
+  font-family: var(--font-heading);
+  font-size: 1.05rem;
+  font-weight: 700;
+
+  color: var(--color-dark);
+}
+
+
+/* ============================================================
+   RIGHT SIDE
+   ============================================================ */
+
+.admin-topbar-right {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+
+/* ============================================================
+   SEARCH
+   ============================================================ */
+
+.admin-search {
+  width: 190px;
+  height: 36px;
+
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+
+  padding: 0 0.75rem;
+
+  background: var(--color-surface-muted);
+  border: 1px solid var(--color-border);
+  border-radius: 7px;
+
+  color: var(--color-text-muted);
+
+  transition:
+    border-color 0.2s ease,
+    background 0.2s ease;
+}
+
+.admin-search:focus-within {
+  border-color: var(--color-primary);
+  background: var(--color-surface);
+}
+
+.admin-search input {
+  width: 100%;
+
+  border: none;
+  outline: none;
+
+  background: transparent;
+
+  font-family: var(--font-body);
+  font-size: 0.7rem;
+
+  color: var(--color-text);
+}
+
+.admin-search input::placeholder {
+  color: var(--color-text-muted);
+}
+
+
+/* ============================================================
+   NOTIFICATION BUTTON
+   ============================================================ */
+
+.admin-topbar-icon-btn {
+  width: 36px;
+  height: 36px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border: 1px solid var(--color-border);
+  border-radius: 7px;
+
+  background: var(--color-surface);
+
+  color: var(--color-text-muted);
+
+  cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    color 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.admin-topbar-icon-btn:hover {
+  background: var(--color-surface-muted);
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+}
+
+
+/* ============================================================
+   ADMIN USER
+   ============================================================ */
+
+.admin-topbar-user {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+
+  padding-left: 0.6rem;
+
+  border-left: 1px solid var(--color-border);
+}
+
+.admin-topbar-avatar {
+  width: 34px;
+  height: 34px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  background: var(--color-primary);
+  color: #FFFFFF;
+}
+
+.admin-topbar-user-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.admin-topbar-user-info strong {
+  font-size: 0.7rem;
+  font-weight: 600;
+
+  color: var(--color-dark);
+}
+
+.admin-topbar-user-info span {
+  margin-top: 0.12rem;
+
+  font-size: 0.58rem;
+
+  color: var(--color-text-muted);
+}
+
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+
+@media (max-width: 850px) {
+  .admin-search {
+    width: 150px;
+  }
+
+  .admin-topbar {
+    padding: 0 1rem;
+  }
+}
+
+@media (max-width: 650px) {
+  .admin-topbar-heading h2 {
+    font-size: 0.9rem;
+  }
+
+  .admin-search {
+    display: none;
+  }
+
+  .admin-topbar-user-info {
+    display: none;
+  }
+}
+
+/* ============================================================
+   TOPBAR SEARCH WRAPPER
+   ============================================================ */
+
+.admin-search-wrapper {
+  position: relative;
+}
+
+
+/* ============================================================
+   SEARCH RESULTS DROPDOWN
+   ============================================================ */
+
+.admin-search-results {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+
+  width: 390px;
+  max-height: 430px;
+
+  overflow-y: auto;
+
+  background: #ffffff;
+  border: 1px solid rgba(44, 27, 27, 0.12);
+  border-radius: 10px;
+
+  box-shadow:
+    0 14px 35px rgba(44, 27, 27, 0.14);
+
+  z-index: 1000;
+
+  padding: 6px;
+}
+
+
+/* ============================================================
+   RESULTS HEADER
+   ============================================================ */
+
+.admin-search-results-header {
+  padding: 8px 10px 7px;
+
+  font-size: 10px;
+  font-weight: 700;
+
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+
+  color: #8b7777;
+}
+
+
+/* ============================================================
+   SINGLE RESULT
+   ============================================================ */
+
+.admin-search-result {
+  width: 100%;
+
+  display: flex;
+  align-items: center;
+
+  gap: 10px;
+
+  padding: 9px 10px;
+
+  border: none;
+  border-radius: 7px;
+
+  background: transparent;
+
+  text-align: left;
+
+  cursor: pointer;
+
+  transition:
+    background 0.15s ease;
+}
+
+.admin-search-result:hover {
+  background: #f7f0e5;
+}
+
+
+/* ============================================================
+   RESULT ICON
+   ============================================================ */
+
+.admin-search-result-icon {
+  width: 32px;
+  height: 32px;
+
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 7px;
+
+  background: rgba(113, 29, 60, 0.08);
+  color: #711d3c;
+}
+
+
+/* ============================================================
+   RESULT CONTENT
+   ============================================================ */
+
+.admin-search-result-content {
+  min-width: 0;
+
+  flex: 1;
+
+  display: flex;
+  flex-direction: column;
+
+  gap: 2px;
+}
+
+.admin-search-result-content strong {
+  overflow: hidden;
+
+  font-size: 13px;
+  font-weight: 650;
+
+  color: #2c1b1b;
+
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.admin-search-result-content span {
+  overflow: hidden;
+
+  font-size: 11px;
+
+  color: #8b7777;
+
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+
+/* ============================================================
+   RESULT CATEGORY
+   ============================================================ */
+
+.admin-search-result small {
+  flex-shrink: 0;
+
+  font-size: 10px;
+  font-weight: 600;
+
+  color: #8b7777;
+
+  background: #f5f0eb;
+
+  border-radius: 5px;
+
+  padding: 4px 6px;
+}
+
+
+/* ============================================================
+   NO RESULTS
+   ============================================================ */
+
+.admin-search-no-results {
+  display: flex;
+  align-items: center;
+
+  gap: 10px;
+
+  padding: 18px 12px;
+
+  color: #8b7777;
+}
+
+.admin-search-no-results > svg {
+  flex-shrink: 0;
+}
+
+.admin-search-no-results div {
+  display: flex;
+  flex-direction: column;
+
+  gap: 2px;
+}
+
+.admin-search-no-results strong {
+  font-size: 13px;
+  font-weight: 650;
+
+  color: #2c1b1b;
+}
+
+.admin-search-no-results span {
+  font-size: 11px;
+  color: #8b7777;
+}
+
+
+/* ============================================================
+   DARK MODE
+   ============================================================ */
+
+:root[data-theme="dark"] .admin-search-results {
+  background: #241818;
+  border-color: rgba(255, 255, 255, 0.08);
+
+  box-shadow:
+    0 16px 40px rgba(0, 0, 0, 0.35);
+}
+
+:root[data-theme="dark"] .admin-search-results-header {
+  color: #b9a7a7;
+}
+
+:root[data-theme="dark"] .admin-search-result:hover {
+  background: #332323;
+}
+
+:root[data-theme="dark"] .admin-search-result-icon {
+  background: rgba(177, 138, 82, 0.12);
+  color: #b18a52;
+}
+
+:root[data-theme="dark"] .admin-search-result-content strong {
+  color: #f7f0e5;
+}
+
+:root[data-theme="dark"] .admin-search-result-content span {
+  color: #b9a7a7;
+}
+
+:root[data-theme="dark"] .admin-search-result small {
+  background: #332323;
+  color: #b9a7a7;
+}
+
+:root[data-theme="dark"] .admin-search-no-results strong {
+  color: #f7f0e5;
+}
+
+:root[data-theme="dark"] .admin-search-no-results span {
+  color: #b9a7a7;
+}
+
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+
+@media (max-width: 700px) {
+
+  .admin-search-results {
+    width: min(390px, calc(100vw - 30px));
+    right: -60px;
+  }
+
+}
+
+@media (max-width: 520px) {
+
+  .admin-search-results {
+    right: -100px;
+  }
+
+}

@@ -1,0 +1,904 @@
+/* ============================================================
+   DASHBOARD PAGE
+   ============================================================ */
+
+.dashboard-page {
+  min-height: 100vh;
+  padding: 0;
+  background: var(--color-background);
+  color: var(--color-text);
+}
+
+
+/* ============================================================
+   DASHBOARD HEADER
+   ============================================================ */
+
+.dashboard-header {
+  max-width: 1400px;
+  margin: 0 auto 2rem;
+
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1.5rem;
+}
+
+.dashboard-label {
+  display: inline-block;
+  margin-bottom: 0.5rem;
+
+  color: var(--color-accent);
+
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+}
+
+.dashboard-header h1 {
+  margin-bottom: 0.5rem;
+
+  color: var(--color-dark);
+  font-family: var(--font-heading);
+
+  font-size: 2.15rem;
+  line-height: 1.15;
+}
+
+.dashboard-header p {
+  max-width: 570px;
+
+  color: var(--color-text-muted);
+
+  font-size: 0.78rem;
+  line-height: 1.65;
+}
+
+.dashboard-primary-btn {
+  flex-shrink: 0;
+
+  min-height: 44px;
+
+  padding: 0.7rem 1.15rem;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+
+  background: var(--color-primary);
+  color: #ffffff;
+
+  border: 1px solid var(--color-primary);
+  border-radius: var(--radius-md);
+
+  font-family: var(--font-body);
+  font-size: 0.75rem;
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition:
+    background-color var(--transition),
+    transform var(--transition),
+    box-shadow var(--transition);
+}
+
+.dashboard-primary-btn:hover {
+  background: var(--color-primary-dark);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-sm);
+}
+
+
+/* ============================================================
+   STAT CARDS
+   ============================================================ */
+
+.dashboard-stats {
+  max-width: 1400px;
+
+  margin: 0 auto 2.25rem;
+
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+}
+
+.dashboard-stat-card {
+  min-height: 128px;
+
+  padding: 1.2rem 1.25rem;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  background: var(--color-surface);
+
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+
+  box-shadow: var(--shadow-sm);
+}
+
+.dashboard-stat-card > span {
+  color: var(--color-text-muted);
+
+  font-size: 0.7rem;
+  font-weight: 600;
+}
+
+.dashboard-stat-card strong {
+  margin: 0.3rem 0;
+
+  color: var(--color-dark);
+  font-family: var(--font-heading);
+
+  font-size: 1.6rem;
+  line-height: 1;
+}
+
+.dashboard-stat-card small {
+  color: var(--color-text-muted);
+  font-size: 0.62rem;
+}
+
+
+/* ============================================================
+   SECTION HEADINGS
+   ============================================================ */
+
+.dashboard-section-heading {
+  margin-bottom: 0.9rem;
+
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+
+  gap: 1rem;
+}
+
+.dashboard-section-heading h2 {
+  color: var(--color-dark);
+  font-family: var(--font-heading);
+
+  font-size: 1.3rem;
+  line-height: 1.2;
+}
+
+.dashboard-section-heading a {
+  color: var(--color-primary);
+
+  font-size: 0.7rem;
+  font-weight: 700;
+}
+
+.dashboard-section-heading a:hover {
+  color: var(--color-primary-dark);
+}
+
+.dashboard-period {
+  padding: 0.42rem 0.7rem;
+
+  color: var(--color-text-muted);
+  background: var(--color-surface-muted);
+
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+
+  font-size: 0.62rem;
+  font-weight: 600;
+}
+
+
+/* ============================================================
+   ANALYTICS
+   ============================================================ */
+
+.dashboard-analytics {
+  max-width: 1400px;
+
+  margin: 0 auto 2.25rem;
+}
+
+.dashboard-chart-grid {
+  display: grid;
+  grid-template-columns: 1.45fr 1fr;
+
+  gap: 1rem;
+}
+
+.dashboard-chart-card {
+  min-height: 300px;
+
+  padding: 1.25rem;
+
+  background: var(--color-surface);
+
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+
+  box-shadow: var(--shadow-sm);
+}
+
+.chart-card-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+
+  gap: 1rem;
+}
+
+.chart-card-header h3 {
+  margin-bottom: 0.28rem;
+
+  color: var(--color-dark);
+
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+.chart-card-header p {
+  color: var(--color-text-muted);
+  font-size: 0.62rem;
+}
+
+
+/* ============================================================
+   EFFORT BAR CHART
+   ============================================================ */
+
+.chart-placeholder {
+  height: 200px;
+
+  margin-top: 1.1rem;
+
+  padding: 1rem 0.5rem 0;
+
+  position: relative;
+
+  border-bottom: 1px solid var(--color-border);
+}
+
+.chart-placeholder::before,
+.chart-placeholder::after {
+  content: "";
+
+  position: absolute;
+
+  left: 0;
+  right: 0;
+
+  border-top: 1px dashed var(--color-border);
+}
+
+.chart-placeholder::before {
+  top: 30%;
+}
+
+.chart-placeholder::after {
+  top: 63%;
+}
+
+.chart-bars {
+  height: 100%;
+
+  padding: 0 1rem;
+
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-around;
+
+  gap: 1rem;
+}
+
+.chart-bar {
+  width: 38px;
+  min-height: 25px;
+
+  position: relative;
+  z-index: 1;
+
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+
+  background: var(--color-primary);
+
+  border-radius: 5px 5px 0 0;
+
+  transition:
+    height var(--transition),
+    background-color var(--transition);
+}
+
+.chart-bar:hover {
+  background: var(--color-accent);
+}
+
+.chart-bar span {
+  position: absolute;
+  bottom: -1.3rem;
+
+  color: var(--color-text-muted);
+
+  font-size: 0.58rem;
+}
+
+
+/* ============================================================
+   PROJECT TYPE LIST
+   ============================================================ */
+
+.project-type-list {
+  margin-top: 1.3rem;
+
+  display: flex;
+  flex-direction: column;
+
+  gap: 1rem;
+}
+
+.project-type-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding-bottom: 0.7rem;
+
+  border-bottom: 1px solid var(--color-border);
+}
+
+.project-type-item:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.project-type-item span {
+  color: var(--color-text);
+  font-size: 0.7rem;
+}
+
+.project-type-item strong {
+  color: var(--color-primary);
+  font-size: 0.7rem;
+}
+
+
+/* ============================================================
+   RECENT PROJECTS
+   ============================================================ */
+
+.dashboard-projects {
+  max-width: 1400px;
+
+  margin: 0 auto 2.25rem;
+}
+
+.dashboard-project-table {
+  overflow: hidden;
+
+  background: var(--color-surface);
+
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+
+  box-shadow: var(--shadow-sm);
+}
+
+.project-table-header,
+.project-table-row {
+  display: grid;
+
+  grid-template-columns:
+    2fr
+    1.25fr
+    1fr
+    1.25fr;
+
+  align-items: center;
+
+  column-gap: 1rem;
+}
+
+.project-table-header {
+  min-height: 46px;
+
+  padding: 0 1.2rem;
+
+  background: var(--color-surface-muted);
+
+  border-bottom: 1px solid var(--color-border);
+
+  color: var(--color-text-muted);
+
+  font-size: 0.62rem;
+  font-weight: 700;
+}
+
+.project-table-row {
+  min-height: 72px;
+
+  padding: 0 1.2rem;
+
+  border-bottom: 1px solid var(--color-border);
+}
+
+.project-table-row:last-child {
+  border-bottom: none;
+}
+
+.project-table-row > span {
+  color: var(--color-text-muted);
+  font-size: 0.67rem;
+}
+
+.project-table-row strong {
+  display: block;
+
+  margin-bottom: 0.28rem;
+
+  color: var(--color-dark);
+
+  font-size: 0.72rem;
+}
+
+.project-table-row small {
+  color: var(--color-text-muted);
+  font-size: 0.58rem;
+}
+
+
+/* ============================================================
+   COMPLEXITY BADGES
+   ============================================================ */
+
+.complexity-badge {
+  width: fit-content;
+
+  padding: 0.32rem 0.58rem;
+
+  border-radius: 20px;
+
+  font-size: 0.58rem !important;
+  font-weight: 700;
+}
+
+.complexity-badge.low {
+  color: var(--color-success);
+  background: rgba(63, 115, 85, 0.1);
+}
+
+.complexity-badge.medium {
+  color: var(--color-warning);
+  background: rgba(168, 117, 42, 0.1);
+}
+
+.complexity-badge.high {
+  color: var(--color-danger);
+  background: rgba(163, 59, 59, 0.1);
+}
+
+
+/* ============================================================
+   QUICK ACTIONS
+   ============================================================ */
+
+.dashboard-quick-actions {
+  max-width: 1400px;
+
+  margin: 0 auto;
+}
+
+.quick-action-grid {
+  display: grid;
+
+  grid-template-columns: repeat(3, 1fr);
+
+  gap: 1rem;
+}
+
+.quick-action-card {
+  min-height: 100px;
+
+  padding: 1.1rem;
+
+  display: grid;
+
+  grid-template-columns: 42px 1fr auto;
+
+  align-items: center;
+
+  gap: 0.85rem;
+
+  background: var(--color-surface);
+
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+
+  box-shadow: var(--shadow-sm);
+
+  transition:
+    border-color var(--transition),
+    transform var(--transition),
+    box-shadow var(--transition);
+}
+
+.quick-action-card:hover {
+  border-color: var(--color-accent-light);
+
+  transform: translateY(-2px);
+
+  box-shadow: var(--shadow-md);
+}
+
+.quick-action-icon {
+  width: 38px;
+  height: 38px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: var(--color-surface-muted);
+  color: var(--color-primary);
+
+  border-radius: 9px;
+
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.quick-action-card h3 {
+  margin-bottom: 0.25rem;
+
+  color: var(--color-dark);
+
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.quick-action-card p {
+  color: var(--color-text-muted);
+
+  font-size: 0.61rem;
+  line-height: 1.5;
+}
+
+.quick-action-arrow {
+  color: var(--color-primary);
+
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+
+@media (max-width: 1000px) {
+  .dashboard-stats {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .dashboard-chart-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .quick-action-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+
+@media (max-width: 700px) {
+  .dashboard-header {
+    align-items: flex-start;
+    flex-direction: column;
+
+    margin-bottom: 1.75rem;
+  }
+
+  .dashboard-header h1 {
+    font-size: 1.9rem;
+  }
+
+  .dashboard-primary-btn {
+    width: 100%;
+  }
+
+  .dashboard-stats {
+    grid-template-columns: 1fr;
+    margin-bottom: 2rem;
+  }
+
+  .dashboard-section-heading {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .dashboard-period {
+    align-self: flex-start;
+  }
+
+  .dashboard-project-table {
+    overflow-x: auto;
+  }
+
+  .project-table-header,
+  .project-table-row {
+    min-width: 700px;
+  }
+
+  .dashboard-analytics,
+  .dashboard-projects {
+    margin-bottom: 2rem;
+  }
+}
+
+
+@media (max-width: 450px) {
+  .dashboard-chart-card {
+    padding: 1rem;
+  }
+
+  .chart-bars {
+    gap: 0.5rem;
+    padding: 0 0.25rem;
+  }
+
+  .chart-bar {
+    width: 28px;
+  }
+
+  .quick-action-card {
+    padding: 1rem;
+  }
+}
+
+
+/* ============================================================
+   PLANWISE AI - DASHBOARD DARK THEME
+   ============================================================ */
+
+
+/* ============================================================
+   DASHBOARD PAGE
+   ============================================================ */
+
+:root[data-theme="dark"] .dashboard-page {
+  background: var(--color-background);
+  color: var(--color-text);
+}
+
+
+/* ============================================================
+   HEADER
+   ============================================================ */
+
+:root[data-theme="dark"] .dashboard-header h1 {
+  color: var(--color-dark);
+}
+
+:root[data-theme="dark"] .dashboard-header p {
+  color: var(--color-text-muted);
+}
+
+:root[data-theme="dark"] .dashboard-label {
+  color: var(--color-accent);
+}
+
+
+/* ============================================================
+   STAT CARDS
+   ============================================================ */
+
+:root[data-theme="dark"] .dashboard-stat-card {
+  background: var(--color-surface);
+
+  border-color: var(--color-border);
+
+  box-shadow: var(--shadow-sm);
+}
+
+:root[data-theme="dark"] .dashboard-stat-card > span {
+  color: var(--color-text-muted);
+}
+
+:root[data-theme="dark"] .dashboard-stat-card strong {
+  color: var(--color-dark);
+}
+
+:root[data-theme="dark"] .dashboard-stat-card small {
+  color: var(--color-text-muted);
+}
+
+
+/* ============================================================
+   SECTION HEADINGS
+   ============================================================ */
+
+:root[data-theme="dark"] .dashboard-section-heading h2 {
+  color: var(--color-dark);
+}
+
+:root[data-theme="dark"] .dashboard-section-heading a {
+  color: var(--color-accent);
+}
+
+:root[data-theme="dark"] .dashboard-section-heading a:hover {
+  color: var(--color-accent-light);
+}
+
+:root[data-theme="dark"] .dashboard-period {
+  background: var(--color-surface-muted);
+
+  border-color: var(--color-border);
+
+  color: var(--color-text-muted);
+}
+
+
+/* ============================================================
+   CHART CARDS
+   ============================================================ */
+
+:root[data-theme="dark"] .dashboard-chart-card {
+  background: var(--color-surface);
+
+  border-color: var(--color-border);
+
+  box-shadow: var(--shadow-sm);
+}
+
+:root[data-theme="dark"] .chart-card-header h3 {
+  color: var(--color-dark);
+}
+
+:root[data-theme="dark"] .chart-card-header p {
+  color: var(--color-text-muted);
+}
+
+:root[data-theme="dark"] .chart-placeholder {
+  border-bottom-color: var(--color-border);
+}
+
+:root[data-theme="dark"] .chart-placeholder::before,
+:root[data-theme="dark"] .chart-placeholder::after {
+  border-top-color: var(--color-border);
+}
+
+:root[data-theme="dark"] .chart-bar span {
+  color: var(--color-text-muted);
+}
+
+
+/* ============================================================
+   PROJECT TYPE LIST
+   ============================================================ */
+
+:root[data-theme="dark"] .project-type-item {
+  border-bottom-color: var(--color-border);
+}
+
+:root[data-theme="dark"] .project-type-item span {
+  color: var(--color-text);
+}
+
+:root[data-theme="dark"] .project-type-item strong {
+  color: var(--color-accent);
+}
+
+
+/* ============================================================
+   RECENT PROJECTS
+   ============================================================ */
+
+:root[data-theme="dark"] .dashboard-project-table {
+  background: var(--color-surface);
+
+  border-color: var(--color-border);
+
+  box-shadow: var(--shadow-sm);
+}
+
+:root[data-theme="dark"] .project-table-header {
+  background: var(--color-surface-muted);
+
+  border-bottom-color: var(--color-border);
+
+  color: var(--color-text-muted);
+}
+
+:root[data-theme="dark"] .project-table-row {
+  border-bottom-color: var(--color-border);
+}
+
+:root[data-theme="dark"] .project-table-row > span {
+  color: var(--color-text-muted);
+}
+
+:root[data-theme="dark"] .project-table-row strong {
+  color: var(--color-dark);
+}
+
+:root[data-theme="dark"] .project-table-row small {
+  color: var(--color-text-muted);
+}
+
+
+/* ============================================================
+   COMPLEXITY BADGES
+   ============================================================ */
+
+:root[data-theme="dark"] .complexity-badge.low {
+  color: var(--color-success);
+  background: rgba(114, 169, 130, 0.12);
+}
+
+:root[data-theme="dark"] .complexity-badge.medium {
+  color: var(--color-warning);
+  background: rgba(208, 160, 90, 0.12);
+}
+
+:root[data-theme="dark"] .complexity-badge.high {
+  color: var(--color-danger);
+  background: rgba(213, 106, 106, 0.12);
+}
+
+
+/* ============================================================
+   QUICK ACTIONS
+   ============================================================ */
+
+:root[data-theme="dark"] .quick-action-card {
+  background: var(--color-surface);
+
+  border-color: var(--color-border);
+
+  box-shadow: var(--shadow-sm);
+}
+
+:root[data-theme="dark"] .quick-action-card:hover {
+  background: var(--color-surface-muted);
+
+  border-color: var(--color-accent);
+
+  box-shadow: var(--shadow-md);
+}
+
+:root[data-theme="dark"] .quick-action-icon {
+  background: var(--color-surface-muted);
+  color: var(--color-accent);
+}
+
+:root[data-theme="dark"] .quick-action-card h3 {
+  color: var(--color-dark);
+}
+
+:root[data-theme="dark"] .quick-action-card p {
+  color: var(--color-text-muted);
+}
+
+:root[data-theme="dark"] .quick-action-arrow {
+  color: var(--color-accent);
+}
+
+
+/* ============================================================
+   PRIMARY BUTTON
+   ============================================================ */
+
+:root[data-theme="dark"] .dashboard-primary-btn {
+  background: var(--color-primary);
+
+  border-color: var(--color-primary);
+
+  color: #ffffff;
+}
+
+:root[data-theme="dark"] .dashboard-primary-btn:hover {
+  background: var(--color-primary-dark);
+}

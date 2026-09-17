@@ -1,0 +1,774 @@
+/* ============================================================
+   PROJECT DETAILS PAGE
+   ============================================================ */
+
+.project-details-page {
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0;
+  background: var(--color-background);
+  color: var(--color-text);
+}
+
+/* ============================================================
+   HEADER
+   ============================================================ */
+
+.project-details-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+
+.project-details-header-left {
+  max-width: 850px;
+}
+
+/* ============================================================
+   BACK TO PROJECTS
+   ============================================================ */
+
+.back-to-projects {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  width: fit-content;
+  margin-bottom: 1rem;
+  padding: 0.5rem 0.8rem;
+  color: var(--color-primary);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  box-shadow: var(--shadow-sm);
+  text-decoration: none;
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  transition:
+    color var(--transition),
+    background-color var(--transition),
+    border-color var(--transition),
+    box-shadow var(--transition),
+    transform var(--transition);
+}
+
+.back-to-projects svg {
+  width: 15px;
+  height: 15px;
+  stroke-width: 2;
+  transition: transform var(--transition);
+}
+
+.back-to-projects:hover {
+  color: #ffffff;
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+  box-shadow: 0 5px 14px rgba(113, 29, 60, 0.18);
+  transform: translateY(-1px);
+}
+
+.back-to-projects:hover svg {
+  transform: translateX(-2px);
+}
+
+.project-details-label {
+  display: block;
+  margin-bottom: 0.4rem;
+  color: var(--color-accent);
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+}
+
+.project-details-header h1 {
+  margin: 0;
+  color: var(--color-dark);
+  font-family: var(--font-heading);
+  font-size: 2rem;
+  line-height: 1.2;
+}
+
+.project-details-header p {
+  max-width: 720px;
+  margin: 0.6rem 0 0;
+  color: var(--color-text-muted);
+  font-size: 0.78rem;
+  line-height: 1.7;
+}
+
+.project-details-header-status {
+  display: flex;
+  align-items: flex-end;
+  flex-direction: column;
+  gap: 0.55rem;
+}
+
+.status-badge-detail {
+  padding: 0.38rem 0.7rem;
+  color: var(--color-success);
+  background: rgba(63, 115, 85, 0.1);
+  border-radius: 999px;
+  font-size: 0.6rem;
+  font-weight: 700;
+}
+
+.project-id {
+  color: var(--color-text-muted);
+  font-size: 0.6rem;
+}
+
+/* ============================================================
+   COMMON CARD
+   ============================================================ */
+
+.project-info-card,
+.planning-card,
+.cost-planning-card,
+.detail-insight-card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+}
+
+/* ============================================================
+   PROJECT INFORMATION
+   ============================================================ */
+
+.project-info-card {
+  margin-bottom: 1.5rem;
+}
+
+.project-info-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1.2rem 1.35rem;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.section-step {
+  display: block;
+  margin-bottom: 0.3rem;
+  color: var(--color-accent);
+  font-size: 0.57rem;
+  font-weight: 700;
+  letter-spacing: 0.13em;
+}
+
+.project-info-heading h2,
+.details-section-heading h2,
+.planning-card-header h2 {
+  margin: 0;
+  color: var(--color-dark);
+  font-family: var(--font-heading);
+  font-size: 1.15rem;
+}
+
+.project-type-detail {
+  padding: 0.38rem 0.65rem;
+  color: var(--color-primary);
+  background: rgba(113, 29, 60, 0.07);
+  border-radius: 999px;
+  font-size: 0.58rem;
+  font-weight: 700;
+}
+
+.project-info-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.project-info-item {
+  padding: 1rem 1.35rem;
+  border-right: 1px solid var(--color-border);
+}
+
+.project-info-item:last-child {
+  border-right: none;
+}
+
+.project-info-item span {
+  display: block;
+  margin-bottom: 0.3rem;
+  color: var(--color-text-muted);
+  font-size: 0.59rem;
+}
+
+.project-info-item strong {
+  color: var(--color-dark);
+  font-size: 0.68rem;
+}
+
+/* ============================================================
+   SECTION
+   ============================================================ */
+
+.details-section {
+  margin-bottom: 2rem;
+}
+
+.details-section-heading {
+  margin-bottom: 0.9rem;
+}
+
+.details-section-heading p {
+  margin: 0.3rem 0 0;
+  color: var(--color-text-muted);
+  font-size: 0.68rem;
+}
+
+/* ============================================================
+   ESTIMATE CARDS
+   ============================================================ */
+
+.estimate-summary-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+}
+
+.estimate-detail-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.8rem;
+  padding: 1rem;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+}
+
+.estimate-detail-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  flex-shrink: 0;
+  color: var(--color-primary);
+  background: rgba(113, 29, 60, 0.08);
+  border-radius: 9px;
+}
+
+.estimate-detail-icon svg {
+  width: 18px;
+  height: 18px;
+  stroke-width: 1.8;
+}
+
+.estimate-detail-card span {
+  display: block;
+  margin-bottom: 0.25rem;
+  color: var(--color-text-muted);
+  font-size: 0.59rem;
+}
+
+.estimate-detail-card strong {
+  display: block;
+  color: var(--color-dark);
+  font-size: 0.95rem;
+}
+
+.estimate-detail-card small {
+  display: block;
+  margin-top: 0.22rem;
+  color: var(--color-text-muted);
+  font-size: 0.54rem;
+}
+
+/* ============================================================
+   PLANNING GRID
+   ============================================================ */
+
+.planning-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.25rem;
+  margin-bottom: 2rem;
+}
+
+.planning-card {
+  overflow: hidden;
+}
+
+.planning-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1.2rem 1.3rem;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.planning-card-header > svg {
+  width: 20px;
+  height: 20px;
+  color: var(--color-accent);
+  stroke-width: 1.7;
+}
+
+.planning-card-header p {
+  max-width: 650px;
+  margin: 0.35rem 0 0;
+  color: var(--color-text-muted);
+  font-size: 0.65rem;
+  line-height: 1.6;
+}
+
+/* ============================================================
+   MILESTONES
+   ============================================================ */
+
+.milestone-list {
+  padding: 0.75rem 1.3rem 0.9rem;
+}
+
+.milestone-item {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.7rem 0;
+}
+
+.milestone-item:not(:last-child)::after {
+  content: "";
+  position: absolute;
+  top: 38px;
+  left: 13px;
+  width: 1px;
+  height: calc(100% - 12px);
+  background: var(--color-border);
+}
+
+.milestone-marker {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 27px;
+  height: 27px;
+  flex-shrink: 0;
+  color: var(--color-text-muted);
+  background: var(--color-surface-muted);
+  border: 1px solid var(--color-border);
+  border-radius: 50%;
+  font-size: 0.58rem;
+  font-weight: 700;
+}
+
+.milestone-marker svg {
+  width: 15px;
+  height: 15px;
+}
+
+.milestone-item.completed .milestone-marker {
+  color: var(--color-success);
+  background: rgba(63, 115, 85, 0.08);
+  border-color: rgba(63, 115, 85, 0.2);
+}
+
+.milestone-item.active .milestone-marker {
+  color: var(--color-primary);
+  background: rgba(113, 29, 60, 0.08);
+  border-color: rgba(113, 29, 60, 0.2);
+}
+
+.milestone-item strong {
+  display: block;
+  color: var(--color-dark);
+  font-size: 0.67rem;
+}
+
+.milestone-item span {
+  display: block;
+  margin-top: 0.15rem;
+  color: var(--color-text-muted);
+  font-size: 0.57rem;
+}
+
+/* ============================================================
+   RESOURCE PLANNING
+   ============================================================ */
+
+.resource-status {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1rem 1.3rem;
+  background: var(--color-surface-muted);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.resource-status-number strong {
+  display: block;
+  color: var(--color-dark);
+  font-size: 1.15rem;
+}
+
+.resource-status-number span {
+  color: var(--color-text-muted);
+  font-size: 0.56rem;
+}
+
+.resource-status-badge {
+  padding: 0.35rem 0.6rem;
+  color: var(--color-warning);
+  background: rgba(168, 117, 42, 0.1);
+  border-radius: 999px;
+  font-size: 0.55rem;
+  font-weight: 700;
+}
+
+.resource-list {
+  padding: 0.6rem 1.3rem 0.9rem;
+}
+
+.resource-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.7rem 0;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.resource-row:last-child {
+  border-bottom: none;
+}
+
+.resource-row strong {
+  display: block;
+  color: var(--color-dark);
+  font-size: 0.64rem;
+}
+
+.resource-row span {
+  display: block;
+  margin-top: 0.15rem;
+  color: var(--color-text-muted);
+  font-size: 0.54rem;
+}
+
+.resource-available,
+.resource-gap {
+  padding: 0.3rem 0.55rem;
+  border-radius: 999px;
+  font-size: 0.52rem !important;
+  font-weight: 700;
+}
+
+.resource-available {
+  color: var(--color-success) !important;
+  background: rgba(63, 115, 85, 0.1);
+}
+
+.resource-gap {
+  color: var(--color-danger) !important;
+  background: rgba(163, 59, 59, 0.09);
+}
+
+/* ============================================================
+   COST PLANNING
+   ============================================================ */
+
+.cost-planning-card {
+  margin-bottom: 2rem;
+}
+
+.cost-planning-card .planning-card-header {
+  align-items: flex-start;
+}
+
+.total-cost {
+  text-align: right;
+}
+
+.total-cost span {
+  display: block;
+  margin-bottom: 0.2rem;
+  color: var(--color-text-muted);
+  font-size: 0.55rem;
+}
+
+.total-cost strong {
+  color: var(--color-primary);
+  font-size: 1.15rem;
+}
+
+.cost-breakdown {
+  padding: 0.9rem 1.3rem 1.1rem;
+}
+
+.cost-row {
+  display: grid;
+  grid-template-columns: 190px 1fr 85px;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.7rem 0;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.cost-row:last-child {
+  border-bottom: none;
+}
+
+.cost-row-info {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.cost-row-info strong {
+  color: var(--color-dark);
+  font-size: 0.62rem;
+}
+
+.cost-row-info span {
+  color: var(--color-text-muted);
+  font-size: 0.56rem;
+}
+
+.cost-bar {
+  height: 7px;
+  overflow: hidden;
+  background: var(--color-surface-muted);
+  border-radius: 999px;
+}
+
+.cost-bar span {
+  display: block;
+  height: 100%;
+  background: var(--color-primary);
+  border-radius: inherit;
+}
+
+.cost-row > strong {
+  color: var(--color-dark);
+  font-size: 0.62rem;
+  text-align: right;
+}
+
+/* ============================================================
+   INSIGHTS
+   ============================================================ */
+
+.details-insights-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.25rem;
+  margin-bottom: 1.25rem;
+}
+
+.detail-insight-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.9rem;
+  padding: 1rem 1.1rem;
+}
+
+.detail-insight-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  flex-shrink: 0;
+  border-radius: 9px;
+}
+
+.detail-insight-icon svg {
+  width: 18px;
+  height: 18px;
+}
+
+.detail-insight-card.risk .detail-insight-icon {
+  color: var(--color-danger);
+  background: rgba(163, 59, 59, 0.08);
+}
+
+.detail-insight-card.recommendation .detail-insight-icon {
+  color: var(--color-accent);
+  background: rgba(177, 138, 82, 0.1);
+}
+
+.detail-insight-card span {
+  color: var(--color-accent);
+  font-size: 0.55rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+}
+
+.detail-insight-card h3 {
+  margin: 0.25rem 0;
+  color: var(--color-dark);
+  font-size: 0.75rem;
+}
+
+.detail-insight-card p {
+  margin: 0;
+  color: var(--color-text-muted);
+  font-size: 0.6rem;
+  line-height: 1.6;
+}
+
+.detail-insight-card a {
+  display: inline-block;
+  margin-top: 0.55rem;
+  color: var(--color-primary);
+  text-decoration: none;
+  font-size: 0.58rem;
+  font-weight: 700;
+}
+
+.detail-insight-card a:hover {
+  text-decoration: underline;
+}
+
+/* ============================================================
+   NOTE
+   ============================================================ */
+
+.project-details-note {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 0.9rem 1rem;
+  background: rgba(177, 138, 82, 0.07);
+  border: 1px solid rgba(177, 138, 82, 0.18);
+  border-radius: var(--radius-md);
+}
+
+.project-details-note-mark {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 25px;
+  height: 25px;
+  flex-shrink: 0;
+  color: var(--color-accent);
+  border: 1px solid rgba(177, 138, 82, 0.4);
+  border-radius: 50%;
+  font-family: Georgia, serif;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.project-details-note strong {
+  display: block;
+  margin-bottom: 0.2rem;
+  color: var(--color-dark);
+  font-size: 0.65rem;
+}
+
+.project-details-note p {
+  margin: 0;
+  color: var(--color-text-muted);
+  font-size: 0.59rem;
+  line-height: 1.6;
+}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+
+@media (max-width: 1050px) {
+  .estimate-summary-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .planning-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .cost-row {
+    grid-template-columns: 180px 1fr 80px;
+  }
+}
+
+@media (max-width: 750px) {
+  .project-details-header {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
+  .project-details-header-status {
+    align-items: flex-start;
+  }
+
+  .project-info-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .project-info-item {
+    border-right: none;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .project-info-item:last-child {
+    border-bottom: none;
+  }
+
+  .estimate-summary-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .details-insights-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .cost-row {
+    grid-template-columns: 1fr;
+    gap: 0.45rem;
+  }
+
+  .cost-row > strong {
+    text-align: left;
+  }
+
+  .total-cost {
+    text-align: left;
+  }
+
+  .cost-planning-card .planning-card-header {
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 520px) {
+  .project-details-header {
+    margin-bottom: 1.75rem;
+  }
+
+  .project-info-heading,
+  .planning-card-header {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  .project-info-item {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  .milestone-list,
+  .resource-list,
+  .cost-breakdown {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  .details-section,
+  .planning-grid,
+  .cost-planning-card {
+    margin-bottom: 1.5rem;
+  }
+}

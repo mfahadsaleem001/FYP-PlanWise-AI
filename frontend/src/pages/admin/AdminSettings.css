@@ -1,0 +1,899 @@
+/* ============================================================
+   ADMIN SETTINGS
+   ============================================================ */
+
+.admin-settings {
+  width: 100%;
+  max-width: 1500px;
+  margin: 0 auto;
+}
+
+
+/* ============================================================
+   PAGE HEADER
+   ============================================================ */
+
+.admin-page-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.admin-page-header-content {
+  min-width: 0;
+}
+
+.admin-page-eyebrow {
+  display: block;
+  margin-bottom: 0.35rem;
+  color: var(--color-accent);
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+}
+
+.admin-page-header h1 {
+  margin: 0;
+  color: var(--color-dark);
+  font-family: var(--font-heading);
+  font-size: 1.65rem;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.admin-page-header p {
+  max-width: 760px;
+  margin: 0.55rem 0 0;
+  color: var(--color-text-muted);
+  font-size: 0.76rem;
+  line-height: 1.6;
+}
+
+
+/* ============================================================
+   SETTINGS LAYOUT
+   ============================================================ */
+
+.admin-settings-layout {
+  display: grid;
+  grid-template-columns: 220px minmax(0, 1fr);
+  align-items: start;
+  gap: 1.25rem;
+}
+
+
+/* ============================================================
+   SETTINGS NAVIGATION
+   ============================================================ */
+
+.admin-settings-nav {
+  position: sticky;
+  top: 88px;
+  overflow: hidden;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  box-shadow: var(--shadow-sm);
+}
+
+.admin-settings-nav-header {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 1rem;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.admin-settings-nav-icon {
+  width: 34px;
+  height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  border-radius: 7px;
+  background: var(--color-primary);
+  color: #ffffff;
+}
+
+.admin-settings-nav-header div:last-child {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.admin-settings-nav-header strong {
+  color: var(--color-dark);
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+
+.admin-settings-nav-header span {
+  margin-top: 0.15rem;
+  color: var(--color-text-muted);
+  font-size: 0.58rem;
+}
+
+.admin-settings-menu {
+  padding: 0.6rem;
+}
+
+.admin-settings-menu a {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  min-height: 38px;
+  padding: 0.6rem 0.7rem;
+  margin-bottom: 0.18rem;
+  border-radius: 6px;
+  color: var(--color-text-muted);
+  text-decoration: none;
+  font-size: 0.67rem;
+  font-weight: 500;
+  transition:
+    background 0.2s ease,
+    color 0.2s ease;
+}
+
+.admin-settings-menu a:hover {
+  background: var(--color-surface-muted);
+  color: var(--color-dark);
+}
+
+.admin-settings-menu a.active {
+  background: rgba(113, 29, 60, 0.1);
+  color: var(--color-primary);
+  font-weight: 600;
+}
+
+
+/* ============================================================
+   CONTENT
+   ============================================================ */
+
+.admin-settings-content {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+
+/* ============================================================
+   SETTINGS CARD
+   ============================================================ */
+
+.admin-settings-card {
+  scroll-margin-top: 90px;
+  padding: 1.25rem;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 11px;
+  box-shadow: var(--shadow-sm);
+}
+
+.admin-settings-card-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.8rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.admin-settings-card-icon {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  border-radius: 7px;
+  background: var(--color-surface-muted);
+  color: var(--color-primary);
+}
+
+.admin-settings-card-header h2 {
+  margin: 0;
+  color: var(--color-dark);
+  font-family: var(--font-heading);
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.admin-settings-card-header p {
+  margin: 0.3rem 0 0;
+  color: var(--color-text-muted);
+  font-size: 0.66rem;
+  line-height: 1.5;
+}
+
+
+/* ============================================================
+   FORM
+   ============================================================ */
+
+.admin-settings-form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+  padding-top: 1rem;
+}
+
+.admin-settings-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.admin-settings-field label {
+  color: var(--color-dark);
+  font-size: 0.65rem;
+  font-weight: 600;
+}
+
+.admin-settings-field input,
+.admin-settings-field select {
+  width: 100%;
+  height: 38px;
+  padding: 0 0.75rem;
+  border: 1px solid var(--color-border);
+  border-radius: 7px;
+  outline: none;
+  background: var(--color-surface);
+  color: var(--color-text);
+  font-family: var(--font-body);
+  font-size: 0.68rem;
+  transition: border-color 0.2s ease;
+}
+
+.admin-settings-field input:focus,
+.admin-settings-field select:focus {
+  border-color: var(--color-primary);
+}
+
+
+/* ============================================================
+   NOTIFICATION OPTIONS
+   ============================================================ */
+
+.admin-settings-options {
+  padding-top: 0.5rem;
+}
+
+.admin-settings-option {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.9rem 0;
+  border-bottom: 1px solid var(--color-border);
+  cursor: pointer;
+}
+
+.admin-settings-option:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.admin-settings-option > div {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.admin-settings-option strong {
+  color: var(--color-dark);
+  font-size: 0.7rem;
+  font-weight: 600;
+}
+
+.admin-settings-option span {
+  max-width: 650px;
+  margin-top: 0.2rem;
+  color: var(--color-text-muted);
+  font-size: 0.62rem;
+  line-height: 1.5;
+}
+
+.admin-settings-option input {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  accent-color: var(--color-primary);
+  cursor: pointer;
+}
+
+
+/* ============================================================
+   RESOURCE ROLES
+   ============================================================ */
+
+.admin-settings-role-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.6rem;
+  margin-top: 1rem;
+}
+
+.admin-settings-role {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.7rem 0.8rem;
+  background: var(--color-surface-muted);
+  border: 1px solid var(--color-border);
+  border-radius: 7px;
+}
+
+.admin-settings-role span {
+  color: var(--color-text);
+  font-size: 0.65rem;
+}
+
+.admin-settings-role strong {
+  color: var(--color-success);
+  font-size: 0.6rem;
+  font-weight: 600;
+}
+
+
+/* ============================================================
+   PROJECT TYPES
+   ============================================================ */
+
+.admin-settings-project-types {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.6rem;
+  padding-top: 1rem;
+}
+
+.admin-settings-project-types div {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.75rem 0.8rem;
+  background: var(--color-surface-muted);
+  border: 1px solid var(--color-border);
+  border-radius: 7px;
+}
+
+.admin-settings-project-types span {
+  color: var(--color-text);
+  font-size: 0.65rem;
+}
+
+.admin-settings-project-types strong {
+  color: var(--color-success);
+  font-size: 0.6rem;
+  font-weight: 600;
+}
+
+
+/* ============================================================
+   MODEL CONFIGURATION
+   ============================================================ */
+
+.admin-model-config-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem;
+  padding-top: 1rem;
+}
+
+.admin-model-config-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: 0.85rem;
+  background: var(--color-surface-muted);
+  border: 1px solid var(--color-border);
+  border-radius: 7px;
+}
+
+.admin-model-config-item span {
+  color: var(--color-text-muted);
+  font-size: 0.58rem;
+}
+
+.admin-model-config-item strong {
+  color: var(--color-dark);
+  font-size: 0.68rem;
+  font-weight: 600;
+}
+
+.admin-model-config-item strong.status-active {
+  color: var(--color-success);
+}
+
+.admin-settings-info-box {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6rem;
+  margin-top: 1rem;
+  padding: 0.85rem;
+  background: rgba(177, 138, 82, 0.08);
+  border: 1px solid rgba(177, 138, 82, 0.25);
+  border-radius: 7px;
+  color: var(--color-accent);
+}
+
+.admin-settings-info-box svg {
+  flex-shrink: 0;
+  margin-top: 0.05rem;
+}
+
+.admin-settings-info-box p {
+  margin: 0;
+  color: var(--color-text-muted);
+  font-size: 0.62rem;
+  line-height: 1.55;
+}
+
+
+/* ============================================================
+   SECURITY
+   ============================================================ */
+
+.admin-settings-security-list {
+  padding-top: 0.45rem;
+}
+
+.admin-security-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.9rem 0;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.admin-security-row:last-child {
+  border-bottom: none;
+}
+
+.admin-security-row-icon {
+  width: 34px;
+  height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  border-radius: 7px;
+  background: var(--color-surface-muted);
+  color: var(--color-primary);
+}
+
+.admin-security-row > div:nth-child(2) {
+  min-width: 0;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.admin-security-row > div:nth-child(2) strong {
+  color: var(--color-dark);
+  font-size: 0.68rem;
+  font-weight: 600;
+}
+
+.admin-security-row > div:nth-child(2) span {
+  margin-top: 0.15rem;
+  color: var(--color-text-muted);
+  font-size: 0.6rem;
+}
+
+.security-status {
+  color: var(--color-success);
+  font-size: 0.62rem;
+  font-weight: 600;
+}
+
+.admin-security-row select {
+  height: 34px;
+  padding: 0 0.65rem;
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  outline: none;
+  background: var(--color-surface);
+  color: var(--color-text);
+  font-family: var(--font-body);
+  font-size: 0.62rem;
+}
+
+.admin-security-row select:focus {
+  border-color: var(--color-primary);
+}
+
+
+/* ============================================================
+   ACTIONS
+   ============================================================ */
+
+.admin-settings-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.65rem;
+  padding: 0.25rem 0 1rem;
+}
+
+.admin-settings-reset,
+.admin-settings-save {
+  min-height: 38px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  padding: 0.65rem 0.9rem;
+  border-radius: 7px;
+  font-family: var(--font-body);
+  font-size: 0.67rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    background 0.2s ease,
+    color 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.admin-settings-reset {
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  color: var(--color-text-muted);
+}
+
+.admin-settings-reset:hover {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
+.admin-settings-save {
+  border: 1px solid var(--color-primary);
+  background: var(--color-primary);
+  color: #ffffff;
+}
+
+.admin-settings-save:hover {
+  background: var(--color-primary-dark);
+  border-color: var(--color-primary-dark);
+}
+
+
+/* ============================================================
+   DARK THEME
+   ============================================================ */
+
+:root[data-theme="dark"] .admin-settings-menu a.active {
+  background: rgba(154, 61, 95, 0.16);
+}
+
+:root[data-theme="dark"] .admin-settings-info-box {
+  background: rgba(201, 166, 107, 0.08);
+  border-color: rgba(201, 166, 107, 0.22);
+}
+
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+
+@media (max-width: 1000px) {
+
+  .admin-settings-layout {
+    grid-template-columns: 190px minmax(0, 1fr);
+  }
+
+  .admin-settings-role-list,
+  .admin-settings-project-types {
+    grid-template-columns: 1fr;
+  }
+
+}
+
+
+@media (max-width: 800px) {
+
+  .admin-settings-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-settings-nav {
+    position: static;
+  }
+
+  .admin-settings-menu {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.25rem;
+  }
+
+  .admin-settings-menu a {
+    margin-bottom: 0;
+  }
+
+}
+
+
+@media (max-width: 600px) {
+
+  .admin-page-header h1 {
+    font-size: 1.4rem;
+  }
+
+  .admin-settings-card {
+    padding: 1rem;
+  }
+
+  .admin-settings-form-grid,
+  .admin-model-config-grid,
+  .admin-settings-menu {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-settings-option {
+    align-items: flex-start;
+  }
+
+  .admin-security-row {
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+
+  .security-status,
+  .admin-security-row select {
+    margin-left: 2.6rem;
+  }
+
+  .admin-settings-actions {
+    width: 100%;
+    flex-direction: column-reverse;
+  }
+
+  .admin-settings-reset,
+  .admin-settings-save {
+    width: 100%;
+  }
+
+}
+
+/* ============================================================
+   APPEARANCE / THEME
+   ============================================================ */
+
+.admin-settings .admin-theme-options {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-top: 4px;
+}
+
+.admin-settings .admin-theme-option {
+  width: 100%;
+  min-height: 92px;
+
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  padding: 16px;
+
+  background: #fbf8f2;
+  color: #2c1b1b;
+
+  border: 1px solid #e3d9cd;
+  border-radius: 8px;
+
+  text-align: left;
+  cursor: pointer;
+
+  transition:
+    border-color 0.2s ease,
+    background 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.admin-settings .admin-theme-option:hover {
+  border-color: #b18a52;
+  box-shadow: 0 4px 14px rgba(44, 27, 27, 0.06);
+}
+
+.admin-settings .admin-theme-option.active {
+  border-color: #711d3c;
+  background: #fffaf4;
+  box-shadow: 0 0 0 1px rgba(113, 29, 60, 0.08);
+}
+
+.admin-settings .admin-theme-option-icon {
+  width: 36px;
+  height: 36px;
+  min-width: 36px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: #f1e7da;
+  color: #711d3c;
+
+  border-radius: 6px;
+}
+
+.admin-settings .admin-theme-option-content {
+  min-width: 0;
+
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.admin-settings .admin-theme-option-content strong {
+  color: #2c1b1b;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.admin-settings .admin-theme-option-content span {
+  color: #766966;
+  font-size: 10px;
+  line-height: 1.5;
+}
+
+.admin-settings .admin-theme-radio {
+  width: 16px;
+  height: 16px;
+  min-width: 16px;
+
+  margin-left: auto;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border: 1.5px solid #b9aaa0;
+  border-radius: 50%;
+}
+
+.admin-settings .admin-theme-option.active .admin-theme-radio {
+  border-color: #711d3c;
+}
+
+.admin-settings .admin-theme-radio span {
+  width: 8px;
+  height: 8px;
+
+  background: #711d3c;
+  border-radius: 50%;
+}
+
+.admin-settings .admin-theme-status {
+  margin-top: 14px;
+  padding: 11px 13px;
+
+  display: flex;
+  align-items: center;
+  gap: 9px;
+
+  background: #f7f0e5;
+  border: 1px solid #e4d9cc;
+  border-radius: 6px;
+}
+
+.admin-settings .admin-theme-status-icon {
+  display: flex;
+  align-items: center;
+  color: #b18a52;
+}
+
+.admin-settings .admin-theme-status p {
+  margin: 0;
+
+  color: #665957;
+  font-size: 10px;
+  line-height: 1.5;
+}
+
+.admin-settings .admin-theme-status strong {
+  color: #711d3c;
+}
+
+
+/* ============================================================
+   DARK MODE
+   ============================================================ */
+
+:root[data-theme="dark"] .admin-settings {
+  color: #eee5dc;
+}
+
+:root[data-theme="dark"] .admin-settings .admin-theme-option {
+  background: #2b2020;
+  color: #eee5dc;
+  border-color: #493939;
+}
+
+:root[data-theme="dark"] .admin-settings .admin-theme-option:hover {
+  border-color: #b18a52;
+  background: #302424;
+}
+
+:root[data-theme="dark"] .admin-settings .admin-theme-option.active {
+  background: #342626;
+  border-color: #b18a52;
+}
+
+:root[data-theme="dark"] .admin-settings .admin-theme-option-icon {
+  background: #413131;
+  color: #d1a86b;
+}
+
+:root[data-theme="dark"] .admin-settings .admin-theme-option-content strong {
+  color: #f1e9e1;
+}
+
+:root[data-theme="dark"] .admin-settings .admin-theme-option-content span {
+  color: #b8aaa2;
+}
+
+:root[data-theme="dark"] .admin-settings .admin-theme-radio {
+  border-color: #74645e;
+}
+
+:root[data-theme="dark"] .admin-settings .admin-theme-option.active .admin-theme-radio {
+  border-color: #d1a86b;
+}
+
+:root[data-theme="dark"] .admin-settings .admin-theme-radio span {
+  background: #d1a86b;
+}
+
+:root[data-theme="dark"] .admin-settings .admin-theme-status {
+  background: #302424;
+  border-color: #493939;
+}
+
+:root[data-theme="dark"] .admin-settings .admin-theme-status p {
+  color: #b8aaa2;
+}
+
+:root[data-theme="dark"] .admin-settings .admin-theme-status strong {
+  color: #d1a86b;
+}
+
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+
+@media (max-width: 900px) {
+  .admin-settings .admin-theme-options {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 520px) {
+  .admin-settings .admin-theme-option {
+    min-height: 82px;
+    padding: 13px;
+  }
+
+  .admin-settings .admin-theme-option-content span {
+    font-size: 9px;
+  }
+
+  .admin-settings .admin-theme-status {
+    align-items: flex-start;
+  }
+}
+
+.admin-security-row .admin-session-timeout-select {
+  width: 125px;
+  min-width: 125px;
+  max-width: 125px;
+  flex: 0 0 125px;
+  padding: 0.55rem 0.7rem;
+  font-size: 0.72rem;
+}

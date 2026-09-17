@@ -1,0 +1,1769 @@
+/* ============================================================
+   PLANWISE AI
+   RECOMMENDATIONS PAGE
+   ============================================================ */
+
+.recommendations-page {
+  width: 100%;
+  max-width: 1480px;
+  margin: 0 auto;
+  padding: 0;
+  color: #2c1b1b;
+}
+
+.recommendations-page *,
+.recommendations-page *::before,
+.recommendations-page *::after {
+  box-sizing: border-box;
+}
+
+/* ============================================================
+   PAGE HEADER
+   ============================================================ */
+
+.recommendations-page .recommendations-header {
+  margin-bottom: 2rem;
+}
+
+.recommendations-page .page-eyebrow,
+.recommendations-page .section-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  color: #711d3c;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.recommendations-page .recommendations-header h1 {
+  margin: 7px 0 8px;
+  color: #2c1b1b;
+  font-family: var(--font-heading);
+  font-size: 31px;
+  line-height: 1.2;
+  font-weight: 750;
+  letter-spacing: -0.02em;
+}
+
+.recommendations-page .recommendations-header p {
+  max-width: 800px;
+  margin: 0;
+  color: #756565;
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+/* ============================================================
+   PROJECT CONTEXT
+   ============================================================ */
+
+.recommendations-page .recommendations-project-context {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 22px;
+  margin-bottom: 2rem;
+  padding: 18px 20px;
+  border: 1px solid rgba(44, 27, 27, 0.09);
+  border-radius: 12px;
+  background: #ffffff;
+  box-shadow: 0 5px 18px rgba(44, 27, 27, 0.035);
+}
+
+.recommendations-page .project-context-main {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  min-width: 0;
+}
+
+.recommendations-page .project-context-icon {
+  width: 45px;
+  height: 45px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  border: 1px solid rgba(113, 29, 60, 0.1);
+  border-radius: 10px;
+  background: rgba(113, 29, 60, 0.07);
+  color: #711d3c;
+}
+
+.recommendations-page .project-context-main span {
+  display: block;
+  margin-bottom: 3px;
+  color: #8a7979;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+}
+
+.recommendations-page .project-context-main h2 {
+  margin: 0;
+  color: #2c1b1b;
+  font-size: 16px;
+  font-weight: 750;
+}
+
+.recommendations-page .project-context-main p {
+  margin: 3px 0 0;
+  color: #806f6f;
+  font-size: 11px;
+}
+
+.recommendations-page .project-context-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  flex-shrink: 0;
+  padding: 7px 10px;
+  border: 1px solid rgba(61, 118, 80, 0.12);
+  border-radius: 7px;
+  background: #f1f7f2;
+  color: #3d7650;
+  font-size: 10px;
+  font-weight: 750;
+}
+
+/* ============================================================
+   SUMMARY
+   ============================================================ */
+
+.recommendations-page .recommendation-summary {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 15px;
+  margin-bottom: 2.25rem;
+}
+
+.recommendations-page .recommendation-summary-card {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  min-height: 100px;
+  padding: 17px 18px;
+  overflow: hidden;
+  border: 1px solid rgba(44, 27, 27, 0.08);
+  border-radius: 12px;
+  background: #ffffff;
+  box-shadow: 0 5px 18px rgba(44, 27, 27, 0.025);
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.recommendations-page .recommendation-summary-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 3px;
+  height: 100%;
+  background: #b18a52;
+}
+
+.recommendations-page .recommendation-summary-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(113, 29, 60, 0.14);
+  box-shadow: 0 10px 24px rgba(44, 27, 27, 0.06);
+}
+
+.recommendations-page .recommendation-summary-icon {
+  width: 41px;
+  height: 41px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  border: 1px solid rgba(177, 138, 82, 0.12);
+  border-radius: 9px;
+  background: rgba(177, 138, 82, 0.09);
+  color: #8c6a39;
+}
+
+.recommendations-page .recommendation-summary-card span {
+  display: block;
+  color: #7d6d6d;
+  font-size: 10px;
+  font-weight: 650;
+}
+
+.recommendations-page .recommendation-summary-card strong {
+  display: block;
+  margin-top: 2px;
+  color: #2c1b1b;
+  font-size: 20px;
+  line-height: 1.25;
+  font-weight: 750;
+}
+
+.recommendations-page .recommendation-summary-card small {
+  display: block;
+  margin-top: 3px;
+  color: #968686;
+  font-size: 9px;
+}
+
+/* ============================================================
+   GENERAL SECTION
+   ============================================================ */
+
+.recommendations-page .recommendation-section {
+  margin-bottom: 2.25rem;
+}
+
+.recommendations-page .section-heading {
+  margin-bottom: 0.9rem;
+}
+
+.recommendations-page .section-heading h2 {
+  margin: 5px 0 6px;
+  color: #2c1b1b;
+  font-family: var(--font-heading);
+  font-size: 20px;
+  line-height: 1.3;
+  font-weight: 750;
+}
+
+.recommendations-page .section-heading p {
+  max-width: 820px;
+  margin: 0;
+  color: #756565;
+  font-size: 12px;
+  line-height: 1.7;
+}
+
+/* ============================================================
+   TEAM REQUIREMENT
+   ============================================================ */
+
+.recommendations-page .team-requirement-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.recommendations-page .team-requirement-card {
+  padding: 18px;
+  border: 1px solid rgba(44, 27, 27, 0.085);
+  border-radius: 12px;
+  background: #ffffff;
+  box-shadow: 0 4px 16px rgba(44, 27, 27, 0.025);
+  transition:
+    transform 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.recommendations-page .team-requirement-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(113, 29, 60, 0.14);
+  box-shadow: 0 9px 22px rgba(44, 27, 27, 0.05);
+}
+
+.recommendations-page .team-requirement-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.recommendations-page .team-requirement-icon {
+  width: 39px;
+  height: 39px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(113, 29, 60, 0.09);
+  border-radius: 9px;
+  background: rgba(113, 29, 60, 0.07);
+  color: #711d3c;
+}
+
+.recommendations-page .team-required-badge {
+  padding: 5px 9px;
+  border: 1px solid rgba(177, 138, 82, 0.12);
+  border-radius: 6px;
+  background: rgba(177, 138, 82, 0.09);
+  color: #826231;
+  font-size: 9px;
+  font-weight: 750;
+}
+
+.recommendations-page .team-requirement-card h3 {
+  margin: 0 0 6px;
+  color: #2c1b1b;
+  font-size: 14px;
+  font-weight: 750;
+}
+
+.recommendations-page .team-requirement-card p {
+  margin: 0;
+  color: #786868;
+  font-size: 11px;
+  line-height: 1.65;
+}
+
+/* ============================================================
+   RESOURCE TABLE
+   ============================================================ */
+
+.recommendations-page .resource-table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+  border: 1px solid rgba(44, 27, 27, 0.09);
+  border-radius: 12px;
+  background: #ffffff;
+  box-shadow: 0 5px 18px rgba(44, 27, 27, 0.025);
+}
+
+.recommendations-page .resource-table {
+  width: 100%;
+  min-width: 760px;
+  border-collapse: collapse;
+}
+
+.recommendations-page .resource-table th {
+  padding: 12px 15px;
+  border-bottom: 1px solid rgba(44, 27, 27, 0.08);
+  background: #faf6ef;
+  color: #756565;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.07em;
+  text-align: left;
+  text-transform: uppercase;
+}
+
+.recommendations-page .resource-table td {
+  padding: 14px 15px;
+  border-bottom: 1px solid rgba(44, 27, 27, 0.065);
+  color: #554545;
+  font-size: 11px;
+  vertical-align: middle;
+}
+
+.recommendations-page .resource-table tbody tr {
+  transition: background-color 0.18s ease;
+}
+
+.recommendations-page .resource-table tbody tr:hover {
+  background: #fdfaf5;
+}
+
+.recommendations-page .resource-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.recommendations-page .resource-role {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+
+.recommendations-page .resource-role-icon {
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  border: 1px solid rgba(113, 29, 60, 0.08);
+  border-radius: 7px;
+  background: rgba(113, 29, 60, 0.06);
+  color: #711d3c;
+}
+
+.recommendations-page .resource-role strong {
+  color: #332424;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.recommendations-page .resource-quantity {
+  display: inline-flex;
+  min-width: 28px;
+  justify-content: center;
+  padding: 4px 7px;
+  border: 1px solid rgba(177, 138, 82, 0.1);
+  border-radius: 6px;
+  background: #f4ede4;
+  color: #634b32;
+  font-size: 10px;
+  font-weight: 750;
+}
+
+.recommendations-page .resource-purpose {
+  display: block;
+  max-width: 410px;
+  color: #756565;
+  line-height: 1.55;
+}
+
+.recommendations-page .assignment-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  white-space: nowrap;
+  padding: 5px 8px;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  font-size: 9px;
+  font-weight: 750;
+}
+
+.recommendations-page .assignment-status.pending {
+  border-color: rgba(177, 138, 82, 0.14);
+  background: #f8f0df;
+  color: #866630;
+}
+
+/* ============================================================
+   ADMIN RESPONSIBILITY
+   ============================================================ */
+
+.recommendations-page .resource-admin-note {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  margin-bottom: 2.25rem;
+  padding: 18px 20px;
+  border: 1px solid rgba(177, 138, 82, 0.23);
+  border-radius: 12px;
+  background: rgba(177, 138, 82, 0.055);
+}
+
+.recommendations-page .resource-admin-note-icon {
+  width: 39px;
+  height: 39px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  border: 1px solid rgba(177, 138, 82, 0.12);
+  border-radius: 9px;
+  background: rgba(177, 138, 82, 0.1);
+  color: #856332;
+}
+
+.recommendations-page .resource-admin-note h3 {
+  margin: 0 0 5px;
+  color: #4b3824;
+  font-size: 13px;
+  font-weight: 750;
+}
+
+.recommendations-page .resource-admin-note p {
+  margin: 0;
+  color: #6f5c47;
+  font-size: 11px;
+  line-height: 1.65;
+}
+
+.recommendations-page .assignment-flow {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin-top: 12px;
+}
+
+.recommendations-page .assignment-flow span {
+  color: #6b553c;
+  font-size: 9px;
+  font-weight: 750;
+}
+
+.recommendations-page .assignment-flow .flow-arrow {
+  color: #b18a52;
+  font-size: 12px;
+}
+
+/* ============================================================
+   TECHNOLOGY
+   ============================================================ */
+
+.recommendations-page .technology-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.recommendations-page .technology-card {
+  display: flex;
+  gap: 13px;
+  padding: 17px;
+  border: 1px solid rgba(44, 27, 27, 0.085);
+  border-radius: 12px;
+  background: #ffffff;
+  box-shadow: 0 4px 16px rgba(44, 27, 27, 0.025);
+  transition:
+    transform 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.recommendations-page .technology-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(113, 29, 60, 0.13);
+  box-shadow: 0 9px 22px rgba(44, 27, 27, 0.05);
+}
+
+.recommendations-page .technology-icon {
+  width: 39px;
+  height: 39px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  border: 1px solid rgba(113, 29, 60, 0.08);
+  border-radius: 9px;
+  background: rgba(113, 29, 60, 0.07);
+  color: #711d3c;
+}
+
+.recommendations-page .technology-category {
+  display: block;
+  margin-bottom: 3px;
+  color: #a0835a;
+  font-size: 8px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.recommendations-page .technology-content h3 {
+  margin: 0 0 5px;
+  color: #2c1b1b;
+  font-size: 13px;
+  font-weight: 750;
+}
+
+.recommendations-page .technology-content p {
+  margin: 0;
+  color: #786868;
+  font-size: 11px;
+  line-height: 1.6;
+}
+
+/* ============================================================
+   ARCHITECTURE
+   ============================================================ */
+
+.recommendations-page .architecture-card {
+  padding: 20px;
+  overflow-x: auto;
+  border: 1px solid rgba(44, 27, 27, 0.09);
+  border-radius: 12px;
+  background: #ffffff;
+  box-shadow: 0 5px 18px rgba(44, 27, 27, 0.025);
+}
+
+.recommendations-page .architecture-flow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 11px;
+  min-width: 700px;
+}
+
+.recommendations-page .architecture-node {
+  min-width: 142px;
+  padding: 13px;
+  text-align: center;
+  border: 1px solid rgba(113, 29, 60, 0.11);
+  border-radius: 9px;
+  background: #fffaf5;
+  transition:
+    transform 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.recommendations-page .architecture-node:hover {
+  transform: translateY(-2px);
+  border-color: rgba(113, 29, 60, 0.2);
+}
+
+.recommendations-page .architecture-node-icon {
+  width: 33px;
+  height: 33px;
+  margin: 0 auto 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  background: rgba(113, 29, 60, 0.07);
+  color: #711d3c;
+}
+
+.recommendations-page .architecture-node strong {
+  display: block;
+  color: #382727;
+  font-size: 10px;
+  font-weight: 750;
+}
+
+.recommendations-page .architecture-node span {
+  display: block;
+  margin-top: 3px;
+  color: #8b7979;
+  font-size: 8px;
+}
+
+.recommendations-page .architecture-arrow {
+  color: #b18a52;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+/* ============================================================
+   PLANNING
+   ============================================================ */
+
+.recommendations-page .planning-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.recommendations-page .planning-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 17px;
+  border: 1px solid rgba(44, 27, 27, 0.085);
+  border-radius: 12px;
+  background: #ffffff;
+  box-shadow: 0 4px 16px rgba(44, 27, 27, 0.025);
+  transition:
+    transform 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.recommendations-page .planning-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(177, 138, 82, 0.2);
+}
+
+.recommendations-page .planning-icon {
+  width: 38px;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  border: 1px solid rgba(177, 138, 82, 0.11);
+  border-radius: 8px;
+  background: rgba(177, 138, 82, 0.085);
+  color: #866532;
+}
+
+.recommendations-page .planning-card h3 {
+  margin: 0 0 5px;
+  color: #2c1b1b;
+  font-size: 12px;
+  font-weight: 750;
+}
+
+.recommendations-page .planning-card p {
+  margin: 0;
+  color: #786868;
+  font-size: 11px;
+  line-height: 1.6;
+}
+
+/* ============================================================
+   INFORMATION NOTE
+   ============================================================ */
+
+.recommendations-page .recommendations-info {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 2rem;
+  padding: 15px 17px;
+  border: 1px solid rgba(113, 29, 60, 0.12);
+  border-radius: 10px;
+  background: rgba(113, 29, 60, 0.04);
+}
+
+.recommendations-page .recommendations-info-icon {
+  width: 33px;
+  height: 33px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  border-radius: 8px;
+  background: rgba(113, 29, 60, 0.07);
+  color: #711d3c;
+}
+
+.recommendations-page .recommendations-info strong {
+  display: block;
+  margin-bottom: 4px;
+  color: #4c3038;
+  font-size: 11px;
+  font-weight: 750;
+}
+
+.recommendations-page .recommendations-info p {
+  margin: 0;
+  color: #786868;
+  font-size: 10px;
+  line-height: 1.65;
+}
+
+/* ============================================================
+   PROJECT COMMUNICATION
+   ============================================================ */
+
+.recommendations-page .admin-contact-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 22px;
+  padding: 19px 20px;
+  border: 1px solid rgba(113, 29, 60, 0.12);
+  border-radius: 12px;
+  background: #ffffff;
+  box-shadow: 0 5px 18px rgba(44, 27, 27, 0.025);
+}
+
+.recommendations-page .admin-contact-main {
+  display: flex;
+  align-items: flex-start;
+  gap: 13px;
+}
+
+.recommendations-page .admin-contact-icon {
+  width: 42px;
+  height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  border: 1px solid rgba(113, 29, 60, 0.09);
+  border-radius: 9px;
+  background: rgba(113, 29, 60, 0.07);
+  color: #711d3c;
+}
+
+.recommendations-page .admin-contact-main h3 {
+  margin: 0 0 5px;
+  color: #2c1b1b;
+  font-size: 14px;
+  font-weight: 750;
+}
+
+.recommendations-page .admin-contact-main p {
+  max-width: 720px;
+  margin: 0;
+  color: #786868;
+  font-size: 11px;
+  line-height: 1.65;
+}
+
+.recommendations-page .admin-contact-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  flex-shrink: 0;
+  min-height: 40px;
+  padding: 0 16px;
+  border: 1px solid #711d3c;
+  border-radius: 8px;
+  background: #711d3c;
+  color: #ffffff;
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 5px 12px rgba(113, 29, 60, 0.14);
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.recommendations-page .admin-contact-button:hover {
+  background: #5d1732;
+  transform: translateY(-1px);
+  box-shadow: 0 8px 17px rgba(113, 29, 60, 0.19);
+}
+
+/* ============================================================
+   DEVELOPMENT REQUEST
+   ============================================================ */
+
+.recommendations-page .development-request-section {
+  margin-top: 0;
+  margin-bottom: 2rem;
+  padding: 24px;
+  border: 1px solid rgba(113, 29, 60, 0.15);
+  border-radius: 14px;
+  background: #fffaf3;
+  box-shadow: 0 7px 22px rgba(44, 27, 27, 0.025);
+}
+
+.recommendations-page .development-request-content {
+  display: flex;
+  align-items: flex-start;
+  gap: 17px;
+}
+
+.recommendations-page .development-request-icon {
+  width: 45px;
+  height: 45px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  border: 1px solid rgba(113, 29, 60, 0.1);
+  border-radius: 10px;
+  background: rgba(113, 29, 60, 0.07);
+  color: #711d3c;
+}
+
+.recommendations-page .development-request-text {
+  flex: 1;
+}
+
+.recommendations-page .development-request-text h2 {
+  margin: 4px 0 7px;
+  color: #2c1b1b;
+  font-family: var(--font-heading);
+  font-size: 21px;
+  font-weight: 750;
+}
+
+.recommendations-page .development-request-text > p {
+  max-width: 760px;
+  margin: 0 0 18px;
+  color: #705f5f;
+  font-size: 12px;
+  line-height: 1.7;
+}
+
+.recommendations-page .development-request-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 41px;
+  padding: 0 17px;
+  border: 1px solid #711d3c;
+  border-radius: 8px;
+  background: #711d3c;
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 5px 13px rgba(113, 29, 60, 0.14);
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.recommendations-page .development-request-button:hover {
+  background: #5d1732;
+  transform: translateY(-1px);
+  box-shadow: 0 8px 18px rgba(113, 29, 60, 0.19);
+}
+
+/* ============================================================
+   REQUEST SUBMITTED STATUS
+   ============================================================ */
+
+.recommendations-page .development-request-status {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 15px 17px;
+  border: 1px solid rgba(40, 120, 75, 0.18);
+  border-radius: 10px;
+  background: #f5faf6;
+  color: #2d6b45;
+}
+
+.recommendations-page .development-request-status > svg {
+  flex-shrink: 0;
+}
+
+.recommendations-page .development-request-status > div {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  flex: 1;
+}
+
+.recommendations-page .development-request-status strong {
+  color: #285d3c;
+  font-size: 13px;
+  font-weight: 750;
+}
+
+.recommendations-page .development-request-status span {
+  color: #607767;
+  font-size: 10px;
+  line-height: 1.5;
+}
+
+.recommendations-page .request-status-badge {
+  flex-shrink: 0;
+  padding: 6px 9px;
+  border: 1px solid rgba(45, 107, 69, 0.1);
+  border-radius: 6px;
+  background: #e8f3eb;
+  color: #2d6b45;
+  font-size: 10px !important;
+  font-weight: 750;
+}
+
+/* ============================================================
+   REQUEST MODAL
+   ============================================================ */
+
+.recommendations-page .request-modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: rgba(44, 27, 27, 0.58);
+  backdrop-filter: blur(3px);
+}
+
+.recommendations-page .request-modal {
+  position: relative;
+  width: min(560px, 100%);
+  max-height: 90vh;
+  overflow-y: auto;
+  padding: 26px;
+  border: 1px solid rgba(113, 29, 60, 0.14);
+  border-radius: 14px;
+  background: #fffaf3;
+  box-shadow: 0 28px 80px rgba(44, 27, 27, 0.24);
+}
+
+.recommendations-page .request-modal-close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 33px;
+  height: 33px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(44, 27, 27, 0.1);
+  border-radius: 8px;
+  background: #ffffff;
+  color: #6d5b5b;
+  cursor: pointer;
+  transition:
+    background 0.2s ease,
+    color 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.recommendations-page .request-modal-close:hover {
+  border-color: rgba(113, 29, 60, 0.15);
+  background: rgba(113, 29, 60, 0.06);
+  color: #711d3c;
+}
+
+.recommendations-page .request-modal-icon {
+  width: 43px;
+  height: 43px;
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(113, 29, 60, 0.09);
+  border-radius: 10px;
+  background: rgba(113, 29, 60, 0.07);
+  color: #711d3c;
+}
+
+.recommendations-page .request-modal h2 {
+  margin: 5px 0 8px;
+  padding-right: 38px;
+  color: #2c1b1b;
+  font-family: var(--font-heading);
+  font-size: 21px;
+  font-weight: 750;
+}
+
+.recommendations-page .request-modal-description {
+  margin: 0 0 19px;
+  color: #705f5f;
+  font-size: 12px;
+  line-height: 1.65;
+}
+
+.recommendations-page .request-project-summary {
+  margin-bottom: 17px;
+  padding: 3px 15px;
+  border: 1px solid rgba(44, 27, 27, 0.09);
+  border-radius: 10px;
+  background: #ffffff;
+}
+
+.recommendations-page .request-summary-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 12px 0;
+  border-bottom: 1px solid rgba(44, 27, 27, 0.07);
+}
+
+.recommendations-page .request-summary-row:last-child {
+  border-bottom: none;
+}
+
+.recommendations-page .request-summary-row span {
+  color: #806f6f;
+  font-size: 11px;
+}
+
+.recommendations-page .request-summary-row strong {
+  color: #2c1b1b;
+  font-size: 11px;
+  font-weight: 700;
+  text-align: right;
+}
+
+.recommendations-page .request-modal-note {
+  display: flex;
+  align-items: flex-start;
+  gap: 9px;
+  margin-bottom: 20px;
+  padding: 12px 13px;
+  border: 1px solid rgba(177, 138, 82, 0.23);
+  border-radius: 8px;
+  background: rgba(177, 138, 82, 0.07);
+  color: #68563b;
+  font-size: 10px;
+  line-height: 1.6;
+}
+
+.recommendations-page .request-modal-note svg {
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.recommendations-page .request-modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 9px;
+}
+
+.recommendations-page .request-cancel-button,
+.recommendations-page .request-confirm-button {
+  min-height: 40px;
+  padding: 0 15px;
+  border-radius: 8px;
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.recommendations-page .request-cancel-button {
+  border: 1px solid rgba(44, 27, 27, 0.13);
+  background: transparent;
+  color: #5f5050;
+}
+
+.recommendations-page .request-cancel-button:hover {
+  background: rgba(44, 27, 27, 0.05);
+}
+
+.recommendations-page .request-confirm-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  border: 1px solid #711d3c;
+  background: #711d3c;
+  color: #ffffff;
+  box-shadow: 0 4px 11px rgba(113, 29, 60, 0.13);
+}
+
+.recommendations-page .request-confirm-button:hover {
+  background: #5d1732;
+  transform: translateY(-1px);
+}
+
+/* ============================================================
+   ADMIN CHAT
+   ============================================================ */
+
+.recommendations-page .admin-chat-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 22px;
+  background: rgba(44, 27, 27, 0.6);
+  backdrop-filter: blur(3px);
+}
+
+.recommendations-page .admin-chat-modal {
+  width: min(680px, 100%);
+  height: min(720px, 88vh);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid rgba(113, 29, 60, 0.13);
+  border-radius: 15px;
+  background: #fffaf3;
+  box-shadow: 0 30px 90px rgba(44, 27, 27, 0.28);
+}
+
+/* ============================================================
+   CHAT HEADER
+   ============================================================ */
+
+.recommendations-page .admin-chat-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+  padding: 15px 17px;
+  border-bottom: 1px solid rgba(44, 27, 27, 0.08);
+  background: #ffffff;
+}
+
+.recommendations-page .admin-chat-header-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.recommendations-page .admin-chat-avatar {
+  width: 39px;
+  height: 39px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(113, 29, 60, 0.08);
+  border-radius: 9px;
+  background: rgba(113, 29, 60, 0.07);
+  color: #711d3c;
+}
+
+.recommendations-page .admin-chat-header-info strong {
+  display: block;
+  color: #2c1b1b;
+  font-size: 13px;
+  font-weight: 750;
+}
+
+.recommendations-page .admin-chat-header-info span {
+  display: block;
+  margin-top: 2px;
+  color: #847474;
+  font-size: 9px;
+}
+
+.recommendations-page .admin-chat-close {
+  width: 33px;
+  height: 33px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(44, 27, 27, 0.1);
+  border-radius: 8px;
+  background: transparent;
+  color: #6d5b5b;
+  cursor: pointer;
+  transition:
+    background 0.2s ease,
+    color 0.2s ease;
+}
+
+.recommendations-page .admin-chat-close:hover {
+  background: rgba(113, 29, 60, 0.06);
+  color: #711d3c;
+}
+
+/* ============================================================
+   CHAT PROJECT BAR
+   ============================================================ */
+
+.recommendations-page .admin-chat-project-bar {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 8px 17px;
+  border-bottom: 1px solid rgba(44, 27, 27, 0.07);
+  background: #fcf7ef;
+  color: #796868;
+  font-size: 9px;
+  font-weight: 650;
+}
+
+/* ============================================================
+   CHAT MESSAGES
+   ============================================================ */
+
+.recommendations-page .admin-chat-messages {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px 19px;
+  background: #f9f4ec;
+}
+
+.recommendations-page .admin-chat-messages::-webkit-scrollbar {
+  width: 5px;
+}
+
+.recommendations-page .admin-chat-messages::-webkit-scrollbar-thumb {
+  background: rgba(113, 29, 60, 0.16);
+  border-radius: 10px;
+}
+
+.recommendations-page .chat-message {
+  display: flex;
+  margin-bottom: 12px;
+}
+
+.recommendations-page .chat-message-user {
+  justify-content: flex-end;
+}
+
+.recommendations-page .chat-message-admin {
+  justify-content: flex-start;
+}
+
+.recommendations-page .chat-message-bubble {
+  max-width: 72%;
+  padding: 10px 12px 8px;
+  border-radius: 10px;
+  box-shadow: 0 2px 7px rgba(44, 27, 27, 0.025);
+}
+
+.recommendations-page .chat-message-admin .chat-message-bubble {
+  border: 1px solid rgba(44, 27, 27, 0.075);
+  border-top-left-radius: 4px;
+  background: #ffffff;
+}
+
+.recommendations-page .chat-message-user .chat-message-bubble {
+  border: 1px solid #711d3c;
+  border-top-right-radius: 4px;
+  background: #711d3c;
+  color: #ffffff;
+}
+
+.recommendations-page .chat-message-bubble p {
+  margin: 0;
+  font-size: 11px;
+  line-height: 1.55;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.recommendations-page .chat-message-admin .chat-message-bubble p {
+  color: #453535;
+}
+
+.recommendations-page .chat-message-user .chat-message-bubble p {
+  color: #ffffff;
+}
+
+.recommendations-page .chat-message-bubble span {
+  display: block;
+  margin-top: 5px;
+  font-size: 8px;
+  opacity: 0.68;
+  text-align: right;
+}
+
+/* Compatibility */
+
+.recommendations-page .admin-chat-message.user,
+.recommendations-page .admin-chat-message.user * {
+  color: #ffffff;
+}
+
+/* ============================================================
+   CHAT INPUT
+   ============================================================ */
+
+.recommendations-page .admin-chat-input-area {
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+  padding: 11px 13px;
+  border-top: 1px solid rgba(44, 27, 27, 0.08);
+  background: #ffffff;
+}
+
+.recommendations-page .admin-chat-input-area textarea {
+  flex: 1;
+  min-height: 39px;
+  max-height: 110px;
+  resize: none;
+  padding: 9px 11px;
+  border: 1px solid rgba(44, 27, 27, 0.12);
+  border-radius: 8px;
+  outline: none;
+  background: #fcfaf6;
+  color: #2c1b1b;
+  font-family: inherit;
+  font-size: 11px;
+  line-height: 1.45;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.recommendations-page .admin-chat-input-area textarea::placeholder {
+  color: #9a8989;
+}
+
+.recommendations-page .admin-chat-input-area textarea:focus {
+  border-color: rgba(113, 29, 60, 0.42);
+  box-shadow: 0 0 0 3px rgba(113, 29, 60, 0.055);
+}
+
+.recommendations-page .admin-chat-send {
+  width: 39px;
+  height: 39px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  border: 1px solid #711d3c;
+  border-radius: 8px;
+  background: #711d3c;
+  color: #ffffff;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(113, 29, 60, 0.13);
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.recommendations-page .admin-chat-send:hover:not(:disabled) {
+  background: #5d1732;
+  transform: translateY(-1px);
+  box-shadow: 0 7px 15px rgba(113, 29, 60, 0.18);
+}
+
+.recommendations-page .admin-chat-send:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.recommendations-page .admin-chat-footer {
+  padding: 6px 13px 9px;
+  background: #ffffff;
+  color: #988888;
+  font-size: 8px;
+  text-align: right;
+}
+
+/* ============================================================
+   DARK MODE
+   ============================================================ */
+
+:root[data-theme="dark"] .recommendations-page {
+  color: #f3e7dc;
+}
+
+:root[data-theme="dark"] .recommendations-page .recommendations-header h1,
+:root[data-theme="dark"] .recommendations-page .project-context-main h2,
+:root[data-theme="dark"] .recommendations-page .recommendation-summary-card strong,
+:root[data-theme="dark"] .recommendations-page .section-heading h2,
+:root[data-theme="dark"] .recommendations-page .team-requirement-card h3,
+:root[data-theme="dark"] .recommendations-page .resource-role strong,
+:root[data-theme="dark"] .recommendations-page .technology-content h3,
+:root[data-theme="dark"] .recommendations-page .architecture-node strong,
+:root[data-theme="dark"] .recommendations-page .planning-card h3,
+:root[data-theme="dark"] .recommendations-page .admin-contact-main h3,
+:root[data-theme="dark"] .recommendations-page .development-request-text h2,
+:root[data-theme="dark"] .recommendations-page .request-modal h2,
+:root[data-theme="dark"] .recommendations-page .request-summary-row strong,
+:root[data-theme="dark"] .recommendations-page .admin-chat-header-info strong {
+  color: #f3e7dc;
+}
+
+:root[data-theme="dark"] .recommendations-page .recommendations-header p,
+:root[data-theme="dark"] .recommendations-page .section-heading p,
+:root[data-theme="dark"] .recommendations-page .team-requirement-card p,
+:root[data-theme="dark"] .recommendations-page .technology-content p,
+:root[data-theme="dark"] .recommendations-page .planning-card p,
+:root[data-theme="dark"] .recommendations-page .admin-contact-main p,
+:root[data-theme="dark"] .recommendations-page .development-request-text > p {
+  color: #c5b5ad;
+}
+
+:root[data-theme="dark"] .recommendations-page .recommendations-project-context,
+:root[data-theme="dark"] .recommendations-page .recommendation-summary-card,
+:root[data-theme="dark"] .recommendations-page .team-requirement-card,
+:root[data-theme="dark"] .recommendations-page .resource-table-wrapper,
+:root[data-theme="dark"] .recommendations-page .technology-card,
+:root[data-theme="dark"] .recommendations-page .architecture-card,
+:root[data-theme="dark"] .recommendations-page .planning-card,
+:root[data-theme="dark"] .recommendations-page .admin-contact-card,
+:root[data-theme="dark"] .recommendations-page .admin-chat-header,
+:root[data-theme="dark"] .recommendations-page .admin-chat-footer,
+:root[data-theme="dark"] .recommendations-page .request-project-summary {
+  border-color: rgba(255, 255, 255, 0.08);
+  background: #302222;
+}
+
+:root[data-theme="dark"] .recommendations-page .project-context-main span,
+:root[data-theme="dark"] .recommendations-page .project-context-main p,
+:root[data-theme="dark"] .recommendations-page .recommendation-summary-card span,
+:root[data-theme="dark"] .recommendations-page .recommendation-summary-card small,
+:root[data-theme="dark"] .recommendations-page .resource-table td,
+:root[data-theme="dark"] .recommendations-page .resource-purpose,
+:root[data-theme="dark"] .recommendations-page .admin-chat-header-info span {
+  color: #ad9d95;
+}
+
+:root[data-theme="dark"] .recommendations-page .recommendations-project-context:hover,
+:root[data-theme="dark"] .recommendations-page .recommendation-summary-card:hover,
+:root[data-theme="dark"] .recommendations-page .team-requirement-card:hover,
+:root[data-theme="dark"] .recommendations-page .technology-card:hover,
+:root[data-theme="dark"] .recommendations-page .planning-card:hover {
+  border-color: rgba(177, 138, 82, 0.2);
+}
+
+:root[data-theme="dark"] .recommendations-page .resource-table th {
+  border-color: rgba(255, 255, 255, 0.07);
+  background: #382929;
+  color: #bcaea7;
+}
+
+:root[data-theme="dark"] .recommendations-page .resource-table td {
+  border-color: rgba(255, 255, 255, 0.07);
+}
+
+:root[data-theme="dark"] .recommendations-page .resource-table tbody tr:hover {
+  background: #382929;
+}
+
+:root[data-theme="dark"] .recommendations-page .project-context-icon,
+:root[data-theme="dark"] .recommendations-page .recommendation-summary-icon,
+:root[data-theme="dark"] .recommendations-page .team-requirement-icon,
+:root[data-theme="dark"] .recommendations-page .resource-role-icon,
+:root[data-theme="dark"] .recommendations-page .technology-icon,
+:root[data-theme="dark"] .recommendations-page .architecture-node-icon,
+:root[data-theme="dark"] .recommendations-page .admin-contact-icon,
+:root[data-theme="dark"] .recommendations-page .development-request-icon,
+:root[data-theme="dark"] .recommendations-page .request-modal-icon,
+:root[data-theme="dark"] .recommendations-page .admin-chat-avatar {
+  border-color: rgba(177, 138, 82, 0.12);
+  background: rgba(177, 138, 82, 0.1);
+  color: #c5a66c;
+}
+
+:root[data-theme="dark"] .recommendations-page .architecture-node {
+  border-color: rgba(177, 138, 82, 0.17);
+  background: #382929;
+}
+
+:root[data-theme="dark"] .recommendations-page .architecture-node span {
+  color: #aa9a92;
+}
+
+:root[data-theme="dark"] .recommendations-page .resource-admin-note {
+  border-color: rgba(177, 138, 82, 0.2);
+  background: rgba(177, 138, 82, 0.07);
+}
+
+:root[data-theme="dark"] .recommendations-page .resource-admin-note h3 {
+  color: #d0b887;
+}
+
+:root[data-theme="dark"] .recommendations-page .resource-admin-note p,
+:root[data-theme="dark"] .recommendations-page .assignment-flow span {
+  color: #bcae9f;
+}
+
+:root[data-theme="dark"] .recommendations-page .recommendations-info {
+  border-color: rgba(177, 138, 82, 0.17);
+  background: rgba(177, 138, 82, 0.06);
+}
+
+:root[data-theme="dark"] .recommendations-page .recommendations-info strong {
+  color: #d1b886;
+}
+
+:root[data-theme="dark"] .recommendations-page .recommendations-info p {
+  color: #bcaea5;
+}
+
+:root[data-theme="dark"] .recommendations-page .development-request-section {
+  border-color: rgba(177, 138, 82, 0.2);
+  background: #352525;
+}
+
+:root[data-theme="dark"] .recommendations-page .development-request-status {
+  border-color: rgba(94, 171, 119, 0.25);
+  background: rgba(52, 103, 68, 0.18);
+}
+
+:root[data-theme="dark"] .recommendations-page .development-request-status strong {
+  color: #a9d4b5;
+}
+
+:root[data-theme="dark"] .recommendations-page .development-request-status span {
+  color: #a9bcae;
+}
+
+:root[data-theme="dark"] .recommendations-page .request-status-badge {
+  border-color: rgba(94, 171, 119, 0.14);
+  background: rgba(94, 171, 119, 0.18);
+  color: #a9d4b5;
+}
+
+:root[data-theme="dark"] .recommendations-page .request-modal-overlay,
+:root[data-theme="dark"] .recommendations-page .admin-chat-overlay {
+  background: rgba(0, 0, 0, 0.7);
+}
+
+:root[data-theme="dark"] .recommendations-page .request-modal,
+:root[data-theme="dark"] .recommendations-page .admin-chat-modal {
+  border-color: rgba(177, 138, 82, 0.16);
+  background: #302121;
+}
+
+:root[data-theme="dark"] .recommendations-page .request-modal-close,
+:root[data-theme="dark"] .recommendations-page .admin-chat-close {
+  border-color: rgba(255, 255, 255, 0.1);
+  background: #382929;
+  color: #c8b8b0;
+}
+
+:root[data-theme="dark"] .recommendations-page .request-summary-row {
+  border-color: rgba(255, 255, 255, 0.07);
+}
+
+:root[data-theme="dark"] .recommendations-page .request-summary-row span,
+:root[data-theme="dark"] .recommendations-page .request-modal-description {
+  color: #aa9991;
+}
+
+:root[data-theme="dark"] .recommendations-page .request-modal-note {
+  border-color: rgba(177, 138, 82, 0.25);
+  background: rgba(177, 138, 82, 0.08);
+  color: #cbb998;
+}
+
+:root[data-theme="dark"] .recommendations-page .request-cancel-button {
+  border-color: rgba(255, 255, 255, 0.12);
+  color: #d0c1b9;
+}
+
+:root[data-theme="dark"] .recommendations-page .admin-chat-project-bar {
+  border-color: rgba(255, 255, 255, 0.07);
+  background: #382929;
+  color: #b7a7a0;
+}
+
+:root[data-theme="dark"] .recommendations-page .admin-chat-messages {
+  background: #261b1b;
+}
+
+:root[data-theme="dark"] .recommendations-page .chat-message-admin .chat-message-bubble {
+  border-color: rgba(255, 255, 255, 0.08);
+  background: #352727;
+}
+
+:root[data-theme="dark"] .recommendations-page .chat-message-admin .chat-message-bubble p {
+  color: #eaded5;
+}
+
+:root[data-theme="dark"] .recommendations-page .admin-chat-input-area,
+:root[data-theme="dark"] .recommendations-page .admin-chat-footer {
+  border-color: rgba(255, 255, 255, 0.08);
+  background: #302222;
+}
+
+:root[data-theme="dark"] .recommendations-page .admin-chat-input-area textarea {
+  border-color: rgba(255, 255, 255, 0.11);
+  background: #382929;
+  color: #f1e5dc;
+}
+
+:root[data-theme="dark"] .recommendations-page .admin-chat-input-area textarea::placeholder {
+  color: #93827b;
+}
+
+:root[data-theme="dark"] .recommendations-page .admin-chat-footer {
+  color: #8f7f78;
+}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+
+@media (max-width: 1100px) {
+  .recommendations-page {
+    padding: 0;
+  }
+
+  .recommendations-page .recommendation-summary {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 900px) {
+  .recommendations-page .team-requirement-grid,
+  .recommendations-page .technology-grid,
+  .recommendations-page .planning-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .recommendations-page .architecture-flow {
+    justify-content: flex-start;
+  }
+}
+
+@media (max-width: 760px) {
+  .recommendations-page {
+    padding: 0;
+  }
+
+  .recommendations-page .recommendations-project-context {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .recommendations-page .recommendation-summary {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .recommendations-page .admin-contact-card {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .recommendations-page .admin-contact-button {
+    width: 100%;
+  }
+
+  .recommendations-page .development-request-content {
+    flex-direction: column;
+  }
+
+  .recommendations-page .development-request-section {
+    padding: 21px;
+  }
+
+  .recommendations-page .development-request-status {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .recommendations-page .request-status-badge {
+    align-self: flex-start;
+  }
+
+  .recommendations-page .request-modal {
+    padding: 23px;
+  }
+
+  .recommendations-page .request-modal-actions {
+    flex-direction: column-reverse;
+  }
+
+  .recommendations-page .request-cancel-button,
+  .recommendations-page .request-confirm-button {
+    width: 100%;
+  }
+
+  .recommendations-page .admin-chat-overlay {
+    padding: 10px;
+  }
+
+  .recommendations-page .admin-chat-modal {
+    width: 100%;
+    height: 94vh;
+    border-radius: 12px;
+  }
+
+  .recommendations-page .chat-message-bubble {
+    max-width: 84%;
+  }
+}
+
+@media (max-width: 480px) {
+  .recommendations-page {
+    padding: 0;
+  }
+
+  .recommendations-page .recommendations-header {
+    margin-bottom: 1.75rem;
+  }
+
+  .recommendations-page .recommendations-header h1 {
+    font-size: 26px;
+  }
+
+  .recommendations-page .recommendations-header p {
+    font-size: 12px;
+  }
+
+  .recommendations-page .recommendations-project-context {
+    margin-bottom: 1.75rem;
+  }
+
+  .recommendations-page .recommendation-summary {
+    margin-bottom: 2rem;
+  }
+
+  .recommendations-page .recommendation-summary-card {
+    min-height: 90px;
+  }
+
+  .recommendations-page .recommendation-section {
+    margin-bottom: 2rem;
+  }
+
+  .recommendations-page .resource-admin-note {
+    flex-direction: column;
+    margin-bottom: 2rem;
+  }
+
+  .recommendations-page .recommendations-info {
+    flex-direction: column;
+    margin-bottom: 1.75rem;
+  }
+
+  .recommendations-page .admin-chat-header {
+    padding: 12px;
+  }
+
+  .recommendations-page .admin-chat-messages {
+    padding: 16px 12px;
+  }
+
+  .recommendations-page .admin-chat-input-area {
+    padding: 9px;
+  }
+}

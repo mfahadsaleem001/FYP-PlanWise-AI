@@ -1,0 +1,422 @@
+/* ============================================================
+   PLANWISE AI - NEW ESTIMATE PAGE
+   ============================================================ */
+
+.new-estimate-page {
+  min-height: 100vh;
+  padding: 0;
+  background: var(--color-background);
+  color: var(--color-text);
+}
+
+
+/* ============================================================
+   PAGE HEADER
+   ============================================================ */
+
+.new-estimate-header {
+  max-width: 1400px;
+  margin: 0 auto 2rem;
+}
+
+.new-estimate-label {
+  display: inline-block;
+  margin-bottom: 0.5rem;
+
+  color: var(--color-accent);
+
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+}
+
+.new-estimate-header h1 {
+  margin-bottom: 0.5rem;
+
+  color: var(--color-dark);
+  font-family: var(--font-heading);
+
+  font-size: 2.15rem;
+  line-height: 1.15;
+}
+
+.new-estimate-header p {
+  max-width: 700px;
+
+  color: var(--color-text-muted);
+
+  font-size: 0.78rem;
+  line-height: 1.65;
+}
+
+
+/* ============================================================
+   FORM CARD
+   ============================================================ */
+
+.estimate-form-card {
+  max-width: 1400px;
+
+  margin: 0 auto 1.5rem;
+  padding: 1.5rem;
+
+  background: var(--color-surface);
+
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+
+  box-shadow: var(--shadow-sm);
+}
+
+.estimate-form-heading {
+  padding-bottom: 1.2rem;
+  margin-bottom: 1.4rem;
+
+  border-bottom: 1px solid var(--color-border);
+}
+
+.form-step {
+  display: inline-block;
+  margin-bottom: 0.4rem;
+
+  color: var(--color-accent);
+
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+}
+
+.estimate-form-heading h2 {
+  margin-bottom: 0.35rem;
+
+  color: var(--color-dark);
+  font-family: var(--font-heading);
+
+  font-size: 1.3rem;
+}
+
+.estimate-form-heading p {
+  color: var(--color-text-muted);
+  font-size: 0.68rem;
+}
+
+
+/* ============================================================
+   FORM FIELDS
+   ============================================================ */
+
+.estimate-form {
+  display: flex;
+  flex-direction: column;
+
+  gap: 1.25rem;
+}
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-field label {
+  margin-bottom: 0.5rem;
+
+  color: var(--color-dark);
+
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+
+.form-field input,
+.form-field textarea,
+.form-field select {
+  width: 100%;
+
+  padding: 0.82rem 0.9rem;
+
+  color: var(--color-text);
+  background: var(--color-surface);
+
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+
+  outline: none;
+
+  font-family: var(--font-body);
+  font-size: 0.73rem;
+
+  transition:
+    border-color var(--transition),
+    box-shadow var(--transition);
+}
+
+.form-field input::placeholder,
+.form-field textarea::placeholder {
+  color: #a59a9a;
+}
+
+.form-field textarea {
+  min-height: 150px;
+
+  resize: vertical;
+
+  line-height: 1.65;
+}
+
+.form-field select {
+  cursor: pointer;
+}
+
+.form-field input:focus,
+.form-field textarea:focus,
+.form-field select:focus {
+  border-color: var(--color-primary);
+
+  box-shadow:
+    0 0 0 3px rgba(113, 29, 60, 0.08);
+}
+
+.field-help {
+  margin-top: 0.4rem;
+
+  color: var(--color-text-muted);
+
+  font-size: 0.6rem;
+  line-height: 1.5;
+}
+
+
+/* ============================================================
+   FORM ACTIONS
+   ============================================================ */
+
+.estimate-form-actions {
+  padding-top: 0.35rem;
+
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+
+  gap: 0.7rem;
+}
+
+.estimate-cancel-btn,
+.estimate-submit-btn {
+  min-height: 42px;
+
+  padding: 0.68rem 1rem;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 0.5rem;
+
+  border-radius: var(--radius-md);
+
+  font-family: var(--font-body);
+  font-size: 0.7rem;
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition:
+    background-color var(--transition),
+    border-color var(--transition),
+    transform var(--transition),
+    box-shadow var(--transition);
+}
+
+.estimate-cancel-btn {
+  color: var(--color-text);
+  background: var(--color-surface);
+
+  border: 1px solid var(--color-border);
+}
+
+.estimate-cancel-btn:hover {
+  border-color: var(--color-accent-light);
+}
+
+.estimate-submit-btn {
+  color: #ffffff;
+  background: var(--color-primary);
+
+  border: 1px solid var(--color-primary);
+}
+
+.estimate-submit-btn:hover {
+  background: var(--color-primary-dark);
+
+  transform: translateY(-1px);
+
+  box-shadow: var(--shadow-sm);
+}
+
+.estimate-submit-btn span {
+  font-size: 0.9rem;
+}
+
+
+/* ============================================================
+   INFORMATION NOTE
+   ============================================================ */
+
+.estimate-info {
+  max-width: 1400px;
+
+  margin: 0 auto;
+
+  padding: 0.9rem 1rem;
+
+  display: flex;
+  align-items: flex-start;
+
+  gap: 0.75rem;
+
+  background: var(--color-surface-muted);
+
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+}
+
+.estimate-info-mark {
+  width: 24px;
+  height: 24px;
+
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  color: var(--color-primary);
+
+  border: 1px solid var(--color-accent-light);
+  border-radius: 50%;
+
+  font-size: 0.7rem;
+  font-weight: 700;
+}
+
+.estimate-info strong {
+  display: block;
+
+  margin-bottom: 0.25rem;
+
+  color: var(--color-dark);
+
+  font-size: 0.7rem;
+}
+
+.estimate-info p {
+  color: var(--color-text-muted);
+
+  font-size: 0.61rem;
+  line-height: 1.6;
+}
+
+
+/* ============================================================
+   CUSTOM PROJECT TYPE
+   ============================================================ */
+
+.custom-project-type-field {
+  padding-top: 0.2rem;
+
+  animation: customProjectTypeIn 0.2s ease;
+}
+
+
+/* ============================================================
+   FORM ERROR
+   ============================================================ */
+
+.estimate-form-error {
+  padding: 0.7rem 0.85rem;
+
+  color: var(--color-danger);
+
+  background: rgba(163, 59, 59, 0.08);
+
+  border: 1px solid rgba(163, 59, 59, 0.2);
+  border-radius: var(--radius-md);
+
+  font-size: 0.68rem;
+  font-weight: 600;
+}
+
+
+/* ============================================================
+   ANIMATION
+   ============================================================ */
+
+@keyframes customProjectTypeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+
+@media (max-width: 700px) {
+  .new-estimate-header {
+    margin-bottom: 1.75rem;
+  }
+
+  .new-estimate-header h1 {
+    font-size: 1.9rem;
+  }
+
+  .estimate-form-card {
+    padding: 1.25rem;
+  }
+
+  .estimate-form {
+    gap: 1.15rem;
+  }
+
+  .estimate-form-actions {
+    flex-direction: column-reverse;
+    align-items: stretch;
+  }
+
+  .estimate-cancel-btn,
+  .estimate-submit-btn {
+    width: 100%;
+  }
+
+  .estimate-info {
+    padding: 0.85rem 0.9rem;
+  }
+}
+
+
+@media (max-width: 450px) {
+  .estimate-form-card {
+    padding: 1rem;
+  }
+
+  .estimate-form-heading {
+    padding-bottom: 1rem;
+    margin-bottom: 1.15rem;
+  }
+
+  .form-field input,
+  .form-field textarea,
+  .form-field select {
+    padding: 0.78rem 0.8rem;
+  }
+
+  .estimate-info {
+    gap: 0.65rem;
+  }
+}

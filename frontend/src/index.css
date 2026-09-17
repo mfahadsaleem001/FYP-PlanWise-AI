@@ -1,0 +1,401 @@
+@import "tailwindcss";
+
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap');
+
+/* =========================================================
+   PLANWISE AI - GLOBAL DESIGN SYSTEM
+   ========================================================= */
+
+/* =========================================================
+   DESIGN TOKENS
+   ========================================================= */
+
+:root {
+  /* Brand Colors */
+  --color-primary: #711D3C;
+  --color-primary-dark: #57152E;
+  --color-primary-light: #8B3152;
+
+  --color-background: #F7F0E5;
+  --color-surface: #FFFDF9;
+  --color-surface-muted: #F1E8DB;
+
+  --color-accent: #B18A52;
+  --color-accent-light: #D1B37D;
+
+  --color-dark: #2C1B1B;
+  --color-text: #3A2A2A;
+  --color-text-muted: #766969;
+
+  --color-border: #E4D8CA;
+
+  --color-success: #3F7355;
+  --color-warning: #A8752A;
+  --color-danger: #A33B3B;
+  --color-info: #496B7A;
+
+
+  /* Typography */
+  --font-body: "DM Sans", sans-serif;
+  --font-heading: "Playfair Display", serif;
+
+
+  /* Spacing */
+  --space-xs: 0.25rem;
+  --space-sm: 0.5rem;
+  --space-md: 1rem;
+  --space-lg: 1.5rem;
+  --space-xl: 2rem;
+  --space-2xl: 3rem;
+
+
+  /* Border Radius */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+
+
+  /* Shadows */
+  --shadow-sm: 0 2px 8px rgba(44, 27, 27, 0.06);
+  --shadow-md: 0 6px 20px rgba(44, 27, 27, 0.08);
+
+
+  /* Layout */
+  --sidebar-width: 250px;
+  --topbar-height: 72px;
+
+  /* Transition */
+  --transition: 0.2s ease;
+}
+
+/* ============================================================
+   PLANWISE AI - GLOBAL DARK THEME
+   ============================================================ */
+
+:root[data-theme="dark"] {
+
+  --color-primary: #9A3D5F;
+  --color-primary-dark: #7D2D4A;
+  --color-primary-light: #B65A78;
+
+  --color-background: #21191A;
+  --color-surface: #2B2223;
+  --color-surface-muted: #342A2B;
+
+  --color-accent: #C9A66B;
+  --color-accent-light: #DFC28E;
+
+  --color-dark: #F7F0E5;
+  --color-text: #E9DFD5;
+  --color-text-muted: #B8AAA3;
+
+  --color-border: #493B3B;
+
+  --color-success: #72A982;
+  --color-warning: #D0A05A;
+  --color-danger: #D56A6A;
+  --color-info: #76A1B2;
+
+  --shadow-sm:
+    0 2px 8px rgba(0, 0, 0, 0.18);
+
+  --shadow-md:
+    0 6px 20px rgba(0, 0, 0, 0.24);
+}
+
+:root[data-theme="dark"] body {
+  background: var(--color-background);
+  color: var(--color-text);
+}
+
+:root[data-theme="dark"] input,
+:root[data-theme="dark"] textarea,
+:root[data-theme="dark"] select {
+  background: var(--color-surface);
+  color: var(--color-text);
+  border-color: var(--color-border);
+}
+
+:root[data-theme="dark"] input::placeholder,
+:root[data-theme="dark"] textarea::placeholder {
+  color: #8F817D;
+}
+
+:root[data-theme="dark"] input:focus,
+:root[data-theme="dark"] textarea:focus,
+:root[data-theme="dark"] select:focus {
+  border-color: var(--color-primary);
+  outline-color: rgba(154, 61, 95, 0.25);
+}
+
+:root[data-theme="dark"] table {
+  color: var(--color-text);
+}
+
+:root[data-theme="dark"] th {
+  background: var(--color-surface-muted);
+  color: var(--color-text-muted);
+  border-color: var(--color-border);
+}
+
+:root[data-theme="dark"] td {
+  color: var(--color-text-muted);
+  border-color: var(--color-border);
+}
+
+:root[data-theme="dark"] a {
+  color: var(--color-accent);
+}
+
+:root[data-theme="dark"] ::selection {
+  background: var(--color-primary);
+  color: var(--color-surface);
+}
+
+/* =========================================================
+   RESET
+   ========================================================= */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+
+html {
+  scroll-behavior: smooth;
+}
+
+
+body {
+  min-width: 320px;
+  min-height: 100vh;
+
+  font-family: var(--font-body);
+  color: var(--color-text);
+  background-color: var(--color-background);
+
+  line-height: 1.6;
+
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}
+
+
+button {
+  cursor: pointer;
+}
+
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+
+ul,
+ol {
+  list-style: none;
+}
+
+
+/* =========================================================
+   TYPOGRAPHY
+   ========================================================= */
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  color: var(--color-dark);
+  font-family: var(--font-heading);
+  line-height: 1.25;
+}
+
+
+h1 {
+  font-size: 2.75rem;
+}
+
+
+h2 {
+  font-size: 2.1rem;
+}
+
+
+h3 {
+  font-size: 1.5rem;
+}
+
+
+p {
+  color: var(--color-text);
+}
+
+
+/* =========================================================
+   FORM ELEMENTS
+   ========================================================= */
+
+input,
+textarea,
+select {
+  width: 100%;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: 0.75rem 0.9rem;
+
+  background: var(--color-surface);
+  color: var(--color-text);
+
+  outline: none;
+  transition: border-color var(--transition),
+              box-shadow var(--transition);
+}
+
+
+input:focus,
+textarea:focus,
+select:focus {
+  border-color: var(--color-primary);
+
+  box-shadow: 0 0 0 3px rgba(113, 29, 60, 0.1);
+}
+
+
+textarea {
+  min-height: 140px;
+  resize: vertical;
+}
+
+
+/* =========================================================
+   BUTTON BASE
+   ========================================================= */
+
+button {
+  border: none;
+}
+
+
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+
+/* =========================================================
+   SCROLLBAR
+   ========================================================= */
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+
+::-webkit-scrollbar-track {
+  background: var(--color-surface-muted);
+}
+
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-accent);
+  border-radius: 10px;
+}
+
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-primary);
+}
+
+
+/* =========================================================
+   SELECTION
+   ========================================================= */
+
+::selection {
+  background: var(--color-primary);
+  color: #ffffff;
+}
+
+
+/* =========================================================
+   RESPONSIVE TYPOGRAPHY
+   ========================================================= */
+
+@media (max-width: 768px) {
+
+  h1 {
+    font-size: 2.2rem;
+  }
+
+  h2 {
+    font-size: 1.8rem;
+  }
+
+  h3 {
+    font-size: 1.35rem;
+  }
+
+  body {
+    font-size: 0.95rem;
+  }
+}
+
+/* ============================================================
+   DARK THEME - COMPATIBILITY OVERRIDES
+   ============================================================ */
+
+:root[data-theme="dark"] .app-layout,
+:root[data-theme="dark"] .app-main,
+:root[data-theme="dark"] .app-content {
+  background: var(--color-background);
+}
+
+:root[data-theme="dark"] .settings-card,
+:root[data-theme="dark"] .settings-options-card,
+:root[data-theme="dark"] .settings-security-card,
+:root[data-theme="dark"] .settings-data-card,
+:root[data-theme="dark"] .profile-overview,
+:root[data-theme="dark"] .profile-info-card,
+:root[data-theme="dark"] .profile-stat-card,
+:root[data-theme="dark"] .profile-security-card,
+:root[data-theme="dark"] .reports-table-wrapper {
+  background: var(--color-surface);
+  border-color: var(--color-border);
+  color: var(--color-text);
+}
+
+:root[data-theme="dark"] h1,
+:root[data-theme="dark"] h2,
+:root[data-theme="dark"] h3,
+:root[data-theme="dark"] h4 {
+  color: var(--color-dark);
+}
+
+:root[data-theme="dark"] button {
+  color: inherit;
+}
+
+:root[data-theme="dark"] .settings-select option {
+  background: var(--color-surface);
+  color: var(--color-text);
+}
