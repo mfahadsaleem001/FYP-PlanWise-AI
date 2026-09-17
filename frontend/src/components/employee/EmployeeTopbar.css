@@ -1,0 +1,215 @@
+/* ============================================================
+   EMPLOYEE TOPBAR
+   ============================================================ */
+
+.employee-topbar {
+  height: 72px;
+  width: 100%;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 0 2rem;
+
+  background: var(--color-surface);
+  border-bottom: 1px solid var(--color-border);
+
+  box-sizing: border-box;
+}
+
+/* ============================================================
+   TITLE
+   ============================================================ */
+
+.employee-topbar-title {
+  display: flex;
+  flex-direction: column;
+  gap: 0.18rem;
+}
+
+.employee-topbar-title > span {
+  color: var(--color-accent);
+
+  font-size: 0.58rem;
+  font-weight: 700;
+
+  letter-spacing: 0.14em;
+  line-height: 1.2;
+}
+
+.employee-topbar-title h2 {
+  margin: 0;
+
+  color: var(--color-text-primary);
+
+  font-family: var(--font-heading);
+  font-size: 1rem;
+  font-weight: 700;
+
+  line-height: 1.2;
+}
+
+/* ============================================================
+   ACTIONS
+   ============================================================ */
+
+.employee-topbar-actions {
+  display: flex;
+  align-items: center;
+
+  gap: 1rem;
+}
+
+/* ============================================================
+   NOTIFICATION
+   ============================================================ */
+
+.employee-topbar-notification {
+  width: 34px;
+  height: 34px;
+
+  position: relative;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  color: var(--color-text-secondary);
+
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 7px;
+
+  text-decoration: none;
+
+  transition:
+    color var(--transition),
+    background-color var(--transition),
+    border-color var(--transition);
+}
+
+.employee-topbar-notification:hover {
+  color: var(--color-primary);
+
+  background: var(--color-background);
+  border-color: var(--color-border);
+}
+
+.employee-topbar-notification svg {
+  width: 17px;
+  height: 17px;
+
+  stroke-width: 1.9;
+}
+
+.employee-notification-dot {
+  width: 6px;
+  height: 6px;
+
+  position: absolute;
+  top: 7px;
+  right: 7px;
+
+  background: var(--color-primary);
+
+  border: 2px solid var(--color-surface);
+  border-radius: 50%;
+}
+
+/* ============================================================
+   USER
+   ============================================================ */
+
+.employee-topbar-user {
+  display: flex;
+  align-items: center;
+
+  gap: 0.65rem;
+}
+
+.employee-topbar-avatar {
+  width: 34px;
+  height: 34px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: var(--color-primary);
+  color: #ffffff;
+
+  border-radius: 50%;
+
+  font-size: 0.7rem;
+  font-weight: 700;
+}
+
+.employee-topbar-user-info {
+  display: flex;
+  flex-direction: column;
+
+  gap: 0.12rem;
+}
+
+.employee-topbar-user-info strong {
+  color: var(--color-text-primary);
+
+  font-size: 0.68rem;
+  font-weight: 700;
+
+  line-height: 1.2;
+}
+
+.employee-topbar-user-info span {
+  color: var(--color-text-muted);
+
+  font-size: 0.56rem;
+
+  line-height: 1.2;
+}
+
+/* ============================================================
+   DARK THEME
+   ============================================================ */
+
+:root[data-theme="dark"] .employee-topbar-notification:hover {
+  background: rgba(255, 255, 255, 0.035);
+}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+
+@media (max-width: 768px) {
+  .employee-topbar {
+    height: 68px;
+    padding: 0 1.25rem;
+  }
+
+  .employee-topbar-title h2 {
+    font-size: 0.9rem;
+  }
+
+  .employee-topbar-user-info {
+    display: none;
+  }
+
+  .employee-topbar-actions {
+    gap: 0.6rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .employee-topbar {
+    padding: 0 1rem;
+  }
+
+  .employee-topbar-title > span {
+    font-size: 0.52rem;
+  }
+
+  .employee-topbar-title h2 {
+    font-size: 0.82rem;
+  }
+}

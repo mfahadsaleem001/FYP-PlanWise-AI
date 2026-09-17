@@ -1,0 +1,959 @@
+/* ============================================================
+   EMPLOYEE MESSAGES
+   PROJECT-CENTRIC COMMUNICATION
+   ============================================================ */
+
+.employee-messages-page {
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0;
+  color: var(--color-heading);
+  box-sizing: border-box;
+}
+
+
+/* ============================================================
+   PAGE HEADER
+   ============================================================ */
+
+.employee-messages-header {
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.employee-messages-eyebrow {
+  display: block;
+  margin-bottom: 0.32rem;
+  color: var(--color-accent);
+  font-size: 0.61rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  line-height: 1.2;
+}
+
+.employee-messages-header h1 {
+  margin: 0;
+  color: var(--color-heading);
+  font-family: var(--font-heading);
+  font-size: 1.5rem;
+  font-weight: 600;
+  line-height: 1.25;
+  letter-spacing: -0.02em;
+}
+
+.employee-messages-header p {
+  max-width: 650px;
+  margin: 0.4rem 0 0;
+  color: var(--color-muted);
+  font-size: 0.76rem;
+  line-height: 1.55;
+}
+
+
+/* ============================================================
+   WORKSPACE
+   ============================================================ */
+
+.employee-messages-workspace {
+  display: grid;
+  grid-template-columns: 330px minmax(0, 1fr);
+  min-height: 690px;
+  margin-top: 1.5rem;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  box-shadow:
+    0 10px 34px rgba(44, 27, 27, 0.045);
+  overflow: hidden;
+}
+
+
+/* ============================================================
+   PROJECT SIDEBAR
+   ============================================================ */
+
+.employee-messages-projects {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  background: var(--color-surface);
+  border-right: 1px solid var(--color-border);
+}
+
+.employee-messages-projects-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1.1rem 1rem 0.95rem;
+}
+
+.employee-messages-sidebar-label {
+  display: block;
+  margin-bottom: 0.24rem;
+  color: var(--color-accent);
+  font-size: 0.54rem;
+  font-weight: 700;
+  letter-spacing: 0.13em;
+}
+
+.employee-messages-projects-header h2 {
+  margin: 0;
+  color: var(--color-heading);
+  font-family: var(--font-heading);
+  font-size: 0.88rem;
+  font-weight: 600;
+}
+
+.employee-messages-sidebar-icon {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  border: 1px solid rgba(177, 138, 82, 0.22);
+  border-radius: 7px;
+  background: rgba(177, 138, 82, 0.07);
+  color: var(--color-accent);
+}
+
+.employee-messages-sidebar-icon svg {
+  width: 15px;
+  height: 15px;
+  stroke-width: 1.8;
+}
+
+
+/* ============================================================
+   SEARCH
+   ============================================================ */
+
+.employee-messages-search {
+  position: relative;
+  display: flex;
+  align-items: center;
+  margin: 0 1rem 0.9rem;
+}
+
+.employee-messages-search svg {
+  position: absolute;
+  left: 0.7rem;
+  width: 13px;
+  height: 13px;
+  color: var(--color-muted);
+  pointer-events: none;
+}
+
+.employee-messages-search input {
+  width: 100%;
+  height: 34px;
+  padding: 0 0.7rem 0 1.95rem;
+  background: var(--color-background);
+  border: 1px solid var(--color-border);
+  border-radius: 5px;
+  outline: none;
+  color: var(--color-heading);
+  font-family: inherit;
+  font-size: 0.62rem;
+  box-sizing: border-box;
+}
+
+.employee-messages-search input::placeholder {
+  color: var(--color-muted);
+}
+
+.employee-messages-search input:focus {
+  border-color: rgba(177, 138, 82, 0.65);
+  box-shadow: 0 0 0 3px rgba(177, 138, 82, 0.07);
+}
+
+
+/* ============================================================
+   PROJECT LABEL
+   ============================================================ */
+
+.employee-messages-project-label {
+  padding: 0 1rem 0.55rem;
+  color: var(--color-muted);
+  font-size: 0.5rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+}
+
+
+/* ============================================================
+   PROJECT LIST
+   ============================================================ */
+
+.employee-project-conversation-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.employee-project-conversation {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.65rem;
+  width: 100%;
+  padding: 0.82rem 1rem;
+  background: transparent;
+  border: 0;
+  border-bottom: 1px solid var(--color-border);
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+  box-sizing: border-box;
+  transition:
+    background 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.employee-project-conversation:hover {
+  background: rgba(113, 29, 60, 0.028);
+}
+
+.employee-project-conversation.active {
+  background: rgba(113, 29, 60, 0.055);
+  box-shadow: inset 3px 0 0 var(--color-primary);
+}
+
+.employee-project-conversation-icon {
+  width: 35px;
+  height: 35px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  border: 1px solid rgba(177, 138, 82, 0.2);
+  border-radius: 7px;
+  background: rgba(177, 138, 82, 0.08);
+  color: var(--color-accent);
+}
+
+.employee-project-conversation-icon svg {
+  width: 16px;
+  height: 16px;
+  stroke-width: 1.8;
+}
+
+.employee-project-conversation-content {
+  min-width: 0;
+  flex: 1;
+}
+
+.employee-project-conversation-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.employee-project-conversation-top strong {
+  min-width: 0;
+  overflow: hidden;
+  color: var(--color-heading);
+  font-size: 0.65rem;
+  font-weight: 600;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.employee-project-unread {
+  min-width: 17px;
+  height: 17px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: var(--color-primary);
+  color: #ffffff;
+  font-size: 0.47rem;
+  font-weight: 700;
+}
+
+.employee-project-conversation-type {
+  display: block;
+  margin-top: 0.2rem;
+  color: var(--color-accent);
+  font-size: 0.48rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+}
+
+.employee-project-conversation-preview {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-top: 0.3rem;
+}
+
+.employee-project-conversation-preview span {
+  min-width: 0;
+  overflow: hidden;
+  color: var(--color-muted);
+  font-size: 0.53rem;
+  line-height: 1.35;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.employee-project-conversation-preview small {
+  flex-shrink: 0;
+  color: var(--color-muted);
+  font-size: 0.46rem;
+}
+
+
+/* ============================================================
+   SIDEBAR FOOTER
+   ============================================================ */
+
+.employee-messages-projects-footer {
+  margin-top: auto;
+  padding: 0.8rem 1rem;
+  border-top: 1px solid var(--color-border);
+}
+
+.employee-messages-projects-footer span {
+  color: var(--color-muted);
+  font-size: 0.51rem;
+}
+
+
+/* ============================================================
+   CHAT
+   ============================================================ */
+
+.employee-message-chat {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 690px;
+  background: var(--color-background);
+}
+
+
+/* ============================================================
+   PROJECT HEADER
+   ============================================================ */
+
+.employee-project-chat-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  min-height: 76px;
+  padding: 0.85rem 1.2rem;
+  background: var(--color-surface);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.employee-project-chat-heading {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  min-width: 0;
+}
+
+.employee-project-chat-icon {
+  width: 39px;
+  height: 39px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  border: 1px solid rgba(177, 138, 82, 0.2);
+  border-radius: 8px;
+  background: rgba(177, 138, 82, 0.08);
+  color: var(--color-accent);
+}
+
+.employee-project-chat-icon svg {
+  width: 18px;
+  height: 18px;
+}
+
+.employee-project-chat-heading > div:last-child {
+  min-width: 0;
+}
+
+.employee-project-chat-heading span {
+  display: block;
+  margin-bottom: 0.14rem;
+  color: var(--color-accent);
+  font-size: 0.48rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.employee-project-chat-heading h2 {
+  margin: 0;
+  overflow: hidden;
+  color: var(--color-heading);
+  font-family: var(--font-heading);
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.employee-project-chat-status {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  flex-shrink: 0;
+}
+
+.employee-project-chat-status span {
+  padding: 0.26rem 0.48rem;
+  border: 1px solid rgba(177, 138, 82, 0.18);
+  border-radius: 4px;
+  background: rgba(177, 138, 82, 0.07);
+  color: var(--color-accent);
+  font-size: 0.48rem;
+  font-weight: 600;
+}
+
+.employee-project-chat-status strong {
+  color: var(--color-heading);
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+
+
+/* ============================================================
+   CONVERSATION TABS
+   ============================================================ */
+
+.employee-message-tabs {
+  display: flex;
+  align-items: stretch;
+  padding: 0 1.2rem;
+  background: var(--color-surface);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.employee-message-tabs button {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  min-width: 205px;
+  padding: 0.7rem 0.75rem;
+  background: transparent;
+  border: 0;
+  color: var(--color-muted);
+  text-align: left;
+  cursor: pointer;
+}
+
+.employee-message-tabs button::after {
+  content: "";
+  position: absolute;
+  right: 0.75rem;
+  bottom: 0;
+  left: 0.75rem;
+  height: 2px;
+  background: transparent;
+}
+
+.employee-message-tabs button.active {
+  color: var(--color-primary);
+}
+
+.employee-message-tabs button.active::after {
+  background: var(--color-primary);
+}
+
+.employee-message-tabs button svg {
+  width: 17px;
+  height: 17px;
+  flex-shrink: 0;
+}
+
+.employee-message-tabs button > span {
+  display: flex;
+  flex-direction: column;
+  gap: 0.14rem;
+}
+
+.employee-message-tabs button strong {
+  color: var(--color-heading);
+  font-size: 0.58rem;
+  font-weight: 600;
+}
+
+.employee-message-tabs button small {
+  color: var(--color-muted);
+  font-size: 0.46rem;
+}
+
+
+/* ============================================================
+   MESSAGE LIST
+   ============================================================ */
+
+.employee-message-list {
+  flex: 1;
+  padding: 1.2rem 1.5rem;
+  overflow-y: auto;
+}
+
+.employee-message-context-banner {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6rem;
+  max-width: 760px;
+  margin: 0 auto 1.2rem;
+  padding: 0.68rem 0.78rem;
+  background: rgba(177, 138, 82, 0.045);
+  border: 1px solid rgba(177, 138, 82, 0.16);
+  border-radius: 7px;
+}
+
+.employee-message-context-banner svg {
+  width: 15px;
+  height: 15px;
+  flex-shrink: 0;
+  margin-top: 0.05rem;
+  color: var(--color-accent);
+}
+
+.employee-message-context-banner > div {
+  display: flex;
+  flex-direction: column;
+  gap: 0.18rem;
+}
+
+.employee-message-context-banner strong {
+  color: var(--color-heading);
+  font-size: 0.57rem;
+  font-weight: 600;
+}
+
+.employee-message-context-banner span {
+  color: var(--color-muted);
+  font-size: 0.51rem;
+  line-height: 1.45;
+}
+
+
+/* ============================================================
+   DATE DIVIDER
+   ============================================================ */
+
+.employee-message-date {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55rem;
+  margin: 0 auto 1.3rem;
+}
+
+.employee-message-date span {
+  width: 50px;
+  height: 1px;
+  background: var(--color-border);
+}
+
+.employee-message-date strong {
+  color: var(--color-muted);
+  font-size: 0.48rem;
+  font-weight: 600;
+}
+
+
+/* ============================================================
+   MESSAGE ROW
+   ============================================================ */
+
+.employee-message-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6rem;
+  max-width: 72%;
+  margin-bottom: 1rem;
+}
+
+.employee-message-row.employee {
+  flex-direction: row-reverse;
+  margin-left: auto;
+}
+
+.employee-message-avatar-small {
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  border: 1px solid rgba(177, 138, 82, 0.16);
+  border-radius: 50%;
+  background: rgba(177, 138, 82, 0.08);
+  color: var(--color-accent);
+  font-size: 0.46rem;
+  font-weight: 700;
+}
+
+.employee-message-row.employee
+.employee-message-avatar-small {
+  background: rgba(113, 29, 60, 0.09);
+  border-color: rgba(113, 29, 60, 0.12);
+  color: var(--color-primary);
+}
+
+.employee-message-row.team
+.employee-message-avatar-small {
+  background: rgba(113, 29, 60, 0.07);
+  border-color: rgba(113, 29, 60, 0.12);
+  color: var(--color-primary);
+}
+
+.employee-message-bubble-wrapper {
+  min-width: 0;
+}
+
+.employee-message-row.employee
+.employee-message-bubble-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.employee-message-meta {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  margin-bottom: 0.27rem;
+}
+
+.employee-message-meta strong {
+  color: var(--color-heading);
+  font-size: 0.54rem;
+  font-weight: 600;
+}
+
+.employee-message-meta span {
+  color: var(--color-muted);
+  font-size: 0.47rem;
+}
+
+.employee-message-bubble {
+  width: fit-content;
+  max-width: 100%;
+  padding: 0.68rem 0.8rem;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  color: var(--color-body);
+  font-size: 0.62rem;
+  line-height: 1.58;
+  box-shadow:
+    0 2px 8px rgba(44, 27, 27, 0.025);
+}
+
+.employee-message-row.employee
+.employee-message-bubble {
+  background: rgba(113, 29, 60, 0.065);
+  border-color: rgba(113, 29, 60, 0.13);
+}
+
+.employee-message-row.team
+.employee-message-bubble {
+  background: rgba(177, 138, 82, 0.045);
+  border-color: rgba(177, 138, 82, 0.14);
+}
+
+.employee-message-read {
+  display: flex;
+  align-items: center;
+  gap: 0.2rem;
+  margin-top: 0.22rem;
+  color: var(--color-muted);
+  font-size: 0.45rem;
+}
+
+.employee-message-read svg {
+  width: 10px;
+  height: 10px;
+  color: var(--color-accent);
+}
+
+
+/* ============================================================
+   COMPOSER
+   ============================================================ */
+
+.employee-message-composer {
+  padding: 0.8rem 1rem 0.75rem;
+  background: var(--color-surface);
+  border-top: 1px solid var(--color-border);
+}
+
+.employee-message-compose-label {
+  margin-bottom: 0.45rem;
+  color: var(--color-muted);
+  font-size: 0.47rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+}
+
+.employee-message-compose-row {
+  display: flex;
+  align-items: flex-end;
+  gap: 0.55rem;
+}
+
+.employee-message-input-wrapper {
+  position: relative;
+  flex: 1;
+}
+
+.employee-message-input-wrapper textarea {
+  width: 100%;
+  min-height: 40px;
+  max-height: 110px;
+  resize: vertical;
+  padding: 0.68rem 2.6rem 0.68rem 0.8rem;
+  background: var(--color-background);
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  outline: none;
+  color: var(--color-heading);
+  font-family: inherit;
+  font-size: 0.61rem;
+  line-height: 1.45;
+  box-sizing: border-box;
+}
+
+.employee-message-input-wrapper textarea::placeholder {
+  color: var(--color-muted);
+}
+
+.employee-message-input-wrapper textarea:focus {
+  border-color: rgba(177, 138, 82, 0.65);
+  box-shadow: 0 0 0 3px rgba(177, 138, 82, 0.07);
+}
+
+.employee-message-attach {
+  position: absolute;
+  right: 0.45rem;
+  bottom: 0.45rem;
+  width: 26px;
+  height: 26px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  border-radius: 4px;
+  background: transparent;
+  color: var(--color-muted);
+  cursor: pointer;
+}
+
+.employee-message-attach:hover {
+  background: rgba(177, 138, 82, 0.08);
+  color: var(--color-primary);
+}
+
+.employee-message-attach svg {
+  width: 14px;
+  height: 14px;
+}
+
+.employee-message-send {
+  min-height: 40px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.42rem;
+  padding: 0.58rem 0.85rem;
+  border: 1px solid var(--color-primary);
+  border-radius: 6px;
+  background: var(--color-primary);
+  color: #ffffff;
+  font-family: inherit;
+  font-size: 0.6rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.employee-message-send:hover {
+  background: #5d1832;
+  border-color: #5d1832;
+}
+
+.employee-message-send svg {
+  width: 13px;
+  height: 13px;
+}
+
+.employee-message-helper {
+  display: block;
+  margin-top: 0.42rem;
+  color: var(--color-muted);
+  font-size: 0.46rem;
+  line-height: 1.4;
+}
+
+
+/* ============================================================
+   DARK THEME
+   ============================================================ */
+
+:root[data-theme="dark"]
+.employee-messages-workspace {
+  box-shadow: none;
+}
+
+:root[data-theme="dark"]
+.employee-project-conversation:hover {
+  background: rgba(177, 138, 82, 0.035);
+}
+
+:root[data-theme="dark"]
+.employee-project-conversation.active {
+  background: rgba(177, 138, 82, 0.065);
+}
+
+:root[data-theme="dark"]
+.employee-message-context-banner {
+  background: rgba(177, 138, 82, 0.055);
+}
+
+:root[data-theme="dark"]
+.employee-message-bubble {
+  background: rgba(255, 255, 255, 0.025);
+  box-shadow: none;
+}
+
+:root[data-theme="dark"]
+.employee-message-row.employee
+.employee-message-bubble {
+  background: rgba(177, 138, 82, 0.075);
+}
+
+:root[data-theme="dark"]
+.employee-message-row.team
+.employee-message-bubble {
+  background: rgba(113, 29, 60, 0.11);
+}
+
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+
+@media (max-width: 950px) {
+
+  .employee-messages-workspace {
+    grid-template-columns: 290px minmax(0, 1fr);
+  }
+
+  .employee-message-row {
+    max-width: 82%;
+  }
+
+  .employee-message-tabs button {
+    min-width: 175px;
+  }
+}
+
+
+@media (max-width: 760px) {
+
+  .employee-messages-workspace {
+    grid-template-columns: 1fr;
+    min-height: auto;
+  }
+
+  .employee-messages-projects {
+    border-right: 0;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .employee-messages-projects-footer {
+    display: none;
+  }
+
+  .employee-project-conversation-list {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .employee-project-conversation {
+    border-right: 1px solid var(--color-border);
+  }
+
+  .employee-message-chat {
+    min-height: 600px;
+  }
+}
+
+
+@media (max-width: 580px) {
+
+  .employee-messages-header h1 {
+    font-size: 1.3rem;
+  }
+
+  .employee-project-chat-header {
+    padding: 0.8rem;
+  }
+
+  .employee-project-chat-status {
+    display: none;
+  }
+
+  .employee-message-tabs {
+    padding: 0 0.6rem;
+    overflow-x: auto;
+  }
+
+  .employee-message-tabs button {
+    min-width: 175px;
+  }
+
+  .employee-message-list {
+    padding: 1rem 0.8rem;
+  }
+
+  .employee-message-row {
+    max-width: 92%;
+  }
+
+  .employee-message-compose-row {
+    gap: 0.45rem;
+  }
+
+  .employee-message-send {
+    width: 40px;
+    padding: 0;
+  }
+
+  .employee-message-send span {
+    display: none;
+  }
+}
+
+
+@media (max-width: 400px) {
+
+  .employee-project-conversation-list {
+    grid-template-columns: 1fr;
+  }
+
+  .employee-project-chat-heading h2 {
+    font-size: 0.78rem;
+  }
+
+  .employee-message-bubble {
+    font-size: 0.59rem;
+  }
+}

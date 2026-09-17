@@ -1,0 +1,842 @@
+.employee-calendar-page {
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0;
+  color: var(--color-text);
+  box-sizing: border-box;
+}
+
+/* ============================================================
+   PAGE HEADER
+   ============================================================ */
+
+.employee-calendar-header {
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.employee-calendar-eyebrow {
+  display: block;
+  margin-bottom: 0.32rem;
+  color: var(--color-accent);
+  font-size: 0.61rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  line-height: 1.2;
+}
+
+.employee-calendar-header h1 {
+  margin: 0;
+  color: var(--color-dark);
+  font-family: var(--font-heading);
+  font-size: 1.5rem;
+  font-weight: 600;
+  line-height: 1.25;
+  letter-spacing: -0.02em;
+}
+
+.employee-calendar-header p {
+  max-width: 680px;
+  margin: 0.4rem 0 0;
+  color: var(--color-text-muted);
+  font-size: 0.76rem;
+  line-height: 1.55;
+}
+
+/* ============================================================
+   TOOLBAR
+   ============================================================ */
+
+.employee-calendar-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 1.5rem;
+  padding: 0.85rem 0.95rem;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  box-sizing: border-box;
+}
+
+/* ============================================================
+   MONTH SELECTOR
+   ============================================================ */
+
+.employee-calendar-month-selector {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  min-width: 0;
+}
+
+.employee-calendar-month-icon {
+  width: 34px;
+  height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  background: var(--color-surface-muted);
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  color: var(--color-accent);
+}
+
+.employee-calendar-month-icon svg {
+  width: 16px;
+  height: 16px;
+}
+
+.employee-calendar-month-content {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.employee-calendar-control-label {
+  margin-bottom: 0.2rem;
+  color: var(--color-text-muted);
+  font-size: 0.4rem;
+  font-weight: 700;
+  letter-spacing: 0.11em;
+  line-height: 1;
+}
+
+/* ============================================================
+   MONTH DROPDOWN
+   ============================================================ */
+
+.employee-calendar-select-wrapper {
+  position: relative;
+  width: 205px;
+}
+
+.employee-calendar-select-wrapper select {
+  width: 100%;
+  height: 31px;
+  appearance: none;
+  padding: 0.25rem 2rem 0.25rem 0.62rem;
+  background: var(--color-background);
+  border: 1px solid var(--color-border);
+  border-radius: 5px;
+  color: var(--color-dark);
+  font-family: inherit;
+  font-size: 0.55rem;
+  font-weight: 600;
+  cursor: pointer;
+  outline: none;
+  transition:
+    border-color var(--transition),
+    box-shadow var(--transition),
+    background var(--transition);
+}
+
+.employee-calendar-select-wrapper select:hover {
+  border-color: var(--color-accent);
+}
+
+.employee-calendar-select-wrapper select:focus {
+  border-color: var(--color-primary);
+  box-shadow:
+    0 0 0 3px rgba(113, 29, 60, 0.08);
+}
+
+.employee-calendar-select-wrapper > svg {
+  position: absolute;
+  top: 50%;
+  right: 0.58rem;
+  width: 12px;
+  height: 12px;
+  pointer-events: none;
+  color: var(--color-text-muted);
+  transform: translateY(-50%);
+}
+
+/* ============================================================
+   TODAY
+   ============================================================ */
+
+.employee-calendar-today-control {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 34px;
+  padding: 0.38rem 0.72rem;
+  background: var(--color-primary);
+  border: 1px solid var(--color-primary);
+  border-radius: 5px;
+  color: #ffffff;
+  cursor: pointer;
+  transition:
+    opacity var(--transition),
+    transform var(--transition);
+}
+
+.employee-calendar-today-control:hover {
+  opacity: 0.91;
+}
+
+.employee-calendar-today-control:active {
+  transform: translateY(1px);
+}
+
+.employee-calendar-today-label {
+  font-size: 0.43rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+}
+
+.employee-calendar-today-date {
+  padding-left: 0.5rem;
+  border-left: 1px solid rgba(255, 255, 255, 0.3);
+  font-size: 0.49rem;
+  font-weight: 500;
+}
+
+/* ============================================================
+   SELECTED DAY
+   ============================================================ */
+
+.employee-calendar-selected-day {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 0.75rem;
+  padding: 0.68rem 0.85rem;
+  background: var(--color-surface-muted);
+  border: 1px solid var(--color-border);
+  border-radius: 7px;
+}
+
+.employee-calendar-selected-day-info {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+}
+
+.employee-calendar-selected-day-info > span {
+  color: var(--color-accent);
+  font-size: 0.43rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+}
+
+.employee-calendar-selected-day-info > strong {
+  color: var(--color-dark);
+  font-size: 0.55rem;
+  font-weight: 600;
+}
+
+.employee-calendar-selected-day-events {
+  color: var(--color-text-muted);
+  font-size: 0.46rem;
+}
+
+/* ============================================================
+   CALENDAR CARD
+   ============================================================ */
+
+.employee-calendar-card {
+  margin-top: 0.8rem;
+  overflow: hidden;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+}
+
+/* ============================================================
+   WEEKDAYS
+   ============================================================ */
+
+.employee-calendar-weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  background: var(--color-surface-muted);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.employee-calendar-weekdays > div {
+  padding: 0.65rem 0.45rem;
+  color: var(--color-text-muted);
+  font-size: 0.43rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+/* ============================================================
+   CALENDAR GRID
+   ============================================================ */
+
+.employee-calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+}
+
+/* ============================================================
+   CALENDAR DAY
+   ============================================================ */
+
+.employee-calendar-day {
+  position: relative;
+  min-height: 108px;
+  padding: 0.6rem;
+  background: var(--color-surface);
+  border-right: 1px solid var(--color-border);
+  border-bottom: 1px solid var(--color-border);
+  cursor: pointer;
+  box-sizing: border-box;
+  transition:
+    background var(--transition),
+    box-shadow var(--transition);
+}
+
+.employee-calendar-day:nth-child(7n) {
+  border-right: 0;
+}
+
+.employee-calendar-day:hover {
+  background: var(--color-surface-muted);
+}
+
+.employee-calendar-day.empty {
+  background: var(--color-background);
+  cursor: default;
+}
+
+.employee-calendar-day.empty:hover {
+  background: var(--color-background);
+}
+
+/* ============================================================
+   SELECTED DAY
+   ============================================================ */
+
+.employee-calendar-day.selected {
+  background: rgba(113, 29, 60, 0.035);
+  box-shadow:
+    inset 0 0 0 1px rgba(113, 29, 60, 0.22);
+}
+
+.employee-calendar-day.selected
+.employee-calendar-day-number
+> span {
+  background: var(--color-primary);
+  color: #ffffff;
+}
+
+/* ============================================================
+   TODAY
+   ============================================================ */
+
+.employee-calendar-day.today {
+  background: rgba(177, 138, 82, 0.045);
+}
+
+.employee-calendar-day.today
+.employee-calendar-day-number
+> span {
+  border: 1px solid var(--color-accent);
+}
+
+/* ============================================================
+   DAY NUMBER
+   ============================================================ */
+
+.employee-calendar-day-number {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  min-height: 24px;
+}
+
+.employee-calendar-day-number > span {
+  min-width: 24px;
+  height: 24px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  color: var(--color-dark);
+  font-size: 0.53rem;
+  font-weight: 600;
+  line-height: 1;
+  transition:
+    background var(--transition),
+    color var(--transition),
+    border-color var(--transition);
+}
+
+.employee-calendar-day-number small {
+  color: var(--color-accent);
+  font-size: 0.4rem;
+  font-weight: 700;
+}
+
+/* ============================================================
+   EVENTS
+   ============================================================ */
+
+.employee-calendar-events {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  margin-top: 0.58rem;
+}
+
+.employee-calendar-event {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.38rem;
+  min-width: 0;
+  padding: 0.38rem 0.43rem;
+  border-radius: 4px;
+  color: var(--color-text);
+  font-size: 0.49rem;
+  font-weight: 500;
+  line-height: 1.4;
+  overflow: hidden;
+}
+
+.employee-calendar-event > span:last-child {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.employee-calendar-event-dot {
+  width: 5px;
+  height: 5px;
+  flex-shrink: 0;
+  margin-top: 0.27rem;
+  border-radius: 50%;
+}
+
+/* ============================================================
+   EVENT TYPES
+   ============================================================ */
+
+.employee-calendar-event.task {
+  background: rgba(73, 107, 122, 0.08);
+}
+
+.employee-calendar-event.task
+.employee-calendar-event-dot {
+  background: var(--color-info);
+}
+
+.employee-calendar-event.milestone {
+  background: rgba(177, 138, 82, 0.09);
+}
+
+.employee-calendar-event.milestone
+.employee-calendar-event-dot {
+  background: var(--color-accent);
+}
+
+.employee-calendar-event.deadline {
+  background: rgba(163, 59, 59, 0.08);
+}
+
+.employee-calendar-event.deadline
+.employee-calendar-event-dot {
+  background: var(--color-danger);
+}
+
+/* ============================================================
+   LEGEND
+   ============================================================ */
+
+.employee-calendar-legend {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 0.7rem;
+  padding: 0 0.2rem;
+}
+
+.employee-calendar-legend > div {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.employee-calendar-legend > div > span:last-child {
+  color: var(--color-text-muted);
+  font-size: 0.45rem;
+}
+
+.legend-dot {
+  width: 6px;
+  height: 6px;
+  display: inline-block;
+  border-radius: 50%;
+}
+
+.legend-dot.task {
+  background: var(--color-info);
+}
+
+.legend-dot.milestone {
+  background: var(--color-accent);
+}
+
+.legend-dot.deadline {
+  background: var(--color-danger);
+}
+
+/* ============================================================
+   UPCOMING
+   ============================================================ */
+
+.employee-upcoming-section {
+  margin-top: 1.5rem;
+}
+
+.employee-calendar-section-heading {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 0.8rem;
+}
+
+.employee-calendar-section-heading h2 {
+  margin: 0;
+  color: var(--color-dark);
+  font-family: var(--font-heading);
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.employee-upcoming-count {
+  color: var(--color-text-muted);
+  font-size: 0.45rem;
+}
+
+/* ============================================================
+   UPCOMING LIST
+   ============================================================ */
+
+.employee-upcoming-list {
+  display: flex;
+  flex-direction: column;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.employee-upcoming-item {
+  display: grid;
+  grid-template-columns: 44px 28px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0.72rem 0.8rem;
+  border-bottom: 1px solid var(--color-border);
+  transition: background var(--transition);
+}
+
+.employee-upcoming-item:last-child {
+  border-bottom: 0;
+}
+
+.employee-upcoming-item:hover {
+  background: var(--color-surface-muted);
+}
+
+/* ============================================================
+   UPCOMING DATE
+   ============================================================ */
+
+.employee-upcoming-date {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.employee-upcoming-date strong {
+  color: var(--color-dark);
+  font-size: 0.7rem;
+  font-weight: 700;
+  line-height: 1.15;
+}
+
+.employee-upcoming-date span {
+  margin-top: 0.08rem;
+  color: var(--color-text-muted);
+  font-size: 0.4rem;
+  text-transform: uppercase;
+}
+
+/* ============================================================
+   UPCOMING ICON
+   ============================================================ */
+
+.employee-upcoming-icon {
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-surface-muted);
+  border: 1px solid var(--color-border);
+  border-radius: 5px;
+  color: var(--color-accent);
+}
+
+.employee-upcoming-icon svg {
+  width: 13px;
+  height: 13px;
+}
+
+/* ============================================================
+   UPCOMING INFO
+   ============================================================ */
+
+.employee-upcoming-info {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.employee-upcoming-info strong {
+  overflow: hidden;
+  color: var(--color-dark);
+  font-size: 0.52rem;
+  font-weight: 600;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.employee-upcoming-info span {
+  margin-top: 0.1rem;
+  overflow: hidden;
+  color: var(--color-text-muted);
+  font-size: 0.44rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ============================================================
+   UPCOMING TYPE
+   ============================================================ */
+
+.employee-upcoming-type {
+  padding: 0.24rem 0.42rem;
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  font-size: 0.4rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.employee-upcoming-type.task {
+  background: rgba(73, 107, 122, 0.07);
+  border-color: rgba(73, 107, 122, 0.15);
+  color: var(--color-info);
+}
+
+.employee-upcoming-type.milestone {
+  background: rgba(177, 138, 82, 0.07);
+  border-color: rgba(177, 138, 82, 0.16);
+  color: var(--color-accent);
+}
+
+.employee-upcoming-type.deadline {
+  background: rgba(163, 59, 59, 0.07);
+  border-color: rgba(163, 59, 59, 0.15);
+  color: var(--color-danger);
+}
+
+/* ============================================================
+   DARK THEME
+   ============================================================ */
+
+:root[data-theme="dark"]
+.employee-calendar-day.selected {
+  background: rgba(154, 61, 95, 0.08);
+  box-shadow:
+    inset 0 0 0 1px rgba(201, 166, 107, 0.2);
+}
+
+:root[data-theme="dark"]
+.employee-calendar-day.today {
+  background: rgba(201, 166, 107, 0.055);
+}
+
+:root[data-theme="dark"]
+.employee-calendar-event.task {
+  background: rgba(118, 161, 178, 0.1);
+}
+
+:root[data-theme="dark"]
+.employee-calendar-event.milestone {
+  background: rgba(201, 166, 107, 0.1);
+}
+
+:root[data-theme="dark"]
+.employee-calendar-event.deadline {
+  background: rgba(213, 106, 106, 0.1);
+}
+
+:root[data-theme="dark"]
+.employee-upcoming-type.task {
+  background: rgba(118, 161, 178, 0.09);
+  border-color: rgba(118, 161, 178, 0.2);
+}
+
+:root[data-theme="dark"]
+.employee-upcoming-type.milestone {
+  background: rgba(201, 166, 107, 0.09);
+  border-color: rgba(201, 166, 107, 0.2);
+}
+
+:root[data-theme="dark"]
+.employee-upcoming-type.deadline {
+  background: rgba(213, 106, 106, 0.09);
+  border-color: rgba(213, 106, 106, 0.2);
+}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+
+@media (max-width: 800px) {
+  .employee-calendar-toolbar {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .employee-calendar-today-control {
+    align-self: flex-start;
+  }
+
+  .employee-calendar-day {
+    min-height: 92px;
+    padding: 0.45rem;
+  }
+
+  .employee-calendar-event {
+    font-size: 0.45rem;
+  }
+
+  .employee-calendar-weekdays > div {
+    font-size: 0.4rem;
+  }
+}
+
+@media (max-width: 650px) {
+  .employee-calendar-month-selector {
+    width: 100%;
+  }
+
+  .employee-calendar-select-wrapper {
+    width: 220px;
+  }
+
+  .employee-calendar-selected-day {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 0.3rem;
+  }
+
+  .employee-calendar-day {
+    min-height: 78px;
+  }
+
+  .employee-calendar-day-number small {
+    display: none;
+  }
+
+  .employee-calendar-event {
+    padding: 0.25rem 0.3rem;
+    font-size: 0.42rem;
+  }
+
+  .employee-upcoming-item {
+    grid-template-columns: 38px 26px minmax(0, 1fr);
+  }
+
+  .employee-upcoming-type {
+    display: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .employee-calendar-toolbar {
+    padding: 0.7rem;
+  }
+
+  .employee-calendar-month-selector {
+    align-items: flex-start;
+  }
+
+  .employee-calendar-month-content {
+    width: 100%;
+  }
+
+  .employee-calendar-select-wrapper {
+    width: 100%;
+  }
+
+  .employee-calendar-today-control {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .employee-calendar-weekdays > div {
+    padding: 0.5rem 0.15rem;
+    font-size: 0.34rem;
+  }
+
+  .employee-calendar-day {
+    min-height: 64px;
+    padding: 0.3rem;
+  }
+
+  .employee-calendar-day-number > span {
+    min-width: 20px;
+    height: 20px;
+    font-size: 0.47rem;
+  }
+
+  .employee-calendar-events {
+    margin-top: 0.35rem;
+  }
+
+  .employee-calendar-event {
+    padding: 0.1rem 0;
+    background: transparent !important;
+  }
+
+  .employee-calendar-event > span:last-child {
+    display: none;
+  }
+
+  .employee-calendar-legend {
+    gap: 0.65rem;
+  }
+
+  .employee-upcoming-item {
+    grid-template-columns: 36px 24px minmax(0, 1fr);
+    gap: 0.5rem;
+    padding: 0.65rem;
+  }
+
+  .employee-upcoming-icon {
+    width: 24px;
+    height: 24px;
+  }
+
+  .employee-upcoming-icon svg {
+    width: 12px;
+    height: 12px;
+  }
+}

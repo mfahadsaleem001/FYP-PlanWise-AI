@@ -1,0 +1,795 @@
+.employee-setup-page {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+  padding: 2rem;
+  background: var(--color-background);
+  color: var(--color-text);
+  box-sizing: border-box;
+}
+
+.employee-setup-shell {
+  width: 100%;
+  max-width: 1180px;
+  min-height: calc(100vh - 4rem);
+  display: grid;
+  grid-template-columns: 0.95fr 1.05fr;
+  overflow: hidden;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  box-shadow: var(--shadow-md);
+}
+
+/* ============================================================
+   BRAND PANEL
+   ============================================================ */
+
+.employee-setup-brand-panel {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 2.5rem;
+  background: var(--color-dark);
+  color: #f7f0e5;
+  overflow: hidden;
+}
+
+.employee-setup-brand-panel::before {
+  content: "";
+  position: absolute;
+  top: -150px;
+  right: -130px;
+  width: 360px;
+  height: 360px;
+  border: 1px solid rgba(201, 166, 107, 0.2);
+  border-radius: 50%;
+}
+
+.employee-setup-brand-panel::after {
+  content: "";
+  position: absolute;
+  right: -80px;
+  bottom: -150px;
+  width: 330px;
+  height: 330px;
+  border: 1px solid rgba(201, 166, 107, 0.12);
+  border-radius: 50%;
+}
+
+.employee-setup-brand {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+}
+
+.employee-setup-brand-mark {
+  width: 34px;
+  height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-primary);
+  border: 1px solid rgba(201, 166, 107, 0.3);
+  border-radius: 6px;
+  color: #ffffff;
+  font-family: var(--font-heading);
+  font-size: 1.05rem;
+  font-weight: 700;
+}
+
+.employee-setup-brand-name {
+  color: #f7f0e5;
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+
+.employee-setup-brand-name span {
+  color: var(--color-accent);
+}
+
+.employee-setup-brand-content {
+  position: relative;
+  z-index: 1;
+  max-width: 430px;
+  margin: auto 0;
+  padding: 3rem 0;
+}
+
+.employee-setup-eyebrow,
+.employee-setup-form-eyebrow {
+  display: block;
+  color: var(--color-accent);
+  font-size: 0.57rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  line-height: 1.2;
+}
+
+.employee-setup-brand-content h1 {
+  max-width: 430px;
+  margin-top: 0.75rem;
+  color: #f7f0e5;
+  font-family: var(--font-heading);
+  font-size: clamp(2rem, 3vw, 2.65rem);
+  font-weight: 600;
+  line-height: 1.18;
+}
+
+.employee-setup-brand-content h1 span {
+  color: var(--color-accent-light);
+}
+
+.employee-setup-brand-content p {
+  max-width: 390px;
+  margin-top: 1rem;
+  color: #c6b9b2;
+  font-size: 0.72rem;
+  line-height: 1.75;
+}
+
+.employee-setup-security {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  max-width: 390px;
+  padding-top: 1.1rem;
+  border-top: 1px solid rgba(247, 240, 229, 0.12);
+}
+
+.employee-setup-security-icon {
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  background: rgba(201, 166, 107, 0.1);
+  border: 1px solid rgba(201, 166, 107, 0.2);
+  border-radius: 5px;
+  color: var(--color-accent);
+}
+
+.employee-setup-security-icon svg {
+  width: 14px;
+  height: 14px;
+}
+
+.employee-setup-security div:last-child {
+  display: flex;
+  flex-direction: column;
+}
+
+.employee-setup-security strong {
+  color: #f7f0e5;
+  font-size: 0.57rem;
+  font-weight: 600;
+}
+
+.employee-setup-security span {
+  margin-top: 0.18rem;
+  color: #a99b95;
+  font-size: 0.47rem;
+  line-height: 1.5;
+}
+
+/* ============================================================
+   FORM PANEL
+   ============================================================ */
+
+.employee-setup-form-panel {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2.5rem;
+  background: var(--color-surface);
+}
+
+.employee-setup-form-wrapper {
+  width: 100%;
+  max-width: 440px;
+}
+
+.employee-setup-form-header {
+  margin-bottom: 1.2rem;
+}
+
+.employee-setup-form-header h2 {
+  margin-top: 0.4rem;
+  color: var(--color-dark);
+  font-family: var(--font-heading);
+  font-size: 1.65rem;
+  font-weight: 600;
+}
+
+.employee-setup-form-header p {
+  max-width: 400px;
+  margin-top: 0.45rem;
+  color: var(--color-text-muted);
+  font-size: 0.62rem;
+  line-height: 1.6;
+}
+
+/* ============================================================
+   ACCOUNT CARD
+   ============================================================ */
+
+.employee-setup-account-card {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  margin-bottom: 1.1rem;
+  padding: 0.75rem;
+  background: var(--color-surface-muted);
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+}
+
+.employee-setup-account-icon {
+  width: 34px;
+  height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  background: var(--color-primary);
+  border-radius: 5px;
+  color: #ffffff;
+}
+
+.employee-setup-account-icon svg {
+  width: 15px;
+  height: 15px;
+}
+
+.employee-setup-account-info {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.employee-setup-account-info strong {
+  color: var(--color-dark);
+  font-size: 0.55rem;
+  font-weight: 600;
+}
+
+.employee-setup-account-info span {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  margin-top: 0.12rem;
+  color: var(--color-text-muted);
+  font-size: 0.45rem;
+}
+
+.employee-setup-account-info span svg {
+  width: 10px;
+  height: 10px;
+}
+
+.employee-setup-account-info small {
+  margin-top: 0.12rem;
+  color: var(--color-accent);
+  font-size: 0.43rem;
+  font-weight: 600;
+}
+
+.employee-setup-account-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  margin-left: auto;
+  padding: 0.22rem 0.4rem;
+  background: rgba(177, 138, 82, 0.08);
+  border: 1px solid rgba(177, 138, 82, 0.2);
+  border-radius: 4px;
+  color: var(--color-accent);
+  font-size: 0.4rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.employee-setup-account-status span {
+  width: 4px;
+  height: 4px;
+  margin: 0;
+  background: var(--color-accent);
+  border-radius: 50%;
+}
+
+/* ============================================================
+   ERROR
+   ============================================================ */
+
+.employee-setup-error {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.9rem;
+  padding: 0.65rem 0.7rem;
+  background: rgba(163, 59, 59, 0.06);
+  border: 1px solid rgba(163, 59, 59, 0.2);
+  border-left: 3px solid var(--color-danger);
+  border-radius: 5px;
+  color: var(--color-danger);
+  font-size: 0.5rem;
+  line-height: 1.4;
+}
+
+.employee-setup-error svg {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+}
+
+/* ============================================================
+   FORM
+   ============================================================ */
+
+.employee-setup-field {
+  margin-bottom: 0.95rem;
+}
+
+.employee-setup-field label {
+  display: block;
+  margin-bottom: 0.35rem;
+  color: var(--color-dark);
+  font-size: 0.54rem;
+  font-weight: 600;
+}
+
+.employee-setup-password-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.employee-setup-password-wrapper > svg:first-child {
+  position: absolute;
+  top: 50%;
+  left: 0.7rem;
+  width: 14px;
+  height: 14px;
+  color: var(--color-text-muted);
+  transform: translateY(-50%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.employee-setup-password-wrapper input {
+  width: 100%;
+  height: 40px;
+  padding: 0.55rem 2.6rem 0.55rem 2.25rem;
+  background: var(--color-background);
+  border: 1px solid var(--color-border);
+  border-radius: 5px;
+  color: var(--color-text);
+  font-size: 0.54rem;
+  box-sizing: border-box;
+}
+
+.employee-setup-password-wrapper input::placeholder {
+  color: var(--color-text-muted);
+  opacity: 0.8;
+}
+
+.employee-setup-password-wrapper input:focus {
+  border-color: var(--color-primary);
+  box-shadow:
+    0 0 0 3px rgba(113, 29, 60, 0.08);
+}
+
+.employee-setup-password-toggle {
+  position: absolute;
+  top: 50%;
+  right: 0.55rem;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  margin: 0;
+  background: transparent !important;
+  border: none !important;
+  color: var(--color-text-muted);
+  transform: translateY(-50%);
+  box-shadow: none !important;
+  z-index: 2;
+}
+
+.employee-setup-password-toggle:hover {
+  background: transparent !important;
+  color: var(--color-primary);
+}
+
+.employee-setup-password-toggle:focus {
+  outline: none;
+  box-shadow: none !important;
+}
+
+.employee-setup-password-toggle svg {
+  width: 14px;
+  height: 14px;
+  display: block;
+  pointer-events: none;
+}
+
+.employee-setup-password-wrapper input::-ms-reveal,
+.employee-setup-password-wrapper input::-ms-clear {
+  display: none;
+}
+
+.employee-setup-password-wrapper input::-webkit-credentials-auto-fill-button {
+  visibility: hidden;
+  pointer-events: none;
+  position: absolute;
+}
+
+.employee-setup-password-hint {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  margin-top: 0.35rem;
+  padding: 0.2rem 0.45rem;
+  background: var(--color-surface-muted);
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  color: var(--color-text-muted);
+  font-size: 0.4rem;
+  font-weight: 500;
+  line-height: 1.2;
+}
+
+.employee-setup-password-hint::before {
+  content: "";
+  width: 4px;
+  height: 4px;
+  flex-shrink: 0;
+  background: var(--color-accent);
+  border-radius: 50%;
+}
+
+/* ============================================================
+   PASSWORD RULES
+   ============================================================ */
+
+.employee-setup-password-rules {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  margin: 0.2rem 0 1.05rem;
+  padding: 0.65rem 0.7rem;
+  background: var(--color-surface-muted);
+  border: 1px solid var(--color-border);
+  border-radius: 5px;
+}
+
+.employee-setup-password-rules div {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.employee-setup-password-rules svg {
+  width: 12px;
+  height: 12px;
+  flex-shrink: 0;
+  color: var(--color-success);
+}
+
+.employee-setup-password-rules span {
+  color: var(--color-text-muted);
+  font-size: 0.43rem;
+  line-height: 1.4;
+}
+
+/* ============================================================
+   SUBMIT
+   ============================================================ */
+
+.employee-setup-submit {
+  width: 100%;
+  height: 41px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55rem;
+  padding: 0 1rem;
+  background: var(--color-primary);
+  border: 1px solid var(--color-primary);
+  border-radius: 5px;
+  color: #ffffff !important;
+  font-size: 0.54rem;
+  font-weight: 600;
+  transition:
+    background var(--transition),
+    border-color var(--transition),
+    transform var(--transition);
+}
+
+.employee-setup-submit:hover {
+  background: var(--color-primary-dark);
+  border-color: var(--color-primary-dark);
+}
+
+.employee-setup-submit:active {
+  transform: translateY(1px);
+}
+
+.employee-setup-submit svg {
+  width: 14px;
+  height: 14px;
+  transition: transform var(--transition);
+}
+
+.employee-setup-submit:hover svg {
+  transform: translateX(2px);
+}
+
+/* ============================================================
+   FOOTER
+   ============================================================ */
+
+.employee-setup-footer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.35rem;
+  margin-top: 1.15rem;
+}
+
+.employee-setup-footer span {
+  color: var(--color-text-muted);
+  font-size: 0.45rem;
+}
+
+.employee-setup-footer a {
+  color: var(--color-primary);
+  font-size: 0.45rem;
+  font-weight: 600;
+}
+
+.employee-setup-footer a:hover {
+  color: var(--color-accent);
+}
+
+/* ============================================================
+   SUCCESS STATE
+   ============================================================ */
+
+.employee-setup-success-card {
+  width: 100%;
+  max-width: 470px;
+  padding: 2.5rem;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  box-shadow: var(--shadow-md);
+  text-align: center;
+}
+
+.employee-setup-success-icon {
+  width: 52px;
+  height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1rem;
+  background: rgba(63, 115, 85, 0.08);
+  border: 1px solid rgba(63, 115, 85, 0.18);
+  border-radius: 7px;
+  color: var(--color-success);
+}
+
+.employee-setup-success-icon svg {
+  width: 25px;
+  height: 25px;
+}
+
+.employee-setup-success-eyebrow {
+  color: var(--color-success);
+  font-size: 0.52rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+}
+
+.employee-setup-success-card h1 {
+  margin-top: 0.45rem;
+  color: var(--color-dark);
+  font-family: var(--font-heading);
+  font-size: 1.8rem;
+  font-weight: 600;
+}
+
+.employee-setup-success-card p {
+  max-width: 380px;
+  margin: 0.65rem auto 1.25rem;
+  color: var(--color-text-muted);
+  font-size: 0.58rem;
+  line-height: 1.65;
+}
+
+.employee-setup-success-button {
+  width: 100%;
+  min-height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.6rem 1rem;
+  background: var(--color-primary);
+  border: 1px solid var(--color-primary);
+  border-radius: 5px;
+  color: #ffffff !important;
+  font-size: 0.52rem;
+  font-weight: 600;
+}
+
+.employee-setup-success-button:hover {
+  background: var(--color-primary-dark);
+  border-color: var(--color-primary-dark);
+}
+
+.employee-setup-success-button svg {
+  width: 14px;
+  height: 14px;
+}
+
+/* ============================================================
+   DARK THEME
+   ============================================================ */
+
+:root[data-theme="dark"]
+.employee-setup-password-wrapper input {
+  background: var(--color-background);
+}
+
+:root[data-theme="dark"]
+.employee-setup-password-hint {
+  background: var(--color-surface);
+}
+
+:root[data-theme="dark"]
+.employee-setup-password-rules {
+  background: var(--color-surface);
+}
+
+:root[data-theme="dark"]
+.employee-setup-account-card {
+  background: var(--color-surface-muted);
+}
+
+:root[data-theme="dark"]
+.employee-setup-error {
+  background: rgba(213, 106, 106, 0.08);
+}
+
+:root[data-theme="dark"]
+.employee-setup-success-icon {
+  background: rgba(114, 169, 130, 0.1);
+}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+
+@media (max-width: 900px) {
+  .employee-setup-page {
+    padding: 1.25rem;
+  }
+
+  .employee-setup-shell {
+    min-height: calc(100vh - 2.5rem);
+    grid-template-columns: 1fr;
+  }
+
+  .employee-setup-brand-panel {
+    min-height: 330px;
+    padding: 2rem;
+  }
+
+  .employee-setup-brand-content {
+    padding: 2rem 0;
+  }
+
+  .employee-setup-brand-content h1 {
+    max-width: 600px;
+    font-size: 2rem;
+  }
+
+  .employee-setup-brand-content p {
+    max-width: 600px;
+  }
+
+  .employee-setup-security {
+    max-width: 600px;
+  }
+
+  .employee-setup-form-panel {
+    padding: 2.5rem 2rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .employee-setup-page {
+    padding: 0;
+  }
+
+  .employee-setup-shell {
+    min-height: 100vh;
+    border: none;
+    border-radius: 0;
+  }
+
+  .employee-setup-brand-panel {
+    min-height: 285px;
+    padding: 1.5rem;
+  }
+
+  .employee-setup-brand-content {
+    padding: 1.25rem 0;
+  }
+
+  .employee-setup-brand-content h1 {
+    margin-top: 0.6rem;
+    font-size: 1.75rem;
+  }
+
+  .employee-setup-brand-content p {
+    margin-top: 0.7rem;
+    font-size: 0.64rem;
+  }
+
+  .employee-setup-security {
+    padding-top: 0.8rem;
+  }
+
+  .employee-setup-form-panel {
+    padding: 2rem 1.5rem;
+  }
+
+  .employee-setup-form-header h2 {
+    font-size: 1.5rem;
+  }
+
+  .employee-setup-account-card {
+    align-items: flex-start;
+  }
+
+  .employee-setup-account-status {
+    display: none;
+  }
+
+  .employee-setup-success-card {
+    margin: 1rem;
+    padding: 2rem 1.25rem;
+  }
+}
+
+@media (max-width: 400px) {
+  .employee-setup-brand-panel {
+    min-height: 270px;
+  }
+
+  .employee-setup-brand-content h1 {
+    font-size: 1.55rem;
+  }
+
+  .employee-setup-form-panel {
+    padding: 1.75rem 1rem;
+  }
+
+  .employee-setup-footer {
+    flex-direction: column;
+    gap: 0.2rem;
+  }
+}

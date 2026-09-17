@@ -1,0 +1,548 @@
+/* ============================================================
+   EMPLOYEE PROFILE
+   ============================================================ */
+
+.employee-profile-page {
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0;
+  color: var(--color-heading);
+  box-sizing: border-box;
+}
+
+
+/* ============================================================
+   PAGE HEADER
+   ============================================================ */
+
+.employee-profile-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1.5rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.employee-profile-eyebrow {
+  display: block;
+  margin-bottom: 0.32rem;
+  color: var(--color-accent);
+  font-size: 0.61rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  line-height: 1.2;
+}
+
+.employee-profile-header h1 {
+  margin: 0;
+  color: var(--color-heading);
+  font-family: var(--font-heading);
+  font-size: 1.5rem;
+  font-weight: 600;
+  line-height: 1.25;
+  letter-spacing: -0.02em;
+}
+
+.employee-profile-header p {
+  max-width: 680px;
+  margin: 0.4rem 0 0;
+  color: var(--color-muted);
+  font-size: 0.76rem;
+  line-height: 1.55;
+}
+
+
+/* ============================================================
+   HEADER BUTTONS
+   ============================================================ */
+
+.employee-profile-edit-button,
+.employee-profile-save-button,
+.employee-profile-cancel-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  min-height: 34px;
+  padding: 0.5rem 0.75rem;
+  border-radius: 5px;
+  font-family: inherit;
+  font-size: 0.54rem;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.employee-profile-edit-button {
+  background: var(--color-primary);
+  border: 1px solid var(--color-primary);
+  color: #ffffff;
+}
+
+.employee-profile-edit-button:hover {
+  opacity: 0.92;
+}
+
+.employee-profile-edit-button svg,
+.employee-profile-save-button svg,
+.employee-profile-cancel-button svg {
+  width: 13px;
+  height: 13px;
+}
+
+.employee-profile-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.employee-profile-cancel-button {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  color: var(--color-muted);
+}
+
+.employee-profile-cancel-button:hover {
+  color: var(--color-heading);
+  border-color: rgba(113, 29, 60, 0.25);
+}
+
+.employee-profile-save-button {
+  background: var(--color-primary);
+  border: 1px solid var(--color-primary);
+  color: #ffffff;
+}
+
+.employee-profile-save-button:hover {
+  opacity: 0.92;
+}
+
+
+/* ============================================================
+   PROFILE OVERVIEW
+   ============================================================ */
+
+.employee-profile-overview {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 1.5rem;
+  padding: 1.15rem 1.25rem;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+}
+
+.employee-profile-avatar {
+  width: 58px;
+  height: 58px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: var(--color-primary);
+  color: #ffffff;
+  font-family: var(--font-heading);
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.employee-profile-overview-info {
+  min-width: 0;
+  flex: 1;
+}
+
+.employee-profile-name-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+}
+
+.employee-profile-name-row h2 {
+  margin: 0;
+  color: var(--color-heading);
+  font-family: var(--font-heading);
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.employee-profile-active-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.2rem 0.4rem;
+  border-radius: 4px;
+  background: rgba(177, 138, 82, 0.08);
+  color: var(--color-accent);
+  font-size: 0.46rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+.employee-profile-active-badge svg {
+  width: 10px;
+  height: 10px;
+}
+
+.employee-profile-role {
+  margin: 0.22rem 0 0;
+  color: var(--color-primary);
+  font-size: 0.62rem;
+  font-weight: 600;
+}
+
+.employee-profile-overview-meta {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.85rem;
+  margin-top: 0.55rem;
+}
+
+.employee-profile-overview-meta span {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  color: var(--color-muted);
+  font-size: 0.49rem;
+}
+
+.employee-profile-overview-meta svg {
+  width: 11px;
+  height: 11px;
+  color: var(--color-accent);
+}
+
+
+/* ============================================================
+   MAIN GRID
+   ============================================================ */
+
+.employee-profile-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.8rem;
+  margin-top: 1.5rem;
+}
+
+
+/* ============================================================
+   CARDS
+   ============================================================ */
+
+.employee-profile-card {
+  min-width: 0;
+  padding: 1.15rem 1.2rem;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  box-sizing: border-box;
+}
+
+.employee-profile-about-card {
+  grid-column: span 2;
+}
+
+.employee-profile-card-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.employee-profile-card-header > div:first-child span {
+  display: block;
+  margin-bottom: 0.22rem;
+  color: var(--color-accent);
+  font-size: 0.5rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+}
+
+.employee-profile-card-header h2 {
+  margin: 0;
+  color: var(--color-heading);
+  font-family: var(--font-heading);
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.employee-profile-card-icon {
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  border: 1px solid rgba(177, 138, 82, 0.18);
+  border-radius: 6px;
+  background: rgba(177, 138, 82, 0.07);
+  color: var(--color-accent);
+}
+
+.employee-profile-card-icon svg {
+  width: 14px;
+  height: 14px;
+}
+
+
+/* ============================================================
+   FORM
+   ============================================================ */
+
+.employee-profile-form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.8rem;
+}
+
+.employee-profile-field {
+  min-width: 0;
+}
+
+.employee-profile-field-full {
+  grid-column: span 2;
+}
+
+.employee-profile-field label {
+  display: block;
+  margin-bottom: 0.35rem;
+  color: var(--color-muted);
+  font-size: 0.5rem;
+  font-weight: 600;
+}
+
+.employee-profile-field input,
+.employee-profile-bio-input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0.58rem 0.65rem;
+  background: var(--color-background);
+  border: 1px solid var(--color-border);
+  border-radius: 5px;
+  outline: none;
+  color: var(--color-heading);
+  font-family: inherit;
+  font-size: 0.57rem;
+}
+
+.employee-profile-field input:focus,
+.employee-profile-bio-input:focus {
+  border-color: rgba(113, 29, 60, 0.4);
+  box-shadow: 0 0 0 2px rgba(113, 29, 60, 0.05);
+}
+
+.employee-profile-field-value {
+  min-height: 31px;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.5rem 0.65rem;
+  background: var(--color-background);
+  border: 1px solid var(--color-border);
+  border-radius: 5px;
+  color: var(--color-heading);
+  font-size: 0.57rem;
+  box-sizing: border-box;
+}
+
+.employee-profile-field-value svg {
+  width: 12px;
+  height: 12px;
+  flex-shrink: 0;
+  color: var(--color-accent);
+}
+
+.employee-profile-readonly {
+  color: var(--color-muted);
+}
+
+
+/* ============================================================
+   WORK INFORMATION
+   ============================================================ */
+
+.employee-profile-work-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.employee-profile-work-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.62rem 0;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.employee-profile-work-item:first-child {
+  padding-top: 0;
+}
+
+.employee-profile-work-item:last-child {
+  padding-bottom: 0;
+  border-bottom: 0;
+}
+
+.employee-profile-work-item span {
+  color: var(--color-muted);
+  font-size: 0.52rem;
+}
+
+.employee-profile-work-item strong {
+  color: var(--color-heading);
+  font-size: 0.55rem;
+  font-weight: 600;
+  text-align: right;
+}
+
+.employee-profile-managed-note {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.55rem;
+  margin-top: 1rem;
+  padding: 0.65rem;
+  background: rgba(177, 138, 82, 0.055);
+  border: 1px solid rgba(177, 138, 82, 0.14);
+  border-radius: 6px;
+}
+
+.employee-profile-managed-note > svg {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+  margin-top: 0.05rem;
+  color: var(--color-accent);
+}
+
+.employee-profile-managed-note strong {
+  display: block;
+  color: var(--color-heading);
+  font-size: 0.53rem;
+  font-weight: 600;
+}
+
+.employee-profile-managed-note p {
+  margin: 0.2rem 0 0;
+  color: var(--color-muted);
+  font-size: 0.48rem;
+  line-height: 1.5;
+}
+
+
+/* ============================================================
+   BIO
+   ============================================================ */
+
+.employee-profile-bio {
+  max-width: 850px;
+  margin: 0;
+  color: var(--color-muted);
+  font-size: 0.6rem;
+  line-height: 1.7;
+}
+
+.employee-profile-bio-input {
+  resize: vertical;
+  min-height: 105px;
+}
+
+
+/* ============================================================
+   SKILLS
+   ============================================================ */
+
+.employee-profile-skills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.employee-profile-skills span {
+  padding: 0.38rem 0.55rem;
+  background: rgba(113, 29, 60, 0.045);
+  border: 1px solid rgba(113, 29, 60, 0.1);
+  border-radius: 4px;
+  color: var(--color-primary);
+  font-size: 0.49rem;
+  font-weight: 600;
+}
+
+
+/* ============================================================
+   DARK THEME
+   ============================================================ */
+
+:root[data-theme="dark"]
+.employee-profile-skills span {
+  background: rgba(177, 138, 82, 0.055);
+  border-color: rgba(177, 138, 82, 0.13);
+  color: var(--color-accent);
+}
+
+:root[data-theme="dark"]
+.employee-profile-managed-note {
+  background: rgba(177, 138, 82, 0.045);
+}
+
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+
+@media (max-width: 800px) {
+
+  .employee-profile-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .employee-profile-about-card {
+    grid-column: span 1;
+  }
+
+  .employee-profile-header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .employee-profile-header-actions {
+    width: 100%;
+  }
+}
+
+
+@media (max-width: 600px) {
+
+  .employee-profile-overview {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .employee-profile-form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .employee-profile-field-full {
+    grid-column: span 1;
+  }
+
+  .employee-profile-overview-meta {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 0.35rem;
+  }
+
+  .employee-profile-header-actions {
+    width: 100%;
+  }
+
+  .employee-profile-header-actions button {
+    flex: 1;
+  }
+}

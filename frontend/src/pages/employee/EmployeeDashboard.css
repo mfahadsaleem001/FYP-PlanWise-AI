@@ -1,0 +1,783 @@
+/* ============================================================
+   EMPLOYEE DASHBOARD
+   ============================================================ */
+
+.employee-dashboard-page {
+  width: 100%;
+  max-width: 1400px;
+
+  margin: 0 auto;
+  padding: 0;
+
+  box-sizing: border-box;
+}
+
+/* ============================================================
+   PAGE HEADER
+   ============================================================ */
+
+.employee-dashboard-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+
+  gap: 1.5rem;
+
+  margin-bottom: 1.75rem;
+}
+
+.employee-dashboard-eyebrow {
+  display: block;
+
+  margin-bottom: 0.35rem;
+
+  color: var(--color-accent);
+
+  font-size: 0.62rem;
+  font-weight: 700;
+
+  letter-spacing: 0.14em;
+  line-height: 1.2;
+}
+
+.employee-dashboard-header h1 {
+  margin: 0;
+
+  color: var(--color-text-primary);
+
+  font-family: var(--font-heading);
+  font-size: 1.55rem;
+  font-weight: 700;
+
+  line-height: 1.25;
+}
+
+.employee-dashboard-header p {
+  max-width: 620px;
+
+  margin: 0.4rem 0 0;
+
+  color: var(--color-text-secondary);
+
+  font-size: 0.72rem;
+  line-height: 1.6;
+}
+
+.employee-dashboard-date {
+  min-height: 36px;
+
+  display: inline-flex;
+  align-items: center;
+
+  gap: 0.5rem;
+
+  padding: 0.55rem 0.75rem;
+
+  color: var(--color-text-secondary);
+
+  background: var(--color-surface);
+
+  border: 1px solid var(--color-border);
+  border-radius: 7px;
+
+  font-size: 0.63rem;
+  font-weight: 600;
+
+  white-space: nowrap;
+
+  box-shadow: var(--shadow-sm);
+
+  box-sizing: border-box;
+}
+
+.employee-dashboard-date svg {
+  width: 15px;
+  height: 15px;
+
+  color: var(--color-accent);
+
+  stroke-width: 1.9;
+}
+
+/* ============================================================
+   SUMMARY CARDS
+   ============================================================ */
+
+.employee-dashboard-summary {
+  display: grid;
+
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+
+  gap: 0.8rem;
+
+  margin-bottom: 1.5rem;
+}
+
+.employee-summary-card {
+  min-width: 0;
+
+  display: flex;
+  align-items: center;
+
+  gap: 0.8rem;
+
+  padding: 1.05rem 1.1rem;
+
+  background: var(--color-surface);
+
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+
+  box-shadow: var(--shadow-sm);
+
+  box-sizing: border-box;
+}
+
+.employee-summary-icon {
+  width: 36px;
+  height: 36px;
+
+  min-width: 36px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  color: var(--color-primary);
+
+  background: rgba(113, 29, 60, 0.07);
+
+  border-radius: 7px;
+}
+
+.employee-summary-icon svg {
+  width: 17px;
+  height: 17px;
+
+  stroke-width: 1.9;
+}
+
+.employee-summary-content {
+  min-width: 0;
+
+  display: flex;
+  flex-direction: column;
+}
+
+.employee-summary-content > span {
+  color: var(--color-accent);
+
+  font-size: 0.56rem;
+  font-weight: 700;
+
+  letter-spacing: 0.1em;
+
+  line-height: 1.2;
+}
+
+.employee-summary-content strong {
+  margin-top: 0.2rem;
+
+  color: var(--color-text-primary);
+
+  font-family: var(--font-heading);
+  font-size: 1.35rem;
+  font-weight: 700;
+
+  line-height: 1.15;
+}
+
+.employee-summary-content p {
+  margin: 0.2rem 0 0;
+
+  color: var(--color-text-muted);
+
+  font-size: 0.58rem;
+
+  line-height: 1.35;
+}
+
+/* ============================================================
+   DASHBOARD GRID
+   ============================================================ */
+
+.employee-dashboard-grid {
+  display: grid;
+
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+
+  gap: 0.8rem;
+
+  margin-bottom: 1.5rem;
+}
+
+.employee-dashboard-card {
+  min-width: 0;
+
+  padding: 1.25rem;
+
+  background: var(--color-surface);
+
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+
+  box-shadow: var(--shadow-sm);
+
+  box-sizing: border-box;
+}
+
+/* ============================================================
+   CARD HEADER
+   ============================================================ */
+
+.employee-card-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+
+  gap: 1rem;
+
+  margin-bottom: 1rem;
+}
+
+.employee-section-eyebrow {
+  display: block;
+
+  margin-bottom: 0.35rem;
+
+  color: var(--color-accent);
+
+  font-size: 0.58rem;
+  font-weight: 700;
+
+  letter-spacing: 0.14em;
+
+  line-height: 1.2;
+}
+
+.employee-card-header h2 {
+  margin: 0;
+
+  color: var(--color-text-primary);
+
+  font-family: var(--font-heading);
+  font-size: 1.05rem;
+  font-weight: 700;
+
+  line-height: 1.3;
+}
+
+.employee-card-header p {
+  margin: 0.3rem 0 0;
+
+  color: var(--color-text-secondary);
+
+  font-size: 0.63rem;
+
+  line-height: 1.5;
+}
+
+.employee-card-link {
+  display: inline-flex;
+  align-items: center;
+
+  gap: 0.3rem;
+
+  padding-top: 0.15rem;
+
+  color: var(--color-primary);
+
+  font-size: 0.62rem;
+  font-weight: 700;
+
+  text-decoration: none;
+
+  white-space: nowrap;
+
+  transition:
+    color var(--transition),
+    gap var(--transition);
+}
+
+.employee-card-link:hover {
+  color: var(--color-accent);
+  gap: 0.45rem;
+}
+
+.employee-card-link svg {
+  width: 13px;
+  height: 13px;
+
+  stroke-width: 2;
+}
+
+/* ============================================================
+   PROJECT LIST
+   ============================================================ */
+
+.employee-project-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.employee-project-item {
+  min-height: 58px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 1rem;
+
+  padding: 0.75rem 0;
+
+  border-bottom: 1px solid var(--color-border);
+
+  box-sizing: border-box;
+}
+
+.employee-project-item:first-child {
+  padding-top: 0;
+}
+
+.employee-project-item:last-child {
+  padding-bottom: 0;
+  border-bottom: 0;
+}
+
+.employee-project-main {
+  min-width: 0;
+
+  display: flex;
+  align-items: center;
+
+  gap: 0.7rem;
+}
+
+.employee-project-icon {
+  width: 32px;
+  height: 32px;
+
+  min-width: 32px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  color: var(--color-primary);
+
+  background: var(--color-background);
+
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+}
+
+.employee-project-icon svg {
+  width: 15px;
+  height: 15px;
+
+  stroke-width: 1.9;
+}
+
+.employee-project-main > div:last-child {
+  min-width: 0;
+
+  display: flex;
+  flex-direction: column;
+
+  gap: 0.15rem;
+}
+
+.employee-project-main strong {
+  color: var(--color-text-primary);
+
+  font-size: 0.68rem;
+  font-weight: 700;
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.employee-project-main span {
+  color: var(--color-text-muted);
+
+  font-size: 0.57rem;
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.employee-project-status {
+  display: inline-flex;
+  align-items: center;
+
+  gap: 0.35rem;
+
+  color: var(--color-text-secondary);
+
+  font-size: 0.56rem;
+  font-weight: 600;
+
+  white-space: nowrap;
+}
+
+.status-dot {
+  width: 6px;
+  height: 6px;
+
+  display: inline-block;
+
+  border-radius: 50%;
+}
+
+.status-dot.active {
+  background: var(--color-primary);
+}
+
+.status-dot.planning {
+  background: var(--color-accent);
+}
+
+/* ============================================================
+   TASK LIST
+   ============================================================ */
+
+.employee-task-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.employee-task-item {
+  min-height: 58px;
+
+  display: flex;
+  align-items: center;
+
+  gap: 0.65rem;
+
+  padding: 0.75rem 0;
+
+  border-bottom: 1px solid var(--color-border);
+
+  box-sizing: border-box;
+}
+
+.employee-task-item:first-child {
+  padding-top: 0;
+}
+
+.employee-task-item:last-child {
+  padding-bottom: 0;
+  border-bottom: 0;
+}
+
+.employee-task-indicator {
+  width: 28px;
+  height: 28px;
+
+  min-width: 28px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  color: var(--color-primary);
+
+  background: rgba(113, 29, 60, 0.06);
+
+  border-radius: 6px;
+}
+
+.employee-task-indicator svg {
+  width: 14px;
+  height: 14px;
+
+  stroke-width: 1.9;
+}
+
+.employee-task-content {
+  min-width: 0;
+
+  flex: 1;
+
+  display: flex;
+  flex-direction: column;
+
+  gap: 0.15rem;
+}
+
+.employee-task-content strong {
+  color: var(--color-text-primary);
+
+  font-size: 0.65rem;
+  font-weight: 700;
+
+  line-height: 1.35;
+}
+
+.employee-task-content span {
+  color: var(--color-text-muted);
+
+  font-size: 0.56rem;
+
+  line-height: 1.3;
+}
+
+.employee-task-deadline {
+  min-width: 42px;
+
+  display: flex;
+  flex-direction: column;
+
+  align-items: flex-end;
+
+  gap: 0.12rem;
+}
+
+.employee-task-deadline span {
+  color: var(--color-text-muted);
+
+  font-size: 0.52rem;
+}
+
+.employee-task-deadline strong {
+  color: var(--color-text-secondary);
+
+  font-size: 0.58rem;
+  font-weight: 700;
+}
+
+/* ============================================================
+   BOTTOM GRID
+   ============================================================ */
+
+.employee-dashboard-bottom-grid {
+  display: grid;
+
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+
+  gap: 0.8rem;
+}
+
+/* ============================================================
+   ACTIVITY
+   ============================================================ */
+
+.employee-activity-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.employee-activity-item {
+  display: flex;
+  align-items: flex-start;
+
+  gap: 0.7rem;
+
+  padding: 0.75rem 0;
+
+  border-bottom: 1px solid var(--color-border);
+}
+
+.employee-activity-item:first-child {
+  padding-top: 0;
+}
+
+.employee-activity-item:last-child {
+  padding-bottom: 0;
+  border-bottom: 0;
+}
+
+.employee-activity-marker {
+  width: 28px;
+  height: 28px;
+
+  min-width: 28px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  color: var(--color-primary);
+
+  background: var(--color-background);
+
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+}
+
+.employee-activity-marker svg {
+  width: 14px;
+  height: 14px;
+
+  stroke-width: 1.9;
+}
+
+.employee-activity-item > div:last-child {
+  min-width: 0;
+
+  display: flex;
+  flex-direction: column;
+
+  gap: 0.12rem;
+}
+
+.employee-activity-item strong {
+  color: var(--color-text-primary);
+
+  font-size: 0.64rem;
+  font-weight: 700;
+
+  line-height: 1.35;
+}
+
+.employee-activity-item span {
+  color: var(--color-text-secondary);
+
+  font-size: 0.56rem;
+
+  line-height: 1.35;
+}
+
+.employee-activity-item small {
+  margin-top: 0.12rem;
+
+  color: var(--color-text-muted);
+
+  font-size: 0.52rem;
+}
+
+/* ============================================================
+   WORK SUMMARY
+   ============================================================ */
+
+.employee-work-summary-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.employee-work-summary-row {
+  min-height: 42px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 1rem;
+
+  border-bottom: 1px solid var(--color-border);
+}
+
+.employee-work-summary-row:last-child {
+  border-bottom: 0;
+}
+
+.employee-work-summary-row span {
+  color: var(--color-text-secondary);
+
+  font-size: 0.62rem;
+}
+
+.employee-work-summary-row strong {
+  color: var(--color-text-primary);
+
+  font-family: var(--font-heading);
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+/* ============================================================
+   DARK THEME
+   ============================================================ */
+
+:root[data-theme="dark"] .employee-summary-icon,
+:root[data-theme="dark"] .employee-task-indicator {
+  background: rgba(177, 138, 82, 0.09);
+}
+
+:root[data-theme="dark"] .employee-project-icon,
+:root[data-theme="dark"] .employee-activity-marker {
+  background: rgba(255, 255, 255, 0.025);
+}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+
+@media (max-width: 1100px) {
+  .employee-dashboard-summary {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .employee-dashboard-grid,
+  .employee-dashboard-bottom-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .employee-dashboard-header {
+    align-items: flex-start;
+
+    flex-direction: column;
+
+    margin-bottom: 1.5rem;
+  }
+
+  .employee-dashboard-header h1 {
+    font-size: 1.35rem;
+  }
+
+  .employee-dashboard-date {
+    align-self: flex-start;
+  }
+
+  .employee-dashboard-summary {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+
+    gap: 0.7rem;
+  }
+
+  .employee-summary-card {
+    padding: 0.9rem;
+  }
+
+  .employee-dashboard-card {
+    padding: 1.1rem;
+  }
+}
+
+@media (max-width: 520px) {
+  .employee-dashboard-summary {
+    grid-template-columns: 1fr;
+  }
+
+  .employee-dashboard-header h1 {
+    font-size: 1.2rem;
+  }
+
+  .employee-dashboard-header p {
+    font-size: 0.65rem;
+  }
+
+  .employee-card-header {
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+
+  .employee-card-link {
+    align-self: flex-start;
+  }
+
+  .employee-project-item {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 0.45rem;
+  }
+
+  .employee-project-status {
+    padding-left: 2.7rem;
+  }
+}

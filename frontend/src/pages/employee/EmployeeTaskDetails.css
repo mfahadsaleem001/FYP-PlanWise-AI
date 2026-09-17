@@ -1,0 +1,945 @@
+/* ============================================================
+   EMPLOYEE TASK DETAILS
+   ============================================================ */
+
+.employee-task-details-page {
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0;
+  color: var(--color-heading);
+  box-sizing: border-box;
+}
+
+
+/* ============================================================
+   BACK NAVIGATION
+   ============================================================ */
+
+.employee-task-details-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  margin-bottom: 1.4rem;
+  color: var(--color-muted);
+  font-size: 0.76rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition:
+    color 0.2s ease,
+    gap 0.2s ease;
+}
+
+.employee-task-details-back svg {
+  width: 15px;
+  height: 15px;
+}
+
+.employee-task-details-back:hover {
+  color: var(--color-accent);
+  gap: 0.6rem;
+}
+
+
+/* ============================================================
+   TASK HEADER
+   ============================================================ */
+
+.employee-task-details-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 2rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.employee-task-title-area {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.9rem;
+  min-width: 0;
+}
+
+.employee-task-title-icon {
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-top: 0.15rem;
+  border-radius: 9px;
+  background: var(--color-primary);
+  color: #ffffff;
+}
+
+.employee-task-title-icon svg {
+  width: 21px;
+  height: 21px;
+  stroke-width: 1.8;
+}
+
+.employee-task-eyebrow {
+  display: block;
+  margin-bottom: 0.3rem;
+  color: var(--color-accent);
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  line-height: 1.2;
+}
+
+.employee-task-details-header h1 {
+  margin: 0;
+  color: var(--color-heading);
+  font-family: var(--font-heading);
+  font-size: 1.48rem;
+  font-weight: 600;
+  line-height: 1.25;
+  letter-spacing: -0.02em;
+}
+
+.employee-task-details-header p {
+  margin: 0.42rem 0 0;
+  color: var(--color-muted);
+  font-size: 0.75rem;
+  line-height: 1.5;
+}
+
+.employee-task-details-header p a {
+  color: var(--color-primary);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.employee-task-details-header p a:hover {
+  color: var(--color-accent);
+}
+
+.employee-task-header-status {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  flex-shrink: 0;
+  padding-top: 0.2rem;
+}
+
+.employee-task-status,
+.employee-task-priority {
+  display: inline-flex;
+  align-items: center;
+  min-height: 29px;
+  padding: 0.35rem 0.65rem;
+  border-radius: 6px;
+  font-size: 0.64rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.employee-task-status {
+  background: rgba(177, 138, 82, 0.12);
+  color: var(--color-accent);
+  border: 1px solid rgba(177, 138, 82, 0.25);
+}
+
+.employee-task-priority {
+  background: rgba(113, 29, 60, 0.08);
+  color: var(--color-primary);
+  border: 1px solid rgba(113, 29, 60, 0.14);
+}
+
+
+/* ============================================================
+   TASK SUMMARY
+   ============================================================ */
+
+.employee-task-summary-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.8rem;
+  margin-top: 1.5rem;
+}
+
+.employee-task-summary-card {
+  position: relative;
+  min-width: 0;
+  min-height: 145px;
+  padding: 1.05rem 1.1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 9px;
+  box-sizing: border-box;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(44, 27, 27, 0.025);
+}
+
+.employee-task-summary-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: var(--color-accent);
+  opacity: 0.7;
+}
+
+.employee-task-summary-heading {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.employee-task-summary-heading > span {
+  color: var(--color-muted);
+  font-size: 0.58rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  line-height: 1.2;
+}
+
+.employee-task-summary-icon {
+  width: 31px;
+  height: 31px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  border-radius: 7px;
+  background: rgba(177, 138, 82, 0.09);
+  color: var(--color-accent);
+}
+
+.employee-task-summary-icon svg {
+  width: 15px;
+  height: 15px;
+  stroke-width: 1.8;
+}
+
+.employee-task-summary-value {
+  display: flex;
+  align-items: baseline;
+  gap: 0.45rem;
+  margin-top: 0.55rem;
+}
+
+.employee-task-summary-value strong {
+  color: var(--color-heading);
+  font-family: var(--font-heading);
+  font-size: 1.55rem;
+  font-weight: 600;
+  line-height: 1;
+}
+
+.employee-task-summary-value span {
+  color: var(--color-muted);
+  font-size: 0.63rem;
+  font-weight: 600;
+}
+
+.employee-task-summary-value-text {
+  display: block;
+  margin-top: 0.65rem;
+  color: var(--color-heading);
+  font-family: var(--font-heading);
+  font-size: 0.95rem;
+  font-weight: 600;
+  line-height: 1.35;
+}
+
+.employee-task-summary-description {
+  display: block;
+  margin-top: 0.3rem;
+  color: var(--color-muted);
+  font-size: 0.64rem;
+  line-height: 1.35;
+}
+
+
+/* ============================================================
+   PROGRESS BAR
+   ============================================================ */
+
+.employee-task-progress-track {
+  width: 100%;
+  height: 4px;
+  margin-top: 0.75rem;
+  background: var(--color-border);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.employee-task-progress-track.large {
+  height: 6px;
+  margin-top: 0;
+}
+
+.employee-task-progress-fill {
+  height: 100%;
+  background: var(--color-accent);
+  border-radius: inherit;
+  transition: width 0.12s ease;
+}
+
+
+/* ============================================================
+   MAIN CONTENT
+   ============================================================ */
+
+.employee-task-details-main-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.3fr) minmax(320px, 0.85fr);
+  gap: 0.8rem;
+  margin-top: 1.5rem;
+}
+
+.employee-task-section {
+  min-width: 0;
+  padding: 1.25rem;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  box-sizing: border-box;
+}
+
+.employee-task-section-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.employee-task-section-heading h2 {
+  margin: 0;
+  color: var(--color-heading);
+  font-family: var(--font-heading);
+  font-size: 1.08rem;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.employee-task-section-count {
+  display: inline-flex;
+  align-items: center;
+  min-height: 26px;
+  padding: 0.3rem 0.55rem;
+  background: var(--color-background);
+  border: 1px solid var(--color-border);
+  border-radius: 5px;
+  color: var(--color-muted);
+  font-size: 0.59rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+
+/* ============================================================
+   TASK DESCRIPTION
+   ============================================================ */
+
+.employee-task-description {
+  margin: 0;
+  padding: 0.95rem 1rem;
+  background: var(--color-background);
+  border-left: 3px solid var(--color-accent);
+  border-radius: 0 7px 7px 0;
+  color: var(--color-muted);
+  font-size: 0.76rem;
+  line-height: 1.7;
+}
+
+
+/* ============================================================
+   TASK INFORMATION
+   ============================================================ */
+
+.employee-task-info-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.6rem;
+  margin-top: 1rem;
+}
+
+.employee-task-info-item {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  min-width: 0;
+  padding: 0.8rem;
+  background: var(--color-background);
+  border: 1px solid var(--color-border);
+  border-radius: 7px;
+  box-sizing: border-box;
+}
+
+.employee-task-info-icon {
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  border-radius: 6px;
+  background: rgba(177, 138, 82, 0.09);
+  color: var(--color-accent);
+}
+
+.employee-task-info-icon svg {
+  width: 14px;
+  height: 14px;
+}
+
+.employee-task-info-item > div:last-child {
+  min-width: 0;
+}
+
+.employee-task-info-item span {
+  display: block;
+  margin-bottom: 0.2rem;
+  color: var(--color-muted);
+  font-size: 0.57rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.employee-task-info-item strong {
+  display: block;
+  overflow: hidden;
+  color: var(--color-heading);
+  font-size: 0.7rem;
+  font-weight: 600;
+  line-height: 1.35;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+
+/* ============================================================
+   CHECKLIST
+   ============================================================ */
+
+.employee-task-checklist {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.employee-task-checklist-item {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  min-height: 40px;
+  padding: 0.55rem 0.6rem;
+  border-radius: 7px;
+  color: var(--color-muted);
+  font-size: 0.7rem;
+  line-height: 1.4;
+  transition:
+    background 0.2s ease,
+    color 0.2s ease;
+}
+
+.employee-task-checklist-item:hover {
+  background: var(--color-background);
+}
+
+.employee-task-checklist-item.completed {
+  color: var(--color-heading);
+}
+
+.employee-task-check-icon {
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.employee-task-check-icon svg {
+  width: 17px;
+  height: 17px;
+  color: var(--color-accent);
+  stroke-width: 1.9;
+}
+
+.employee-task-check-icon > span {
+  width: 15px;
+  height: 15px;
+  display: block;
+  border: 1px solid var(--color-border);
+  border-radius: 50%;
+  background: var(--color-surface);
+}
+
+
+/* ============================================================
+   UPDATE PROGRESS SECTION
+   ============================================================ */
+
+.employee-task-update-section {
+  margin-top: 0.8rem;
+}
+
+.employee-task-update-content {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
+
+.employee-task-update-progress {
+  flex: 1;
+  min-width: 0;
+}
+
+.employee-task-update-progress-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.employee-task-update-progress-top span {
+  color: var(--color-muted);
+  font-size: 0.65rem;
+  font-weight: 600;
+}
+
+.employee-task-update-progress-top strong {
+  color: var(--color-heading);
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+
+
+/* ============================================================
+   PROGRESS BAR AS INTERACTIVE SLIDER
+   ============================================================ */
+
+.employee-task-interactive-progress {
+  position: relative;
+  width: 100%;
+  margin-top: 0.7rem;
+}
+
+.employee-task-progress-slider-overlay {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 100%;
+  height: 20px;
+  margin: 0;
+  transform: translateY(-50%);
+  appearance: none;
+  -webkit-appearance: none;
+  background: transparent;
+  border: 0;
+  outline: none;
+  cursor: pointer;
+  z-index: 2;
+}
+
+.employee-task-progress-slider-overlay::-webkit-slider-runnable-track {
+  height: 6px;
+  background: transparent;
+  border: none;
+}
+
+.employee-task-progress-slider-overlay::-moz-range-track {
+  height: 6px;
+  background: transparent;
+  border: none;
+}
+
+.employee-task-progress-slider-overlay::-webkit-slider-thumb {
+  width: 15px;
+  height: 15px;
+  appearance: none;
+  -webkit-appearance: none;
+  margin-top: -4.5px;
+  border: 2px solid var(--color-surface);
+  border-radius: 50%;
+  background: var(--color-primary);
+  box-shadow:
+    0 0 0 1px var(--color-primary),
+    0 2px 5px rgba(44, 27, 27, 0.18);
+  cursor: grab;
+}
+
+.employee-task-progress-slider-overlay::-webkit-slider-thumb:active {
+  cursor: grabbing;
+}
+
+.employee-task-progress-slider-overlay::-moz-range-thumb {
+  width: 11px;
+  height: 11px;
+  border: 2px solid var(--color-surface);
+  border-radius: 50%;
+  background: var(--color-primary);
+  box-shadow:
+    0 0 0 1px var(--color-primary),
+    0 2px 5px rgba(44, 27, 27, 0.18);
+  cursor: grab;
+}
+
+.employee-task-progress-slider-overlay::-moz-range-thumb:active {
+  cursor: grabbing;
+}
+
+
+/* ============================================================
+   UPDATE ACTIONS
+   ============================================================ */
+
+.employee-task-update-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  flex-shrink: 0;
+}
+
+.employee-task-update-button {
+  min-height: 35px;
+  padding: 0.5rem 0.75rem;
+  border-radius: 6px;
+  font-family: inherit;
+  font-size: 0.63rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease,
+    color 0.2s ease;
+}
+
+.employee-task-update-button.secondary {
+  background: transparent;
+  border: 1px solid var(--color-border);
+  color: var(--color-muted);
+}
+
+.employee-task-update-button.secondary:hover {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
+.employee-task-update-button.primary {
+  background: var(--color-primary);
+  border: 1px solid var(--color-primary);
+  color: #ffffff;
+}
+
+.employee-task-update-button.primary:hover {
+  background: #5d1832;
+  border-color: #5d1832;
+}
+
+
+/* ============================================================
+   BOTTOM GRID
+   ============================================================ */
+
+.employee-task-bottom-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(320px, 0.9fr);
+  gap: 0.8rem;
+  margin-top: 0.8rem;
+}
+
+
+/* ============================================================
+   RECENT UPDATES
+   ============================================================ */
+
+.employee-task-updates-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.employee-task-update-item {
+  display: grid;
+  grid-template-columns: 10px minmax(0, 1fr);
+  gap: 0.75rem;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.employee-task-update-item:last-child {
+  border-bottom: 0;
+  padding-bottom: 0;
+}
+
+.employee-task-update-dot {
+  width: 7px;
+  height: 7px;
+  margin-top: 0.35rem;
+  border-radius: 50%;
+  background: var(--color-accent);
+}
+
+.employee-task-update-item > div:last-child {
+  display: flex;
+  flex-direction: column;
+  gap: 0.18rem;
+}
+
+.employee-task-update-item strong {
+  color: var(--color-heading);
+  font-size: 0.71rem;
+  font-weight: 600;
+}
+
+.employee-task-update-item span {
+  color: var(--color-muted);
+  font-size: 0.63rem;
+  line-height: 1.45;
+}
+
+.employee-task-update-item small {
+  margin-top: 0.05rem;
+  color: var(--color-muted);
+  font-size: 0.57rem;
+}
+
+
+/* ============================================================
+   TASK DISCUSSION
+   ============================================================ */
+
+.employee-task-message-content {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+}
+
+.employee-task-message-icon {
+  width: 34px;
+  height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  border-radius: 8px;
+  background: rgba(113, 29, 60, 0.08);
+  color: var(--color-primary);
+}
+
+.employee-task-message-icon svg {
+  width: 17px;
+  height: 17px;
+}
+
+.employee-task-message-content strong {
+  display: block;
+  color: var(--color-heading);
+  font-size: 0.72rem;
+  font-weight: 600;
+}
+
+.employee-task-message-content p {
+  margin: 0.35rem 0 0;
+  color: var(--color-muted);
+  font-size: 0.64rem;
+  line-height: 1.55;
+}
+
+.employee-task-message-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  width: 100%;
+  min-height: 36px;
+  margin-top: 1rem;
+  padding: 0.55rem 0.8rem;
+  border: 1px solid var(--color-primary);
+  border-radius: 6px;
+  background: var(--color-primary);
+  color: #ffffff;
+  font-size: 0.64rem;
+  font-weight: 700;
+  text-decoration: none;
+  box-sizing: border-box;
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.employee-task-message-button svg {
+  width: 14px;
+  height: 14px;
+}
+
+.employee-task-message-button:hover {
+  background: #5d1832;
+  border-color: #5d1832;
+}
+
+
+/* ============================================================
+   DARK THEME
+   ============================================================ */
+
+:root[data-theme="dark"]
+.employee-task-summary-card {
+  background: var(--color-surface);
+  border-color: var(--color-border);
+  box-shadow: none;
+}
+
+:root[data-theme="dark"]
+.employee-task-summary-icon {
+  background: rgba(177, 138, 82, 0.12);
+}
+
+:root[data-theme="dark"]
+.employee-task-priority {
+  background: rgba(177, 138, 82, 0.1);
+  border-color: rgba(177, 138, 82, 0.2);
+  color: var(--color-accent);
+}
+
+:root[data-theme="dark"]
+.employee-task-description {
+  background: rgba(255, 255, 255, 0.025);
+}
+
+:root[data-theme="dark"]
+.employee-task-info-item {
+  background: rgba(255, 255, 255, 0.02);
+}
+
+:root[data-theme="dark"]
+.employee-task-checklist-item:hover {
+  background: rgba(255, 255, 255, 0.025);
+}
+
+:root[data-theme="dark"]
+.employee-task-message-icon {
+  background: rgba(177, 138, 82, 0.1);
+  color: var(--color-accent);
+}
+
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+
+@media (max-width: 1100px) {
+
+  .employee-task-summary-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .employee-task-details-main-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .employee-task-bottom-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+
+@media (max-width: 760px) {
+
+  .employee-task-details-header {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .employee-task-header-status {
+    padding-top: 0;
+  }
+
+  .employee-task-update-content {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .employee-task-update-progress {
+    width: 100%;
+  }
+
+  .employee-task-update-actions {
+    width: 100%;
+  }
+
+  .employee-task-update-button {
+    flex: 1;
+  }
+}
+
+
+@media (max-width: 600px) {
+
+  .employee-task-summary-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .employee-task-details-header h1 {
+    font-size: 1.3rem;
+  }
+
+  .employee-task-title-icon {
+    width: 40px;
+    height: 40px;
+  }
+
+  .employee-task-section {
+    padding: 1rem;
+  }
+
+  .employee-task-info-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .employee-task-header-status {
+    flex-wrap: wrap;
+  }
+}
+
+
+@media (max-width: 480px) {
+
+  .employee-task-title-area {
+    gap: 0.7rem;
+  }
+
+  .employee-task-title-icon {
+    width: 36px;
+    height: 36px;
+  }
+
+  .employee-task-title-icon svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  .employee-task-details-header h1 {
+    font-size: 1.18rem;
+  }
+
+  .employee-task-summary-card {
+    padding: 1rem;
+  }
+
+  .employee-task-section-heading h2 {
+    font-size: 1rem;
+  }
+
+  .employee-task-update-actions {
+    flex-direction: column;
+  }
+
+  .employee-task-update-button {
+    width: 100%;
+  }
+}
