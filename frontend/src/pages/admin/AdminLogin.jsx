@@ -5,17 +5,20 @@ import {
   ArrowRight,
   AlertCircle,
 } from "lucide-react";
+
 import { useState } from "react";
 
 import "./AdminLogin.css";
+
 import { adminLogin } from "../../services/api";
+
 
 function AdminLogin() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -29,23 +32,34 @@ function AdminLogin() {
         password
       );
 
+      if (!data?.access_token) {
+        throw new Error(
+          "Login succeeded, but no access token was received."
+        );
+      }
+
       localStorage.setItem(
         "planwise_access_token",
         data.access_token
       );
 
-      window.location.href = "/admin/dashboard";
+      window.location.href =
+        "/admin/dashboard";
+
     } catch (error) {
       setError(
-        error.message || "Unable to sign in."
+        error.message ||
+        "Unable to sign in."
       );
     } finally {
       setLoading(false);
     }
   };
 
+
   return (
     <main className="admin-login-page">
+
       <div className="admin-login-container">
 
         {/* =====================================================
@@ -53,18 +67,30 @@ function AdminLogin() {
         ===================================================== */}
 
         <section className="admin-login-intro">
+
           <div className="admin-login-brand">
+
             <div className="admin-login-brand-mark">
               <ShieldCheck size={22} />
             </div>
 
             <div>
-              <strong>PLANWISE</strong>
-              <span>ADMIN PORTAL</span>
+
+              <strong>
+                PLANWISE
+              </strong>
+
+              <span>
+                ADMIN PORTAL
+              </span>
+
             </div>
+
           </div>
 
+
           <div className="admin-login-intro-content">
+
             <span className="admin-login-eyebrow">
               SECURE ADMINISTRATION
             </span>
@@ -80,51 +106,71 @@ function AdminLogin() {
               system intelligence, and administrative controls
               from one secure workspace.
             </p>
+
           </div>
 
+
           <div className="admin-login-security-note">
+
             <ShieldCheck size={17} />
 
             <div>
-              <strong>Protected workspace</strong>
+
+              <strong>
+                Protected workspace
+              </strong>
 
               <span>
                 Admin access is restricted to authorized accounts.
               </span>
+
             </div>
+
           </div>
+
         </section>
+
 
         {/* =====================================================
             LOGIN CARD
         ===================================================== */}
 
         <section className="admin-login-card">
+
           <div className="admin-login-card-header">
+
             <span className="admin-login-card-label">
               ADMIN ACCESS
             </span>
 
-            <h2>Sign in to Admin Panel</h2>
+            <h2>
+              Sign in to Admin Panel
+            </h2>
 
             <p>
               Enter your administrator credentials to continue.
             </p>
+
           </div>
+
 
           <form
             className="admin-login-form"
             onSubmit={handleSubmit}
           >
 
-            {/* EMAIL */}
+            {/* =================================================
+                EMAIL
+            ================================================= */}
 
             <div className="admin-login-field">
+
               <label htmlFor="admin-email">
                 Email Address
               </label>
 
               <div className="admin-login-input-wrapper">
+
                 <Mail size={17} />
 
                 <input
@@ -139,13 +185,20 @@ function AdminLogin() {
                   }
                   required
                 />
+
               </div>
+
             </div>
 
-            {/* PASSWORD */}
+
+            {/* =================================================
+                PASSWORD
+            ================================================= */}
 
             <div className="admin-login-field">
+
               <div className="admin-login-label-row">
+
                 <label htmlFor="admin-password">
                   Password
                 </label>
@@ -156,9 +209,12 @@ function AdminLogin() {
                 >
                   Forgot password?
                 </button>
+
               </div>
 
+
               <div className="admin-login-input-wrapper">
+
                 <Lock size={17} />
 
                 <input
@@ -173,45 +229,77 @@ function AdminLogin() {
                   }
                   required
                 />
+
               </div>
+
             </div>
 
-            {/* ERROR MESSAGE */}
+
+            {/* =================================================
+                ERROR MESSAGE
+            ================================================= */}
 
             {error && (
+
               <div className="admin-login-message">
+
                 <AlertCircle size={15} />
 
-                <span>{error}</span>
+                <span>
+                  {error}
+                </span>
+
               </div>
+
             )}
 
-            {/* SUBMIT */}
+
+            {/* =================================================
+                SUBMIT
+            ================================================= */}
 
             <button
               type="submit"
               className="admin-login-submit"
               disabled={loading}
             >
+
               <span>
-                {loading ? "Signing In..." : "Sign In"}
+                {loading
+                  ? "Signing In..."
+                  : "Sign In"}
               </span>
 
-              {!loading && <ArrowRight size={17} />}
+              {!loading && (
+                <ArrowRight size={17} />
+              )}
+
             </button>
+
           </form>
 
+
+          {/* =================================================
+              FOOTER
+          ================================================= */}
+
           <div className="admin-login-footer">
+
             <ShieldCheck size={14} />
 
             <span>
               Authorized administrators only
             </span>
+
           </div>
+
         </section>
+
       </div>
+
     </main>
   );
 }
+
 
 export default AdminLogin;

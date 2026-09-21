@@ -66,3 +66,10 @@ def update_project(
     db.refresh(project)
 
     return project
+
+def delete_project(
+    db: Session,
+    project: Project,
+) -> None:
+    db.delete(project)
+    db.commit()

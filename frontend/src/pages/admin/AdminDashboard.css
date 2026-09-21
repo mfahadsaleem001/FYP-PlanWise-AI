@@ -826,3 +826,416 @@
     margin-top: 1px;
   }
 }
+
+/* ============================================================
+   RECENT PROJECTS
+   ============================================================ */
+
+.admin-recent-projects {
+  min-width: 0;
+}
+
+.admin-recent-project-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.admin-recent-project-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.admin-recent-project-item:last-child {
+  border-bottom: none;
+}
+
+.admin-recent-project-main {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+
+.admin-recent-project-icon {
+  width: 34px;
+  height: 34px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-primary);
+  background: var(--color-surface-muted);
+  border-radius: var(--radius-sm);
+}
+
+.admin-recent-project-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.admin-recent-project-info strong {
+  color: var(--color-dark);
+  font-size: 14px;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.admin-recent-project-info span {
+  color: var(--color-text-muted);
+  font-size: 12px;
+}
+
+.admin-recent-project-meta {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-shrink: 0;
+}
+
+.admin-recent-project-meta > span:last-child {
+  color: var(--color-text-muted);
+  font-size: 12px;
+}
+
+.admin-project-status {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px 9px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: capitalize;
+  background: var(--color-surface-muted);
+  color: var(--color-text);
+}
+
+.admin-project-status-draft {
+  color: var(--color-warning);
+}
+
+.admin-project-status-in_progress {
+  color: var(--color-info);
+}
+
+.admin-project-status-completed {
+  color: var(--color-success);
+}
+
+.admin-project-empty {
+  padding: 30px 0;
+  text-align: center;
+  color: var(--color-text-muted);
+  font-size: 13px;
+}
+
+.admin-dashboard-error {
+  margin-bottom: 20px;
+  padding: 12px 16px;
+  border: 1px solid var(--color-danger);
+  border-radius: var(--radius-md);
+  color: var(--color-danger);
+  background: var(--color-surface);
+  font-size: 13px;
+}
+
+/* ============================================================
+   DASHBOARD ERROR
+   ============================================================ */
+
+.admin-dashboard-error {
+  margin-bottom: 20px;
+  padding: 12px 16px;
+  border: 1px solid var(--color-danger);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  color: var(--color-danger);
+  font-size: 13px;
+}
+
+
+/* ============================================================
+   RECENT PROJECTS
+   ============================================================ */
+
+.admin-recent-projects {
+  min-width: 0;
+}
+
+.admin-recent-project-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.admin-recent-project-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 15px 0;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.admin-recent-project-item:last-child {
+  border-bottom: none;
+}
+
+.admin-recent-project-main {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+
+.admin-recent-project-icon {
+  width: 36px;
+  height: 36px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface-muted);
+  color: var(--color-primary);
+}
+
+.admin-recent-project-info {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.admin-recent-project-info strong {
+  display: block;
+  max-width: 190px;
+  overflow: hidden;
+  color: var(--color-dark);
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.35;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.admin-recent-project-info span {
+  color: var(--color-text-muted);
+  font-size: 11px;
+}
+
+.admin-recent-project-meta {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+}
+
+.admin-project-status {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 5px 9px;
+  border: 1px solid var(--color-border);
+  border-radius: 999px;
+  background: var(--color-surface-muted);
+  color: var(--color-text);
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: capitalize;
+  white-space: nowrap;
+}
+
+.admin-project-status-draft {
+  color: var(--color-warning);
+}
+
+.admin-project-status-in_progress {
+  color: var(--color-info);
+}
+
+.admin-project-status-completed {
+  color: var(--color-success);
+}
+
+.admin-recent-project-owner {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 3px;
+  min-width: 85px;
+}
+
+.admin-recent-project-owner span {
+  color: var(--color-text);
+  font-size: 11px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.admin-recent-project-owner small {
+  color: var(--color-text-muted);
+  font-size: 10px;
+  white-space: nowrap;
+}
+
+.admin-project-empty {
+  min-height: 190px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  color: var(--color-text-muted);
+  font-size: 12px;
+}
+
+
+/* ============================================================
+   PROJECT OVERVIEW FOOTER
+   ============================================================ */
+
+.admin-project-overview-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  margin-top: 22px;
+  padding-top: 16px;
+  border-top: 1px solid var(--color-border);
+}
+
+.admin-project-overview-footer div {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.admin-project-overview-footer span {
+  color: var(--color-text-muted);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.admin-project-overview-footer strong {
+  color: var(--color-dark);
+  font-size: 14px;
+  font-weight: 600;
+}
+
+
+/* ============================================================
+   RESOURCE VISUAL
+   ============================================================ */
+
+.admin-resource-panel {
+  min-width: 0;
+}
+
+.admin-resource-visual {
+  margin-top: 22px;
+  padding-top: 17px;
+  border-top: 1px solid var(--color-border);
+}
+
+.admin-resource-visual-header,
+.admin-resource-visual-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.admin-resource-visual-header span,
+.admin-resource-visual-footer span {
+  color: var(--color-text-muted);
+  font-size: 11px;
+}
+
+.admin-resource-visual-header strong {
+  color: var(--color-primary);
+  font-size: 13px;
+}
+
+.admin-resource-progress {
+  height: 7px;
+  margin: 9px 0 8px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: var(--color-surface-muted);
+}
+
+.admin-resource-progress span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--color-primary);
+}
+
+.admin-resource-visual-footer span {
+  font-size: 10px;
+}
+
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+
+@media (max-width: 900px) {
+
+  .admin-recent-project-item {
+    align-items: flex-start;
+  }
+
+  .admin-recent-project-meta {
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 6px;
+  }
+
+}
+
+
+@media (max-width: 640px) {
+
+  .admin-recent-project-item {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .admin-recent-project-meta {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .admin-recent-project-owner {
+    align-items: flex-end;
+  }
+
+  .admin-project-overview-footer {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+}
+
+.admin-project-empty {
+  min-height: 190px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  color: var(--color-text-muted);
+  font-size: 12px;
+}
