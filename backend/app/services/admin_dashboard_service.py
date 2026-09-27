@@ -1,8 +1,11 @@
 from sqlalchemy import func, select
 from sqlalchemy.orm import Session
 
+from app.models.employee import Employee
 from app.models.project import Project
 from app.models.user import User
+from app.services.activity_log_service import get_recent_activity
+from app.services.system_status_service import get_system_status
 
 
 def get_dashboard_stats(db: Session) -> dict:
@@ -36,7 +39,9 @@ def get_dashboard_stats(db: Session) -> dict:
         .group_by(Project.status)
     )
 
-    status_rows = db.execute(status_statement).all()
+    status_rows = db.execute(
+        status_statement
+    ).all()
 
     project_status = {
         status: count
@@ -66,7 +71,9 @@ def get_project_type_distribution(
         )
     )
 
-    rows = db.execute(statement).all()
+    rows = db.execute(
+        statement
+    ).all()
 
     return [
         {
@@ -93,7 +100,9 @@ def get_recent_projects(
         .limit(limit)
     )
 
-    rows = db.execute(statement).all()
+    rows = db.execute(
+        statement
+    ).all()
 
     recent_projects = []
 
@@ -112,3 +121,70 @@ def get_recent_projects(
         )
 
     return recent_projects
+
+
+def get_employee_resource_summary(
+    db: Session,
+) -> dict:
+    total_employees = db.scalar(
+        select(func.count(Employee.id))
+    )
+
+    available_employees = db.scalar(
+        select(func.count(Employee.id)).where(
+            Employee.availability_status == "available"
+        )
+    )
+
+    partially_available_employees = db.scalar(
+        select(func.count(Employee.id)).where(
+            Employee.availability_status == "partially_available"
+        )
+    )
+
+    unavailable_employees = db.scalar(
+        select(func.count(Employee.id)).where(
+            Employee.availability_status == "unavailable"
+        )
+    )
+
+    total_capacity_hours = db.scalar(
+        select(
+            func.coalesce(
+                func.sum(Employee.capacity_hours),
+                0,
+            )
+        )
+    )
+
+    return {
+        "total": total_employees or 0,
+        "available": available_employees or 0,
+        "partially_available": (
+            partially_available_employees or 0
+        ),
+        "unavailable": unavailable_employees or 0,
+        "total_capacity_hours": (
+            total_capacity_hours or 0
+        ),
+    }
+    
+def get_dashboard_recent_activity(
+    db: Session,
+    limit: int = 5,
+) -> list[dict]:
+    activities = get_recent_activity(
+        db=db,
+        limit=limit,
+    )
+
+    return [
+        {
+            "id": activity.id,
+            "user_id": activity.user_id,
+            "action": activity.action,
+            "description": activity.description,
+            "created_at": activity.created_at,
+        }
+        for activity in activities
+    ]

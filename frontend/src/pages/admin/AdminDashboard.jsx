@@ -27,11 +27,8 @@ function AdminDashboard() {
         setLoading(true);
         setError("");
 
-        const token = localStorage.getItem("planwise_access_token");
-
-        console.log(
-          "Admin dashboard token:",
-          token ? "FOUND" : "NOT FOUND"
+        const token = localStorage.getItem(
+          "planwise_access_token"
         );
 
         if (!token) {
@@ -54,7 +51,9 @@ function AdminDashboard() {
         );
 
         if (response.status === 401) {
-          localStorage.removeItem("planwise_access_token");
+          localStorage.removeItem(
+            "planwise_access_token"
+          );
 
           throw new Error(
             "Your session has expired. Please log in again."
@@ -81,7 +80,6 @@ function AdminDashboard() {
         );
 
         setDashboardData(data);
-
       } catch (err) {
         console.error(
           "Admin dashboard error:",
@@ -90,9 +88,8 @@ function AdminDashboard() {
 
         setError(
           err.message ||
-          "Something went wrong while loading the dashboard."
+            "Something went wrong while loading the dashboard."
         );
-
       } finally {
         setLoading(false);
       }
@@ -109,6 +106,15 @@ function AdminDashboard() {
 
   const recentProjects =
     dashboardData?.recent_projects || [];
+
+  const employeeResourceSummary =
+    dashboardData?.employee_resource_summary;
+
+  const recentActivity =
+    dashboardData?.recent_activity || [];
+
+  const systemStatus =
+    dashboardData?.system_status || [];
 
 
   const formatProjectDate = (dateString) => {
@@ -152,7 +158,6 @@ function AdminDashboard() {
       <div className="admin-dashboard-header">
 
         <div>
-
           <span className="admin-dashboard-eyebrow">
             SYSTEM OVERVIEW
           </span>
@@ -166,9 +171,7 @@ function AdminDashboard() {
             estimation activity, and overall PlanWise
             system performance.
           </p>
-
         </div>
-
 
         <button
           className="admin-dashboard-action"
@@ -224,15 +227,9 @@ function AdminDashboard() {
           </div>
 
           <div className="admin-stat-footer">
-
-            <span className="admin-stat-positive">
-              —
-            </span>
-
             <span>
               registered users
             </span>
-
           </div>
 
         </div>
@@ -261,15 +258,9 @@ function AdminDashboard() {
           </div>
 
           <div className="admin-stat-footer">
-
-            <span className="admin-stat-positive">
-              —
-            </span>
-
             <span>
-              employees
+              employee accounts
             </span>
-
           </div>
 
         </div>
@@ -299,7 +290,7 @@ function AdminDashboard() {
 
           <div className="admin-stat-footer">
 
-            <span className="admin-stat-positive">
+            <span>
               {loading
                 ? "—"
                 : stats?.draft_projects ?? 0}
@@ -331,19 +322,13 @@ function AdminDashboard() {
           </div>
 
           <div className="admin-stat-value">
-            412
+            —
           </div>
 
           <div className="admin-stat-footer">
-
-            <span className="admin-stat-positive">
-              +34
-            </span>
-
             <span>
-              this month
+              estimation module not connected
             </span>
-
           </div>
 
         </div>
@@ -366,17 +351,21 @@ function AdminDashboard() {
           </div>
 
           <div className="admin-stat-value">
-            64
+            {loading
+              ? "—"
+              : employeeResourceSummary?.total ?? 0}
           </div>
 
           <div className="admin-stat-footer">
 
-            <span className="admin-stat-positive">
-              41
+            <span>
+              {loading
+                ? "—"
+                : employeeResourceSummary?.available ?? 0}
             </span>
 
             <span>
-              currently assigned
+              available
             </span>
 
           </div>
@@ -401,15 +390,13 @@ function AdminDashboard() {
           </div>
 
           <div className="admin-stat-value">
-            7
+            —
           </div>
 
           <div className="admin-stat-footer">
-
-            <span className="admin-stat-danger">
-              requires attention
+            <span>
+              risk analysis not connected
             </span>
-
           </div>
 
         </div>
@@ -463,19 +450,25 @@ function AdminDashboard() {
             {loading ? (
 
               <div className="admin-project-empty">
+
                 <Clock3 size={18} />
+
                 <span>
                   Loading project data...
                 </span>
+
               </div>
 
             ) : projectTypeDistribution.length === 0 ? (
 
               <div className="admin-project-empty">
+
                 <FolderKanban size={18} />
+
                 <span>
                   No project data available.
                 </span>
+
               </div>
 
             ) : (
@@ -605,19 +598,25 @@ function AdminDashboard() {
             {loading ? (
 
               <div className="admin-project-empty">
+
                 <Clock3 size={18} />
+
                 <span>
                   Loading recent projects...
                 </span>
+
               </div>
 
             ) : recentProjects.length === 0 ? (
 
               <div className="admin-project-empty">
+
                 <FolderKanban size={18} />
+
                 <span>
                   No projects found.
                 </span>
+
               </div>
 
             ) : (
@@ -734,7 +733,7 @@ function AdminDashboard() {
               <strong>
                 {loading
                   ? "—"
-                  : stats?.employees ?? 0}
+                  : employeeResourceSummary?.total ?? 0}
               </strong>
 
               <span>
@@ -747,24 +746,13 @@ function AdminDashboard() {
             <div className="admin-resource-row">
 
               <span>
-                Active Employees
-              </span>
-
-              <strong>
-                12
-              </strong>
-
-            </div>
-
-
-            <div className="admin-resource-row">
-
-              <span>
                 Available
               </span>
 
               <strong>
-                7
+                {loading
+                  ? "—"
+                  : employeeResourceSummary?.available ?? 0}
               </strong>
 
             </div>
@@ -773,11 +761,13 @@ function AdminDashboard() {
             <div className="admin-resource-row">
 
               <span>
-                Assigned
+                Partially Available
               </span>
 
               <strong>
-                11
+                {loading
+                  ? "—"
+                  : employeeResourceSummary?.partially_available ?? 0}
               </strong>
 
             </div>
@@ -786,11 +776,30 @@ function AdminDashboard() {
             <div className="admin-resource-row">
 
               <span>
-                Resource Gaps
+                Unavailable
               </span>
 
-              <strong className="admin-stat-danger">
-                6
+              <strong>
+                {loading
+                  ? "—"
+                  : employeeResourceSummary?.unavailable ?? 0}
+              </strong>
+
+            </div>
+
+
+            <div className="admin-resource-row">
+
+              <span>
+                Weekly Capacity
+              </span>
+
+              <strong>
+                {loading
+                  ? "—"
+                  : employeeResourceSummary?.total_capacity_hours ?? 0}
+
+                {!loading && " hrs"}
               </strong>
 
             </div>
@@ -807,7 +816,7 @@ function AdminDashboard() {
               </span>
 
               <strong>
-                61%
+                —
               </strong>
 
             </div>
@@ -817,7 +826,7 @@ function AdminDashboard() {
 
               <span
                 style={{
-                  width: "61%",
+                  width: "0%",
                 }}
               />
 
@@ -827,11 +836,11 @@ function AdminDashboard() {
             <div className="admin-resource-visual-footer">
 
               <span>
-                11 assigned
+                Assignment data not connected
               </span>
 
               <span>
-                7 available
+                Capacity tracked
               </span>
 
             </div>
@@ -877,129 +886,72 @@ function AdminDashboard() {
 
           <div className="admin-activity-list">
 
-            <div className="admin-activity-item">
+            {loading ? (
 
-              <div className="admin-activity-icon">
-                <Users size={15} />
-              </div>
+              <div className="admin-project-empty">
 
-              <div className="admin-activity-content">
-
-                <strong>
-                  New user registered
-                </strong>
+                <Clock3 size={18} />
 
                 <span>
-                  Account registration completed
+                  Loading recent activity...
                 </span>
 
               </div>
 
-              <time>
-                12 min
-              </time>
+            ) : recentActivity.length === 0 ? (
 
-            </div>
+              <div className="admin-project-empty">
 
-
-            <div className="admin-activity-item">
-
-              <div className="admin-activity-icon">
-                <UserCog size={15} />
-              </div>
-
-              <div className="admin-activity-content">
-
-                <strong>
-                  Employee account created
-                </strong>
+                <Activity size={18} />
 
                 <span>
-                  New employee added to the organization
+                  No recent activity.
                 </span>
 
               </div>
 
-              <time>
-                24 min
-              </time>
+            ) : (
 
-            </div>
+              recentActivity.map(
+                (activity) => (
 
+                  <div
+                    className="admin-activity-item"
+                    key={activity.id}
+                  >
 
-            <div className="admin-activity-item">
-
-              <div className="admin-activity-icon">
-                <Calculator size={15} />
-              </div>
-
-              <div className="admin-activity-content">
-
-                <strong>
-                  Estimate generated
-                </strong>
-
-                <span>
-                  New project estimation completed
-                </span>
-
-              </div>
-
-              <time>
-                28 min
-              </time>
-
-            </div>
+                    <div className="admin-activity-icon">
+                      <Activity size={15} />
+                    </div>
 
 
-            <div className="admin-activity-item">
+                    <div className="admin-activity-content">
 
-              <div className="admin-activity-icon">
-                <UserCheck size={15} />
-              </div>
+                      <strong>
+                        {formatProjectStatus(
+                          activity.action
+                        )}
+                      </strong>
 
-              <div className="admin-activity-content">
+                      <span>
+                        {activity.description}
+                      </span>
 
-                <strong>
-                  Resource assigned
-                </strong>
-
-                <span>
-                  Employee assigned to project
-                </span>
-
-              </div>
-
-              <time>
-                1 hr
-              </time>
-
-            </div>
+                    </div>
 
 
-            <div className="admin-activity-item">
+                    <time>
+                      {formatProjectDate(
+                        activity.created_at
+                      )}
+                    </time>
 
-              <div className="admin-activity-icon admin-activity-danger">
-                <AlertTriangle size={15} />
-              </div>
+                  </div>
 
-              <div className="admin-activity-content">
+                )
+              )
 
-                <strong>
-                  High-risk project detected
-                </strong>
-
-                <span>
-                  Resource capacity requires review
-                </span>
-
-              </div>
-
-              <time>
-                2 hrs
-              </time>
-
-            </div>
+            )}
 
           </div>
 
@@ -1031,88 +983,67 @@ function AdminDashboard() {
 
           <div className="admin-system-status">
 
-            <div className="admin-status-row">
+            {loading ? (
 
-              <div>
+              <div className="admin-project-empty">
 
-                <strong>
-                  API Service
-                </strong>
+                <Clock3 size={18} />
 
                 <span>
-                  Core application services
+                  Checking system status...
                 </span>
 
               </div>
 
-              <span className="admin-status-badge">
-                Operational
-              </span>
+            ) : systemStatus.length === 0 ? (
 
-            </div>
+              <div className="admin-project-empty">
 
-
-            <div className="admin-status-row">
-
-              <div>
-
-                <strong>
-                  Database
-                </strong>
+                <Activity size={18} />
 
                 <span>
-                  PostgreSQL connection
+                  System status unavailable.
                 </span>
 
               </div>
 
-              <span className="admin-status-badge">
-                Operational
-              </span>
+            ) : (
 
-            </div>
+              systemStatus.map(
+                (item) => (
 
+                  <div
+                    className="admin-status-row"
+                    key={item.name}
+                  >
 
-            <div className="admin-status-row">
+                    <div>
 
-              <div>
+                      <strong>
+                        {item.name}
+                      </strong>
 
-                <strong>
-                  ML Model
-                </strong>
+                      <span>
+                        {item.message}
+                      </span>
 
-                <span>
-                  Current production model
-                </span>
-
-              </div>
-
-              <span className="admin-status-badge">
-                Active
-              </span>
-
-            </div>
+                    </div>
 
 
-            <div className="admin-status-row">
+                    <span
+                      className={`admin-status-badge admin-status-${item.status}`}
+                    >
+                      {formatProjectStatus(
+                        item.status
+                      )}
+                    </span>
 
-              <div>
+                  </div>
 
-                <strong>
-                  Gemini Service
-                </strong>
+                )
+              )
 
-                <span>
-                  AI recommendation service
-                </span>
-
-              </div>
-
-              <span className="admin-status-badge">
-                Connected
-              </span>
-
-            </div>
+            )}
 
           </div>
 

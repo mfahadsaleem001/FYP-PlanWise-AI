@@ -3,12 +3,11 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 class Settings(BaseSettings):
     database_url: str
-
     jwt_secret_key: str
     jwt_access_token_expire_minutes: int = 30
-
     initial_admin_email: str
     initial_admin_password: str
+    gemini_api_key: str | None = None
 
     model_config = SettingsConfigDict(
         env_file=".env",
