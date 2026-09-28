@@ -6,11 +6,15 @@ from app.database.connection import get_db
 from app.models.user import User
 from app.schemas.admin_user import (
     AdminUserCreate,
+    AdminUserDetailResponse,
     AdminUserResponse,
 )
 from app.services.user_service import (
     create_user,
     get_user_by_email,
+    get_all_users,
+    get_user_by_id_for_admin,
+    get_user_project_count,
 )
 
 
@@ -50,3 +54,52 @@ def create_employee_user(
     )
 
     return user
+
+
+@router.get(
+    "",
+    response_model=list[AdminUserResponse],
+)
+def get_users(
+    current_admin: User = Depends(require_admin),
+    db: Session = Depends(get_db),
+):
+    return get_all_users(db)
+
+
+@router.get(
+    "/{user_id}",
+    response_model=AdminUserDetailResponse,
+)
+def get_user_details(
+    user_id: int,
+    current_admin: User = Depends(require_admin),
+    db: Session = Depends(get_db),
+):
+    user = get_user_by_id_for_admin(
+        db=db,
+        user_id=user_id,
+    )
+
+    if user is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="User not found",
+        )
+
+    project_count = get_user_project_count(
+        db=db,
+        user_id=user.id,
+    )
+
+    return {
+        "id": user.id,
+        "name": user.name,
+        "email": user.email,
+        "role": user.role,
+        "status": user.status,
+        "projects": project_count,
+        "last_activity": user.last_login_at,
+        "created_at": user.created_at,
+        "updated_at": user.updated_at,
+    }
