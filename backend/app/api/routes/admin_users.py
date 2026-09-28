@@ -9,10 +9,11 @@ from app.schemas.admin_user import (
     AdminUserDetailResponse,
     AdminUserResponse,
 )
+from app.services.activity_log_service import get_user_activity_history
 from app.services.user_service import (
     create_user,
-    get_user_by_email,
     get_all_users,
+    get_user_by_email,
     get_user_by_id_for_admin,
     get_user_project_count,
 )
@@ -103,3 +104,38 @@ def get_user_details(
         "created_at": user.created_at,
         "updated_at": user.updated_at,
     }
+
+
+@router.get(
+    "/{user_id}/activities",
+)
+def get_user_activities(
+    user_id: int,
+    current_admin: User = Depends(require_admin),
+    db: Session = Depends(get_db),
+):
+    user = get_user_by_id_for_admin(
+        db=db,
+        user_id=user_id,
+    )
+
+    if user is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="User not found",
+        )
+
+    activities = get_user_activity_history(
+        db=db,
+        user_id=user.id,
+    )
+
+    return [
+        {
+            "id": activity.id,
+            "action": activity.action,
+            "description": activity.description,
+            "created_at": activity.created_at,
+        }
+        for activity in activities
+    ]

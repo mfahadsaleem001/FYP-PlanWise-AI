@@ -12,6 +12,7 @@ from app.schemas.auth import (
     RegisterRequest,
     TokenResponse,
 )
+from app.services.activity_log_service import create_activity_log
 from app.services.user_service import create_user, get_user_by_email
 
 
@@ -89,6 +90,13 @@ def login(
 
     db.commit()
     db.refresh(user)
+
+    create_activity_log(
+        db=db,
+        user_id=user.id,
+        action="login",
+        description="User logged in successfully",
+    )
 
     access_token = create_access_token(
         user_id=user.id,

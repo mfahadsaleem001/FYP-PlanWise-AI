@@ -35,6 +35,7 @@ def get_recent_activity(
 
     return list(db.scalars(statement).all())
 
+
 def get_latest_activity_for_user(
     db: Session,
     user_id: int,
@@ -47,3 +48,16 @@ def get_latest_activity_for_user(
     )
 
     return db.scalar(statement)
+
+
+def get_user_activity_history(
+    db: Session,
+    user_id: int,
+) -> list[ActivityLog]:
+    statement = (
+        select(ActivityLog)
+        .where(ActivityLog.user_id == user_id)
+        .order_by(ActivityLog.created_at.desc())
+    )
+
+    return list(db.scalars(statement).all())
