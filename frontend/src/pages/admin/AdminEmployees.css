@@ -1,1547 +1,1678 @@
 /* ============================================================
-   ADMIN EMPLOYEES
-============================================================ */
+   PLANWISE AI — ADMIN EMPLOYEES & RESOURCES
+   Dashboard-Matched Enterprise UI
+   ============================================================ */
 
 .admin-employees {
   width: 100%;
-  max-width: 1400px;
+  min-width: 0;
+  max-width: 1500px;
+  min-height: calc(100vh - var(--topbar-height));
   margin: 0 auto;
-  padding: 0;
+  padding: 2px 2px 25px;
+  box-sizing: border-box;
   color: var(--color-text);
+  background: transparent;
+  animation: adminEmployeesPageIn 0.35s ease both;
 }
-
 
 /* ============================================================
    PAGE HEADER
-============================================================ */
+   ============================================================ */
 
-.employees-page-header {
+.admin-employees-header {
   display: flex;
   align-items: flex-end;
   justify-content: space-between;
-  gap: 1.5rem;
-  margin-bottom: 1.5rem;
+  gap: 24px;
+  margin-bottom: 22px;
+  animation: adminEmployeesHeaderIn 0.42s ease both;
 }
 
-.employees-page-header > div {
+.admin-employees-header-content {
   min-width: 0;
 }
 
-.employees-eyebrow {
-  display: block;
-  margin-bottom: 0.35rem;
+.admin-employees-eyebrow,
+.admin-employee-modal-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  margin-bottom: 7px;
   color: var(--color-accent);
-  font-size: 0.62rem;
-  font-weight: 700;
+  font-size: 10px;
+  font-weight: 750;
   letter-spacing: 0.14em;
-  line-height: 1.2;
+  line-height: 1;
+  text-transform: uppercase;
 }
 
-.employees-page-header h1 {
+.admin-employees-header h1 {
   margin: 0;
   color: var(--color-dark);
   font-family: var(--font-heading);
-  font-size: 1.65rem;
+  font-size: clamp(25px, 2.2vw, 32px);
   font-weight: 700;
-  line-height: 1.2;
+  line-height: 1.15;
+  letter-spacing: -0.015em;
 }
 
-.employees-page-header p {
-  margin-top: 0.35rem;
+.admin-employees-header p {
+  max-width: 620px;
+  margin: 7px 0 0;
   color: var(--color-text-muted);
-  font-size: 0.63rem;
+  font-size: 13px;
   line-height: 1.55;
 }
 
-
-/* ============================================================
-   BUTTONS
-============================================================ */
-
-.employees-primary-btn,
-.employee-primary-btn {
-  min-height: 36px;
+.admin-employees-primary {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 0.45rem;
-  padding: 0.55rem 0.85rem;
-  background: var(--color-primary);
+  gap: 7px;
+  min-height: 36px;
+  padding: 0 14px;
   border: 1px solid var(--color-primary);
-  border-radius: 5px;
+  border-radius: 7px;
+  background: var(--color-primary);
   color: #ffffff;
   font-family: var(--font-body);
-  font-size: 0.58rem;
-  font-weight: 600;
-  line-height: 1;
-  white-space: nowrap;
+  font-size: 11px;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: var(--shadow-sm);
   transition:
-    background var(--transition),
-    border-color var(--transition),
-    transform var(--transition),
-    box-shadow var(--transition);
+    transform 0.2s ease,
+    background 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
-.employees-primary-btn:hover,
-.employee-primary-btn:hover {
+.admin-employees-primary:hover {
+  transform: translateY(-1px);
   background: var(--color-primary-dark);
   border-color: var(--color-primary-dark);
-  transform: translateY(-1px);
-  box-shadow: var(--shadow-sm);
+  box-shadow: var(--shadow-md);
 }
 
-.employees-primary-btn svg,
-.employee-primary-btn svg {
-  width: 15px;
-  height: 15px;
+.admin-employees-primary:active {
+  transform: translateY(0);
 }
-
-.employee-secondary-btn {
-  min-height: 36px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.4rem;
-  padding: 0.55rem 0.85rem;
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: 5px;
-  color: var(--color-text);
-  font-size: 0.58rem;
-  font-weight: 600;
-  white-space: nowrap;
-  transition:
-    background var(--transition),
-    border-color var(--transition),
-    color var(--transition);
-}
-
-.employee-secondary-btn:hover {
-  background: var(--color-surface-muted);
-  border-color: var(--color-accent);
-  color: var(--color-primary);
-}
-
 
 /* ============================================================
-   SUMMARY CARDS
-============================================================ */
+   STAT CARDS
+   ============================================================ */
 
-.employees-summary-grid {
+.admin-employees-stat-grid {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 0.75rem;
-  margin-bottom: 1.25rem;
+  gap: 12px;
+  margin-bottom: 18px;
 }
 
-.employee-summary-card {
-  min-width: 0;
-  display: flex;
-  align-items: center;
-  gap: 0.8rem;
-  padding: 0.95rem 1rem;
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: 7px;
-  box-shadow: var(--shadow-sm);
-}
-
-.summary-icon {
-  width: 36px;
-  height: 36px;
-  flex-shrink: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: var(--color-surface-muted);
-  border: 1px solid var(--color-border);
-  border-radius: 6px;
-  color: var(--color-primary);
-}
-
-.summary-icon svg {
-  width: 18px;
-  height: 18px;
-}
-
-.employee-summary-card > div:last-child {
-  min-width: 0;
-  display: flex;
-  flex-direction: column;
-}
-
-.employee-summary-card span {
-  color: var(--color-text-muted);
-  font-size: 0.53rem;
-  font-weight: 500;
-  line-height: 1.3;
-}
-
-.employee-summary-card strong {
-  margin-top: 0.1rem;
-  color: var(--color-dark);
-  font-size: 1.2rem;
-  font-weight: 700;
-  line-height: 1.15;
-}
-
-.employee-summary-card small {
-  margin-top: 0.12rem;
-  color: var(--color-text-muted);
-  font-size: 0.47rem;
-  line-height: 1.3;
-}
-
-
-/* ============================================================
-   TOOLBAR
-============================================================ */
-
-.employees-toolbar {
-  display: flex;
-  align-items: center;
-  gap: 0.65rem;
-  margin-bottom: 0.9rem;
-}
-
-.employees-search {
-  min-width: 260px;
-  flex: 1;
-  height: 36px;
+.admin-employees-stat-card {
   position: relative;
-  display: flex;
-  align-items: center;
-}
-
-.employees-search svg {
-  position: absolute;
-  left: 0.7rem;
-  width: 15px;
-  height: 15px;
-  color: var(--color-text-muted);
-  pointer-events: none;
-}
-
-.employees-search input {
-  width: 100%;
-  height: 36px;
-  padding: 0.5rem 0.7rem 0.5rem 2.1rem;
-  background: var(--color-surface);
+  min-width: 0;
+  padding: 15px 15px 14px;
   border: 1px solid var(--color-border);
-  border-radius: 5px;
-  color: var(--color-text);
-  font-size: 0.55rem;
-}
-
-.employees-search input::placeholder {
-  color: var(--color-text-muted);
-}
-
-.employees-search input:focus {
-  border-color: var(--color-primary);
-  box-shadow: 0 0 0 3px rgba(113, 29, 60, 0.07);
-}
-
-.employees-toolbar select {
-  width: 160px;
-  height: 36px;
-  padding: 0.45rem 0.65rem;
+  border-radius: 9px;
   background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: 5px;
-  color: var(--color-text);
-  font-size: 0.53rem;
-  cursor: pointer;
-}
-
-.employees-toolbar select:focus {
-  border-color: var(--color-primary);
-  box-shadow: 0 0 0 3px rgba(113, 29, 60, 0.07);
-}
-
-
-/* ============================================================
-   TABLE CARD
-============================================================ */
-
-.employees-table-card {
-  width: 100%;
-  overflow: visible;
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: 8px;
   box-shadow: var(--shadow-sm);
+  overflow: hidden;
+  opacity: 0;
+  animation: adminEmployeesCardIn 0.45s ease forwards;
+  transition:
+    transform 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
-.employees-table-header {
-  min-height: 60px;
+.admin-employees-stat-card::before {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: var(--color-primary);
+  content: "";
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.3s ease;
+}
+
+.admin-employees-stat-card::after {
+  position: absolute;
+  right: -30px;
+  bottom: -35px;
+  width: 85px;
+  height: 85px;
+  border-radius: 50%;
+  background: rgba(177, 138, 82, 0.045);
+  content: "";
+  pointer-events: none;
+  transition:
+    transform 0.35s ease,
+    opacity 0.35s ease;
+}
+
+.admin-employees-stat-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(113, 29, 60, 0.22);
+  box-shadow: var(--shadow-md);
+}
+
+.admin-employees-stat-card:hover::before {
+  transform: scaleX(1);
+}
+
+.admin-employees-stat-card:hover::after {
+  transform: scale(1.35);
+  opacity: 0.9;
+}
+
+.admin-employees-stat-card:nth-child(1) {
+  animation-delay: 70ms;
+}
+
+.admin-employees-stat-card:nth-child(2) {
+  animation-delay: 120ms;
+}
+
+.admin-employees-stat-card:nth-child(3) {
+  animation-delay: 170ms;
+}
+
+.admin-employees-stat-card:nth-child(4) {
+  animation-delay: 220ms;
+}
+
+.admin-employees-stat-top {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 1rem;
-  padding: 0.85rem 1rem;
-  border-bottom: 1px solid var(--color-border);
+  gap: 10px;
+  margin-bottom: 14px;
 }
 
-.employees-table-header h2 {
-  margin: 0;
-  color: var(--color-dark);
-  font-family: var(--font-heading);
-  font-size: 0.95rem;
+.admin-employees-stat-top > span {
+  color: var(--color-text-muted);
+  font-size: 9px;
+  font-weight: 750;
+  letter-spacing: 0.1em;
   line-height: 1.25;
+  text-transform: uppercase;
 }
 
-.employees-table-header p {
-  margin-top: 0.2rem;
-  color: var(--color-text-muted);
-  font-size: 0.5rem;
-  line-height: 1.3;
-}
-
-.directory-status {
-  display: inline-flex;
+.admin-employees-stat-icon {
+  display: flex;
   align-items: center;
-  padding: 0.3rem 0.55rem;
-  background: var(--color-surface-muted);
+  justify-content: center;
+  flex: 0 0 34px;
+  width: 34px;
+  height: 34px;
   border: 1px solid var(--color-border);
-  border-radius: 4px;
+  border-radius: 7px;
+  background: var(--color-surface-muted);
+  color: var(--color-primary);
+  transition:
+    transform 0.25s ease,
+    background 0.25s ease,
+    color 0.25s ease,
+    border-color 0.25s ease;
+}
+
+.admin-employees-stat-card:hover .admin-employees-stat-icon {
+  transform: translateY(-1px);
+  border-color: rgba(113, 29, 60, 0.18);
+  background: rgba(113, 29, 60, 0.06);
+}
+
+.admin-employees-stat-card > strong {
+  display: flex;
+  align-items: center;
+  min-height: 25px;
+  margin-bottom: 7px;
+  color: var(--color-dark);
+  font-size: 25px;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.025em;
+}
+
+.admin-employees-stat-card > small {
+  display: block;
+  min-height: 16px;
   color: var(--color-text-muted);
-  font-size: 0.47rem;
+  font-size: 10px;
+  line-height: 1.35;
+}
+
+/* ============================================================
+   MAIN PANEL
+   ============================================================ */
+
+.admin-employees-panel {
+  position: relative;
+  width: 100%;
+  min-width: 0;
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  background: var(--color-surface);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+  opacity: 0;
+  animation: adminEmployeesPanelIn 0.48s ease 270ms forwards;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.admin-employees-panel::before {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(177, 138, 82, 0.35),
+    transparent
+  );
+  content: "";
+  pointer-events: none;
+}
+
+.admin-employees-panel:hover {
+  border-color: rgba(113, 29, 60, 0.14);
+  box-shadow: var(--shadow-md);
+}
+
+/* ============================================================
+   TOOLBAR
+   ============================================================ */
+
+.admin-employees-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  min-height: 68px;
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--color-border);
+  background: var(--color-surface);
+}
+
+.admin-employees-toolbar-left {
+  min-width: 0;
+}
+
+.admin-employees-panel-title {
+  display: flex;
+  align-items: baseline;
+  gap: 9px;
+}
+
+.admin-employees-panel-title span {
+  color: var(--color-dark);
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.admin-employees-panel-title small {
+  color: var(--color-text-muted);
+  font-size: 10px;
   font-weight: 600;
 }
 
+.admin-employees-toolbar-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* ============================================================
+   SEARCH
+   ============================================================ */
+
+.admin-employees-search {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 235px;
+  height: 35px;
+  padding: 0 10px;
+  box-sizing: border-box;
+  border: 1px solid var(--color-border);
+  border-radius: 7px;
+  background: var(--color-background);
+  color: var(--color-text-muted);
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    background 0.2s ease,
+    transform 0.2s ease;
+}
+
+.admin-employees-search:hover {
+  border-color: rgba(113, 29, 60, 0.2);
+}
+
+.admin-employees-search:focus-within {
+  border-color: var(--color-primary);
+  background: var(--color-surface);
+  box-shadow: 0 0 0 3px rgba(113, 29, 60, 0.07);
+  transform: translateY(-1px);
+}
+
+.admin-employees-search svg {
+  flex: 0 0 auto;
+}
+
+.admin-employees-search input {
+  width: 100%;
+  min-width: 0;
+  padding: 0;
+  border: 0;
+  outline: none;
+  background: transparent;
+  color: var(--color-dark);
+  font-family: var(--font-body);
+  font-size: 10px;
+  appearance: none;
+  box-shadow: none;
+}
+
+.admin-employees-search input:focus,
+.admin-employees-search input:focus-visible {
+  outline: none;
+  box-shadow: none;
+}
+
+.admin-employees-search input::placeholder {
+  color: var(--color-text-muted);
+  opacity: 0.8;
+}
+
+/* ============================================================
+   FILTERS
+   ============================================================ */
+
+.admin-employees-filter {
+  height: 35px;
+  padding: 0 28px 0 10px;
+  border: 1px solid var(--color-border);
+  border-radius: 7px;
+  outline: none;
+  background-color: var(--color-background);
+  color: var(--color-text);
+  font-family: var(--font-body);
+  font-size: 10px;
+  font-weight: 700;
+  cursor: pointer;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    transform 0.2s ease;
+}
+
+.admin-employees-filter:hover {
+  border-color: rgba(113, 29, 60, 0.2);
+}
+
+.admin-employees-filter:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(113, 29, 60, 0.07);
+}
 
 /* ============================================================
    TABLE
-============================================================ */
+   ============================================================ */
 
-.employees-table-wrapper {
+.admin-employees-table-wrapper {
   width: 100%;
   overflow-x: auto;
-  overflow-y: visible;
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-border) transparent;
 }
 
-.employees-table {
+.admin-employees-table {
   width: 100%;
   min-width: 1120px;
   border-collapse: collapse;
-  table-layout: auto;
 }
 
-.employees-table th {
-  padding: 0.7rem 0.8rem;
+.admin-employees-table thead {
   background: var(--color-surface-muted);
+}
+
+.admin-employees-table th {
+  height: 40px;
+  padding: 0 14px;
   border-bottom: 1px solid var(--color-border);
   color: var(--color-text-muted);
-  font-size: 0.46rem;
-  font-weight: 700;
-  letter-spacing: 0.04em;
+  font-size: 9px;
+  font-weight: 750;
+  letter-spacing: 0.065em;
   text-align: left;
   text-transform: uppercase;
   white-space: nowrap;
 }
 
-.employees-table td {
-  padding: 0.72rem 0.8rem;
+.admin-employees-table td {
+  height: 65px;
+  padding: 10px 14px;
   border-bottom: 1px solid var(--color-border);
   color: var(--color-text);
-  font-size: 0.52rem;
+  font-size: 10px;
   vertical-align: middle;
 }
 
-.employees-table tbody tr {
-  transition: background var(--transition);
+.admin-employees-table tbody tr:last-child td {
+  border-bottom: 0;
 }
 
-.employees-table tbody tr:hover {
-  background: var(--color-surface-muted);
+.admin-employee-row {
+  opacity: 0;
+  animation: adminEmployeeRowReveal 0.42s ease forwards;
+  animation-delay: calc(var(--row-index) * 45ms);
+  transition:
+    background 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
-.employees-table tbody tr:last-child td {
-  border-bottom: none;
+.admin-employee-row:hover {
+  background: rgba(113, 29, 60, 0.025);
+  box-shadow: inset 3px 0 0 rgba(113, 29, 60, 0.5);
 }
-
 
 /* ============================================================
-   EMPLOYEE NAME CELL
-============================================================ */
+   EMPLOYEE CELL
+   ============================================================ */
 
-.employee-name-cell {
+.admin-employee-cell {
   display: flex;
   align-items: center;
-  gap: 0.6rem;
-  min-width: 190px;
+  gap: 10px;
+  min-width: 205px;
 }
 
-.employee-avatar {
-  width: 31px;
-  height: 31px;
-  flex-shrink: 0;
+.admin-employee-avatar {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--color-primary);
-  border-radius: 50%;
-  color: #ffffff;
-  font-size: 0.5rem;
-  font-weight: 700;
-  letter-spacing: 0.02em;
+  flex: 0 0 35px;
+  width: 35px;
+  height: 35px;
+  border: 1px solid rgba(113, 29, 60, 0.14);
+  border-radius: 7px;
+  background: rgba(113, 29, 60, 0.07);
+  color: var(--color-primary);
+  font-size: 10px;
+  font-weight: 800;
+  transition:
+    transform 0.2s ease,
+    border-color 0.2s ease,
+    background 0.2s ease;
 }
 
-.employee-name-cell > div:last-child {
-  min-width: 0;
+.admin-employee-row:hover .admin-employee-avatar {
+  transform: translateX(1px);
+  border-color: rgba(113, 29, 60, 0.24);
+  background: rgba(113, 29, 60, 0.1);
+}
+
+.admin-employee-info {
   display: flex;
   flex-direction: column;
+  min-width: 0;
+  gap: 3px;
 }
 
-.employee-name-cell strong {
+.admin-employee-info strong {
+  max-width: 170px;
   overflow: hidden;
   color: var(--color-dark);
-  font-size: 0.56rem;
-  font-weight: 700;
-  line-height: 1.3;
+  font-size: 10px;
+  font-weight: 800;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
-.employee-name-cell span {
-  margin-top: 0.12rem;
+.admin-employee-info span {
+  max-width: 190px;
   overflow: hidden;
   color: var(--color-text-muted);
-  font-size: 0.46rem;
-  line-height: 1.3;
+  font-size: 9px;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
-
 
 /* ============================================================
    ROLE / EXPERIENCE
-============================================================ */
+   ============================================================ */
 
-.employee-role {
+.admin-employee-role {
   display: inline-block;
-  max-width: 150px;
-  color: var(--color-text);
-  font-size: 0.51rem;
-  font-weight: 600;
-  line-height: 1.35;
-}
-
-.employee-experience {
-  color: var(--color-text-muted);
-  font-size: 0.5rem;
-  white-space: nowrap;
-}
-
-
-/* ============================================================
-   SKILLS
-============================================================ */
-
-.employee-skills {
-  max-width: 190px;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.25rem;
-}
-
-.employee-skills span,
-.modal-skills span {
-  display: inline-flex;
-  align-items: center;
-  padding: 0.2rem 0.35rem;
-  background: var(--color-surface-muted);
-  border: 1px solid var(--color-border);
-  border-radius: 3px;
-  color: var(--color-text-muted);
-  font-size: 0.43rem;
-  font-weight: 500;
-  line-height: 1.2;
-  white-space: nowrap;
-}
-
-.employee-skills .more-skill {
-  color: var(--color-primary);
+  max-width: 145px;
+  overflow: hidden;
+  color: var(--color-dark);
+  font-size: 10px;
   font-weight: 700;
-}
-
-
-/* ============================================================
-   AVAILABILITY
-============================================================ */
-
-.availability-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.3rem;
-  padding: 0.25rem 0.45rem;
-  border: 1px solid transparent;
-  border-radius: 4px;
-  font-size: 0.45rem;
-  font-weight: 600;
-  line-height: 1.2;
-  white-space: nowrap;
-}
-
-.availability-dot {
-  width: 5px;
-  height: 5px;
-  flex-shrink: 0;
-  border-radius: 50%;
-}
-
-.availability-badge.available {
-  background: rgba(63, 115, 85, 0.09);
-  border-color: rgba(63, 115, 85, 0.2);
-  color: var(--color-success);
-}
-
-.availability-badge.available .availability-dot {
-  background: var(--color-success);
-}
-
-.availability-badge.assigned {
-  background: rgba(177, 138, 82, 0.1);
-  border-color: rgba(177, 138, 82, 0.22);
-  color: var(--color-warning);
-}
-
-.availability-badge.assigned .availability-dot {
-  background: var(--color-warning);
-}
-
-.availability-badge.unavailable {
-  background: rgba(163, 59, 59, 0.08);
-  border-color: rgba(163, 59, 59, 0.18);
-  color: var(--color-danger);
-}
-
-.availability-badge.unavailable .availability-dot {
-  background: var(--color-danger);
-}
-
-
-/* ============================================================
-   WORKLOAD
-============================================================ */
-
-.workload-cell {
-  width: 72px;
-}
-
-.workload-top {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  margin-bottom: 0.25rem;
-}
-
-.workload-top span {
-  color: var(--color-text-muted);
-  font-size: 0.46rem;
-  font-weight: 600;
-}
-
-.workload-bar {
-  width: 100%;
-  height: 4px;
-  overflow: hidden;
-  background: var(--color-surface-muted);
-  border-radius: 4px;
-}
-
-.workload-bar span {
-  display: block;
-  height: 100%;
-  min-width: 2px;
-  border-radius: inherit;
-}
-
-.workload-bar span.low {
-  background: var(--color-success);
-}
-
-.workload-bar span.medium {
-  background: var(--color-accent);
-}
-
-.workload-bar span.high {
-  background: var(--color-warning);
-}
-
-.workload-bar span.critical {
-  background: var(--color-danger);
-}
-
-
-/* ============================================================
-   ACCOUNT STATUS
-============================================================ */
-
-.employee-account-status {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.3rem;
-  padding: 0.25rem 0.45rem;
-  border: 1px solid transparent;
-  border-radius: 4px;
-  font-size: 0.44rem;
-  font-weight: 600;
-  line-height: 1.2;
-  white-space: nowrap;
-}
-
-.employee-account-status-dot {
-  width: 5px;
-  height: 5px;
-  flex-shrink: 0;
-  border-radius: 50%;
-}
-
-.employee-account-status.active {
-  background: rgba(63, 115, 85, 0.09);
-  border-color: rgba(63, 115, 85, 0.2);
-  color: var(--color-success);
-}
-
-.employee-account-status.active
-  .employee-account-status-dot {
-  background: var(--color-success);
-}
-
-.employee-account-status.pending {
-  background: rgba(177, 138, 82, 0.1);
-  border-color: rgba(177, 138, 82, 0.22);
-  color: var(--color-warning);
-}
-
-.employee-account-status.pending
-  .employee-account-status-dot {
-  background: var(--color-warning);
-}
-
-
-/* ============================================================
-   CURRENT PROJECT
-============================================================ */
-
-.current-project {
-  display: inline-block;
-  max-width: 155px;
-  overflow: hidden;
-  color: var(--color-text-muted);
-  font-size: 0.48rem;
   line-height: 1.4;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
+.admin-employee-experience {
+  color: var(--color-text-muted);
+  font-size: 10px;
+  font-weight: 650;
+  white-space: nowrap;
+}
+
+/* ============================================================
+   SKILLS
+   ============================================================ */
+
+.admin-employee-skills {
+  display: flex;
+  align-items: center;
+  flex-wrap: nowrap;
+  gap: 4px;
+  min-width: 155px;
+}
+
+.admin-employee-skills span {
+  display: inline-flex;
+  align-items: center;
+  min-height: 20px;
+  max-width: 72px;
+  padding: 0 6px;
+  overflow: hidden;
+  border: 1px solid var(--color-border);
+  border-radius: 5px;
+  background: var(--color-background);
+  color: var(--color-text-muted);
+  font-size: 8px;
+  font-weight: 700;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.admin-employee-skills .admin-more-skill {
+  min-width: 22px;
+  justify-content: center;
+  padding: 0 4px;
+  border-color: rgba(113, 29, 60, 0.15);
+  color: var(--color-primary);
+  background: rgba(113, 29, 60, 0.05);
+  cursor: pointer;
+  transition:
+    background 0.18s ease,
+    border-color 0.18s ease,
+    color 0.18s ease,
+    transform 0.18s ease;
+}
+
+.admin-employee-skills .admin-more-skill:hover {
+  transform: translateY(-1px);
+  border-color: var(--color-primary);
+  background: rgba(113, 29, 60, 0.09);
+  color: var(--color-primary-dark);
+}
+
+
+/* ============================================================
+   AVAILABILITY
+   ============================================================ */
+
+.admin-availability-badge,
+.admin-account-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 7px;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  font-size: 8px;
+  font-weight: 800;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.admin-availability-dot,
+.admin-account-status-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+.admin-availability-badge.available {
+  border-color: rgba(63, 115, 85, 0.18);
+  background: rgba(63, 115, 85, 0.08);
+  color: var(--color-success);
+}
+
+.admin-availability-badge.assigned {
+  border-color: rgba(177, 138, 82, 0.2);
+  background: rgba(177, 138, 82, 0.08);
+  color: var(--color-accent);
+}
+
+.admin-availability-badge.unavailable {
+  border-color: rgba(163, 59, 59, 0.18);
+  background: rgba(163, 59, 59, 0.07);
+  color: var(--color-danger);
+}
+
+.admin-account-status.active {
+  border-color: rgba(63, 115, 85, 0.18);
+  background: rgba(63, 115, 85, 0.08);
+  color: var(--color-success);
+}
+
+.admin-account-status.pending {
+  border-color: rgba(177, 138, 82, 0.2);
+  background: rgba(177, 138, 82, 0.08);
+  color: var(--color-accent);
+}
+
+/* ============================================================
+   WORKLOAD
+   ============================================================ */
+
+.admin-workload {
+  width: 82px;
+}
+
+.admin-workload-top {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 5px;
+}
+
+.admin-workload-top span {
+  color: var(--color-dark);
+  font-size: 9px;
+  font-weight: 800;
+}
+
+.admin-workload-track {
+  width: 100%;
+  height: 4px;
+  border-radius: 999px;
+  background: var(--color-surface-muted);
+  overflow: hidden;
+}
+
+.admin-workload-track > span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--color-primary);
+}
+
+.admin-workload-track > span.low {
+  background: var(--color-success);
+}
+
+.admin-workload-track > span.medium {
+  background: var(--color-accent);
+}
+
+.admin-workload-track > span.high {
+  background: var(--color-warning);
+}
+
+.admin-workload-track > span.critical {
+  background: var(--color-danger);
+}
+
+/* ============================================================
+   CURRENT PROJECT
+   ============================================================ */
+
+.admin-current-project {
+  display: block;
+  max-width: 150px;
+  overflow: hidden;
+  color: var(--color-text-muted);
+  font-size: 9px;
+  font-weight: 600;
+  line-height: 1.4;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
 
 /* ============================================================
    ACTIONS
-============================================================ */
+   ============================================================ */
 
-.employee-actions {
+.admin-employee-actions {
   display: flex;
   align-items: center;
-  gap: 0.25rem;
+  gap: 5px;
 }
 
-.employee-action-btn {
-  width: 28px;
-  height: 28px;
-  display: flex;
+.admin-table-action {
+  display: inline-flex;
   align-items: center;
   justify-content: center;
+  width: 29px;
+  height: 29px;
   padding: 0;
-  background: transparent;
-  border: 1px solid transparent;
-  border-radius: 4px;
-  color: var(--color-text-muted);
-  transition:
-    background var(--transition),
-    border-color var(--transition),
-    color var(--transition);
-}
-
-.employee-action-btn:hover {
-  background: var(--color-surface-muted);
-  border-color: var(--color-border);
-  color: var(--color-primary);
-}
-
-.employee-action-btn svg {
-  width: 14px;
-  height: 14px;
-}
-
-.employee-more-wrapper {
-  position: relative;
-}
-
-.employee-more-menu {
-  position: absolute;
-  top: calc(100% + 5px);
-  right: 0;
-  z-index: 20;
-  width: 145px;
-  padding: 0.3rem;
-  background: var(--color-surface);
   border: 1px solid var(--color-border);
-  border-radius: 6px;
-  box-shadow: var(--shadow-md);
-}
-
-.employee-more-menu button {
-  width: 100%;
-  display: flex;
-  align-items: center;
-  gap: 0.45rem;
-  padding: 0.48rem 0.5rem;
-  background: transparent;
-  border: none;
-  border-radius: 4px;
-  color: var(--color-text);
-  font-size: 0.49rem;
-  text-align: left;
-  transition:
-    background var(--transition),
-    color var(--transition);
-}
-
-.employee-more-menu button:hover {
-  background: var(--color-surface-muted);
-  color: var(--color-primary);
-}
-
-.employee-more-menu svg {
-  width: 13px;
-  height: 13px;
+  border-radius: 7px;
+  background: var(--color-surface);
   color: var(--color-text-muted);
+  cursor: pointer;
+  transition:
+    transform 0.2s ease,
+    color 0.2s ease,
+    border-color 0.2s ease,
+    background 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.admin-table-action:hover {
+  transform: translateY(-1px);
+  border-color: var(--color-primary);
+  background: rgba(113, 29, 60, 0.05);
+  color: var(--color-primary);
+  box-shadow: var(--shadow-sm);
 }
 
 
 /* ============================================================
    EMPTY STATE
-============================================================ */
+   ============================================================ */
 
-.employees-empty-state {
-  min-height: 240px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 2rem;
-  text-align: center;
+.admin-employees-empty {
+  height: 180px !important;
+  padding: 28px !important;
+  color: var(--color-text-muted) !important;
+  text-align: center !important;
 }
 
-.employees-empty-state > svg {
-  margin-bottom: 0.7rem;
+.admin-employees-empty svg {
+  display: block;
+  margin: 0 auto 10px;
   color: var(--color-accent);
 }
 
-.employees-empty-state h3 {
-  margin: 0;
+.admin-employees-empty strong {
+  display: block;
+  margin-bottom: 4px;
   color: var(--color-dark);
-  font-family: var(--font-heading);
-  font-size: 0.9rem;
+  font-size: 11px;
+  font-weight: 800;
 }
 
-.employees-empty-state p {
-  margin-top: 0.3rem;
-  color: var(--color-text-muted);
-  font-size: 0.52rem;
+.admin-employees-empty span {
+  display: block;
+  font-size: 10px;
+  line-height: 1.45;
 }
-
 
 /* ============================================================
-   TABLE FOOTER
-============================================================ */
+   FOOTER
+   ============================================================ */
 
-.employees-table-footer {
-  min-height: 52px;
+.admin-employees-footer {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 1rem;
-  padding: 0.7rem 1rem;
+  gap: 14px;
+  min-height: 54px;
+  padding: 10px 18px;
   border-top: 1px solid var(--color-border);
-}
-
-.employees-table-footer > span {
   color: var(--color-text-muted);
-  font-size: 0.48rem;
+  font-size: 10px;
+  background: var(--color-surface);
 }
 
-.employees-pagination {
+.admin-employees-footer strong {
+  color: var(--color-dark);
+  font-weight: 800;
+}
+
+.admin-employees-pagination {
   display: flex;
   align-items: center;
-  gap: 0.25rem;
+  gap: 4px;
 }
 
-.employees-pagination button {
-  min-width: 28px;
-  height: 27px;
-  padding: 0 0.4rem;
-  background: var(--color-surface);
+.admin-pagination-button,
+.admin-pagination-current {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 31px;
+  height: 29px;
+  padding: 0 8px;
   border: 1px solid var(--color-border);
-  border-radius: 4px;
-  color: var(--color-text-muted);
-  font-size: 0.45rem;
-  font-weight: 600;
+  border-radius: 6px;
+  font-family: var(--font-body);
+  font-size: 9px;
+  font-weight: 700;
 }
 
-.employees-pagination button:hover:not(:disabled) {
+.admin-pagination-button {
+  background: var(--color-surface);
+  color: var(--color-text-muted);
+  cursor: pointer;
+  transition:
+    transform 0.2s ease,
+    border-color 0.2s ease,
+    color 0.2s ease,
+    background 0.2s ease;
+}
+
+.admin-pagination-button:hover:not(:disabled) {
+  transform: translateY(-1px);
   border-color: var(--color-primary);
+  background: rgba(113, 29, 60, 0.04);
   color: var(--color-primary);
 }
 
-.employees-pagination button.active {
-  background: var(--color-primary);
+.admin-pagination-button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.admin-pagination-current {
   border-color: var(--color-primary);
+  background: var(--color-primary);
   color: #ffffff;
 }
 
-.employees-pagination button:disabled {
-  opacity: 0.45;
-}
-
-
 /* ============================================================
-   MODAL OVERLAY
-============================================================ */
+   MODAL
+   ============================================================ */
 
-.employee-modal-overlay {
+.admin-employee-modal-overlay {
   position: fixed;
-  inset: 0;
   z-index: 1000;
+  inset: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 1.5rem;
+  padding: 22px;
   background: rgba(44, 27, 27, 0.46);
-  backdrop-filter: blur(3px);
+  backdrop-filter: blur(4px);
+  animation: adminEmployeeOverlayIn 0.2s ease;
 }
 
-.employee-modal {
-  width: min(680px, 100%);
-  max-height: calc(100vh - 3rem);
+.admin-employee-modal,
+.admin-employee-form-modal {
+  width: min(600px, 100%);
+  max-height: calc(100vh - 44px);
   overflow-y: auto;
-  background: var(--color-surface);
   border: 1px solid var(--color-border);
-  border-radius: 9px;
-  box-shadow: 0 18px 50px rgba(44, 27, 27, 0.18);
+  border-radius: 10px;
+  background: var(--color-surface);
+  box-shadow: 0 22px 60px rgba(44, 27, 27, 0.2);
+  animation: adminEmployeeModalIn 0.28s ease;
 }
 
-.employee-add-modal,
-.employee-edit-modal {
-  width: min(760px, 100%);
+.admin-employee-form-modal {
+  width: min(650px, 100%);
 }
-
 
 /* ============================================================
    MODAL HEADER
-============================================================ */
+   ============================================================ */
 
-.employee-modal-header {
+.admin-employee-modal-header {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  gap: 1rem;
-  padding: 1.1rem 1.15rem;
+  gap: 18px;
+  padding: 19px 20px 16px;
   border-bottom: 1px solid var(--color-border);
 }
 
-.employee-modal-header > div {
-  min-width: 0;
-}
-
-.employee-modal-header span {
-  display: block;
-  margin-bottom: 0.25rem;
-  color: var(--color-accent);
-  font-size: 0.49rem;
-  font-weight: 700;
-  letter-spacing: 0.13em;
-  line-height: 1.2;
-}
-
-.employee-modal-header h2 {
+.admin-employee-modal-header h2 {
   margin: 0;
   color: var(--color-dark);
   font-family: var(--font-heading);
-  font-size: 1.15rem;
-  line-height: 1.25;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1.2;
 }
 
-.employee-modal-close {
-  width: 30px;
-  height: 30px;
-  flex-shrink: 0;
-  display: flex;
+.admin-employee-modal-close {
+  display: inline-flex;
   align-items: center;
   justify-content: center;
+  flex: 0 0 31px;
+  width: 31px;
+  height: 31px;
   padding: 0;
-  background: transparent;
-  border: 1px solid transparent;
-  border-radius: 5px;
+  border: 1px solid var(--color-border);
+  border-radius: 7px;
+  background: var(--color-surface);
   color: var(--color-text-muted);
+  cursor: pointer;
+  transition:
+    transform 0.2s ease,
+    color 0.2s ease,
+    border-color 0.2s ease,
+    background 0.2s ease;
 }
 
-.employee-modal-close:hover {
-  background: var(--color-surface-muted);
-  border-color: var(--color-border);
-  color: var(--color-primary);
+.admin-employee-modal-close:hover {
+  transform: rotate(4deg);
+  border-color: var(--color-danger);
+  background: rgba(163, 59, 59, 0.05);
+  color: var(--color-danger);
 }
-
 
 /* ============================================================
-   EMPLOYEE PROFILE SUMMARY
-============================================================ */
+   PROFILE
+   ============================================================ */
 
-.employee-profile-summary {
+.admin-employee-profile {
   display: flex;
   align-items: center;
-  gap: 0.85rem;
-  padding: 1rem 1.15rem;
-  background: var(--color-surface-muted);
-  border-bottom: 1px solid var(--color-border);
+  gap: 12px;
+  padding: 18px 20px;
 }
 
-.employee-profile-avatar {
-  width: 48px;
-  height: 48px;
-  flex-shrink: 0;
+.admin-employee-modal-avatar {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--color-primary);
-  border-radius: 50%;
-  color: #ffffff;
-  font-size: 0.72rem;
-  font-weight: 700;
+  flex: 0 0 46px;
+  width: 46px;
+  height: 46px;
+  border: 1px solid rgba(113, 29, 60, 0.15);
+  border-radius: 9px;
+  background: rgba(113, 29, 60, 0.07);
+  color: var(--color-primary);
+  font-size: 14px;
+  font-weight: 800;
 }
 
-.employee-profile-summary h3 {
-  margin: 0 0 0.35rem;
+.admin-employee-profile h3 {
+  margin: 0 0 5px;
   color: var(--color-dark);
-  font-family: var(--font-body);
-  font-size: 0.72rem;
-  font-weight: 700;
+  font-size: 13px;
+  font-weight: 800;
 }
 
+.admin-employee-modal-email {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-bottom: 7px;
+  color: var(--color-text-muted);
+  font-size: 10px;
+}
 
 /* ============================================================
    DETAIL GRID
-============================================================ */
+   ============================================================ */
 
-.employee-detail-grid {
+.admin-employee-details-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 0.7rem;
-  padding: 1rem 1.15rem;
+  gap: 9px;
+  padding: 0 20px 17px;
 }
 
-.employee-detail-item {
+.admin-employee-detail-card {
+  position: relative;
   display: flex;
-  align-items: flex-start;
-  gap: 0.55rem;
-  min-width: 0;
-  padding: 0.65rem;
-  background: var(--color-background);
+  align-items: center;
+  gap: 9px;
+  min-height: 62px;
+  padding: 10px;
   border: 1px solid var(--color-border);
-  border-radius: 5px;
+  border-radius: 7px;
+  background: var(--color-background);
+  overflow: hidden;
+  transition:
+    transform 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
-.employee-detail-item > svg {
-  width: 15px;
-  height: 15px;
-  flex-shrink: 0;
-  margin-top: 0.1rem;
-  color: var(--color-accent);
+.admin-employee-detail-card::before {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 2px;
+  height: 100%;
+  background: var(--color-primary);
+  content: "";
+  transform: scaleY(0);
+  transform-origin: top;
+  transition: transform 0.25s ease;
 }
 
-.employee-detail-item > div {
-  min-width: 0;
+.admin-employee-detail-card:hover {
+  transform: translateY(-1px);
+  border-color: rgba(113, 29, 60, 0.22);
+  box-shadow: var(--shadow-sm);
+}
+
+.admin-employee-detail-card:hover::before {
+  transform: scaleY(1);
+}
+
+.admin-employee-detail-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 31px;
+  width: 31px;
+  height: 31px;
+  border-radius: 7px;
+  background: var(--color-surface-muted);
+  color: var(--color-primary);
+}
+
+.admin-employee-detail-card > div:last-child {
   display: flex;
   flex-direction: column;
+  gap: 3px;
+  min-width: 0;
 }
 
-.employee-detail-item span {
+.admin-employee-detail-card span {
   color: var(--color-text-muted);
-  font-size: 0.45rem;
-  line-height: 1.3;
+  font-size: 9px;
+  font-weight: 700;
 }
 
-.employee-detail-item strong {
-  margin-top: 0.15rem;
+.admin-employee-detail-card strong {
   overflow: hidden;
-  color: var(--color-text);
-  font-size: 0.52rem;
-  font-weight: 600;
-  line-height: 1.35;
+  color: var(--color-dark);
+  font-size: 10px;
+  font-weight: 800;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
-
-/* ============================================================
-   MODAL SECTIONS
-============================================================ */
-
-.employee-modal-section {
-  padding: 0 1.15rem 1rem;
-}
-
-.employee-modal-section h3 {
-  margin-bottom: 0.55rem;
-  color: var(--color-dark);
-  font-family: var(--font-heading);
-  font-size: 0.72rem;
-  line-height: 1.25;
-}
-
-.employee-info-row {
-  min-height: 34px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
-  padding: 0.45rem 0;
-  border-bottom: 1px solid var(--color-border);
-}
-
-.employee-info-row:last-child {
-  border-bottom: none;
-}
-
-.employee-info-row span {
-  color: var(--color-text-muted);
-  font-size: 0.49rem;
-}
-
-.employee-info-row strong {
-  color: var(--color-text);
-  font-size: 0.5rem;
-  font-weight: 600;
-  text-align: right;
-}
-
-
 /* ============================================================
    MODAL SKILLS
-============================================================ */
+   ============================================================ */
 
-.modal-skills {
+.admin-employee-modal-section {
+  padding: 0 20px 17px;
+}
+
+.admin-employee-modal-section > span {
+  display: block;
+  margin-bottom: 8px;
+  color: var(--color-dark);
+  font-size: 10px;
+  font-weight: 800;
+}
+
+.admin-employee-modal-skills {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.3rem;
+  gap: 5px;
 }
 
-
-/* ============================================================
-   ASSIGNMENT INFO
-============================================================ */
-
-.assignment-info-box {
-  display: flex;
-  align-items: flex-start;
-  gap: 0.65rem;
-  padding: 0.8rem;
-  background: var(--color-surface-muted);
-  border: 1px solid var(--color-border);
-  border-left: 3px solid var(--color-accent);
-  border-radius: 5px;
-}
-
-.assignment-info-box > svg {
-  width: 17px;
-  height: 17px;
-  flex-shrink: 0;
-  margin-top: 0.05rem;
-  color: var(--color-accent);
-}
-
-.assignment-info-box > div {
-  min-width: 0;
-}
-
-.assignment-info-box strong {
-  display: block;
-  margin-bottom: 0.25rem;
-  color: var(--color-dark);
-  font-size: 0.54rem;
-  font-weight: 700;
-}
-
-.assignment-info-box p {
-  color: var(--color-text-muted);
-  font-size: 0.49rem;
-  line-height: 1.55;
-}
-
-
-/* ============================================================
-   PROFILE MODAL ACTIONS
-============================================================ */
-
-.employee-modal-actions {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  gap: 0.5rem;
-  padding: 0.9rem 1.15rem;
-  border-top: 1px solid var(--color-border);
-}
-
-.employee-profile-edit-btn {
-  min-height: 34px;
-}
-
-
-/* ============================================================
-   ADD / EDIT FORM
-============================================================ */
-
-.employee-add-form {
-  padding: 1.1rem 1.15rem 1.15rem;
-}
-
-.employee-form-grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 0.8rem;
-}
-
-.employee-form-field {
-  min-width: 0;
-}
-
-.employee-form-full {
-  grid-column: 1 / -1;
-}
-
-.employee-form-field label {
-  display: block;
-  margin-bottom: 0.32rem;
-  color: var(--color-text);
-  font-size: 0.52rem;
-  font-weight: 600;
-  line-height: 1.3;
-}
-
-.employee-form-field input,
-.employee-form-field select {
-  width: 100%;
-  height: 36px;
-  padding: 0.5rem 0.65rem;
-  background: var(--color-background);
-  border: 1px solid var(--color-border);
-  border-radius: 5px;
-  color: var(--color-text);
-  font-size: 0.53rem;
-}
-
-.employee-form-field input::placeholder {
-  color: var(--color-text-muted);
-}
-
-.employee-form-field input:focus,
-.employee-form-field select:focus {
-  border-color: var(--color-primary);
-  box-shadow: 0 0 0 3px rgba(113, 29, 60, 0.07);
-}
-
-.employee-form-field small {
-  display: block;
-  margin-top: 0.25rem;
-  color: var(--color-text-muted);
-  font-size: 0.44rem;
-  line-height: 1.3;
-}
-
-
-/* ============================================================
-   SECURE EMPLOYEE ACCOUNT SETUP
-============================================================ */
-
-.employee-secure-account {
-  display: flex;
-  align-items: flex-start;
-  gap: 0.9rem;
-  margin-top: 1rem;
-  padding: 1rem 1.05rem;
-  background: var(--color-surface-muted);
-  border: 1px solid var(--color-border);
-  border-left: 3px solid var(--color-accent);
-  border-radius: 6px;
-}
-
-.employee-secure-account-icon {
-  width: 35px;
-  height: 35px;
-  flex-shrink: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: rgba(177, 138, 82, 0.12);
-  border: 1px solid rgba(177, 138, 82, 0.25);
-  border-radius: 6px;
-  color: var(--color-accent);
-}
-
-.employee-secure-account-icon svg {
-  width: 17px;
-  height: 17px;
-}
-
-.employee-secure-account-content {
-  min-width: 0;
-  flex: 1;
-}
-
-.employee-secure-account-content > strong {
-  display: block;
-  margin-bottom: 0.3rem;
-  color: var(--color-dark);
-  font-family: var(--font-body);
-  font-size: 0.7rem;
-  font-weight: 700;
-  line-height: 1.35;
-}
-
-.employee-secure-account-content p {
-  max-width: 720px;
-  margin: 0;
-  color: var(--color-text-muted);
-  font-family: var(--font-body);
-  font-size: 0.59rem;
-  font-weight: 400;
-  line-height: 1.65;
-}
-
-.employee-secure-account-content p strong {
-  display: inline;
-  margin: 0;
-  color: var(--color-text);
-  font-family: inherit;
-  font-size: inherit;
-  font-weight: 700;
-}
-
-
-/* ============================================================
-   ACCOUNT SETUP FLOW
-============================================================ */
-
-.employee-secure-account-flow {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 0.3rem;
-  margin-top: 0.7rem;
-}
-
-.employee-secure-account-flow > span:not(.flow-arrow) {
+.admin-employee-modal-skills span {
   display: inline-flex;
   align-items: center;
-  min-height: 23px;
-  padding: 0.25rem 0.45rem;
-  background: var(--color-surface);
+  min-height: 24px;
+  padding: 0 8px;
   border: 1px solid var(--color-border);
-  border-radius: 4px;
+  border-radius: 6px;
+  background: var(--color-background);
   color: var(--color-text-muted);
-  font-size: 0.45rem;
-  font-weight: 600;
-  line-height: 1.2;
-}
-
-.employee-secure-account-flow
-  > span:first-child {
-  color: var(--color-warning);
-  border-color: rgba(177, 138, 82, 0.25);
-  background: rgba(177, 138, 82, 0.08);
-}
-
-.employee-secure-account-flow
-  > span:last-child {
-  color: var(--color-success);
-  border-color: rgba(63, 115, 85, 0.2);
-  background: rgba(63, 115, 85, 0.07);
-}
-
-.employee-secure-account-flow .flow-arrow {
-  color: var(--color-accent);
-  font-size: 0.55rem;
+  font-size: 9px;
   font-weight: 700;
 }
 
-
 /* ============================================================
-   EDIT SECURITY NOTE
-============================================================ */
+   STATUS NOTE
+   ============================================================ */
 
-.employee-edit-security-note {
-  margin-top: 1rem;
-}
-
-.employee-edit-security-note
-  .employee-secure-account-content
-  p {
-  max-width: 650px;
-}
-
-
-/* ============================================================
-   FORM ACTIONS
-============================================================ */
-
-.employee-add-form-actions,
-.employee-edit-form-actions {
+.admin-employee-status-note {
   display: flex;
   align-items: center;
+  gap: 9px;
+  margin: 0 20px 17px;
+  padding: 11px 12px;
+  border-left: 3px solid var(--color-accent);
+  background: rgba(177, 138, 82, 0.06);
+}
+
+.admin-employee-status-note > div {
+  display: flex;
+  color: var(--color-accent);
+}
+
+.admin-employee-status-note p {
+  margin: 0;
+  color: var(--color-text-muted);
+  font-size: 9px;
+}
+
+.admin-employee-status-note strong {
+  color: var(--color-dark);
+  font-weight: 800;
+}
+
+/* ============================================================
+   MODAL ACTIONS
+   ============================================================ */
+
+.admin-employee-modal-actions,
+.admin-employee-form-actions {
+  display: flex;
   justify-content: flex-end;
-  gap: 0.5rem;
-  margin-top: 1rem;
-  padding-top: 0.9rem;
+  gap: 7px;
+  padding: 13px 20px 17px;
   border-top: 1px solid var(--color-border);
 }
 
-.employee-update-btn {
-  min-height: 36px;
+.admin-employee-modal-primary,
+.admin-employee-modal-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 33px;
+  padding: 0 11px;
+  border-radius: 7px;
+  font-family: var(--font-body);
+  font-size: 10px;
+  font-weight: 800;
+  cursor: pointer;
+  transition:
+    transform 0.2s ease,
+    background 0.2s ease,
+    border-color 0.2s ease,
+    color 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
-
-/* ============================================================
-   DARK THEME
-============================================================ */
-
-:root[data-theme="dark"] .employee-modal-overlay {
-  background: rgba(0, 0, 0, 0.58);
-}
-
-:root[data-theme="dark"] .employee-avatar,
-:root[data-theme="dark"] .employee-profile-avatar {
+.admin-employee-modal-primary {
+  border: 1px solid var(--color-primary);
+  background: var(--color-primary);
   color: #ffffff;
 }
 
-:root[data-theme="dark"] .employee-secure-account-icon {
-  background: rgba(201, 166, 107, 0.1);
-  border-color: rgba(201, 166, 107, 0.22);
+.admin-employee-modal-primary:hover {
+  transform: translateY(-1px);
+  background: var(--color-primary-dark);
+  box-shadow: var(--shadow-sm);
 }
 
-:root[data-theme="dark"] .employee-secure-account-flow
-  > span:not(.flow-arrow) {
+.admin-employee-modal-secondary {
+  border: 1px solid var(--color-border);
   background: var(--color-surface);
+  color: var(--color-text-muted);
 }
 
-:root[data-theme="dark"]
-  .employee-secure-account-flow
-  > span:first-child {
-  background: rgba(201, 166, 107, 0.08);
+.admin-employee-modal-secondary:hover {
+  transform: translateY(-1px);
+  border-color: var(--color-primary);
+  color: var(--color-primary);
 }
-
-:root[data-theme="dark"]
-  .employee-secure-account-flow
-  > span:last-child {
-  background: rgba(114, 169, 130, 0.08);
-}
-
 
 /* ============================================================
-   RESPONSIVE — 1100px
-============================================================ */
+   FORM
+   ============================================================ */
 
-@media (max-width: 1100px) {
-  .employees-summary-grid {
+.admin-employee-form {
+  padding-top: 2px;
+}
+
+.admin-employee-form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 13px;
+  padding: 18px 20px;
+}
+
+.admin-employee-form-grid label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+
+.admin-employee-form-grid label > span {
+  color: var(--color-dark);
+  font-size: 9px;
+  font-weight: 800;
+}
+
+.admin-employee-form-grid input,
+.admin-employee-form-grid select {
+  width: 100%;
+  height: 36px;
+  padding: 0 10px;
+  box-sizing: border-box;
+  border: 1px solid var(--color-border);
+  border-radius: 7px;
+  outline: none;
+  background: var(--color-background);
+  color: var(--color-dark);
+  font-family: var(--font-body);
+  font-size: 10px;
+  transition:
+    border-color 0.2s ease,
+    background 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.admin-employee-form-grid input::placeholder {
+  color: var(--color-text-muted);
+  opacity: 0.75;
+}
+
+.admin-employee-form-grid input:hover,
+.admin-employee-form-grid select:hover {
+  border-color: rgba(113, 29, 60, 0.2);
+}
+
+.admin-employee-form-grid input:focus,
+.admin-employee-form-grid select:focus {
+  border-color: var(--color-primary);
+  background: var(--color-surface);
+  box-shadow: 0 0 0 3px rgba(113, 29, 60, 0.07);
+}
+
+.admin-employee-form-full {
+  grid-column: 1 / -1;
+}
+
+.admin-employee-form-grid small {
+  color: var(--color-text-muted);
+  font-size: 8px;
+  line-height: 1.4;
+}
+
+/* ============================================================
+   SECURE ACCOUNT NOTE
+   ============================================================ */
+
+.admin-employee-secure-note {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin: 0 20px 17px;
+  padding: 12px;
+  border: 1px solid rgba(177, 138, 82, 0.2);
+  border-radius: 7px;
+  background: rgba(177, 138, 82, 0.055);
+  color: var(--color-accent);
+}
+
+.admin-employee-secure-note > svg {
+  flex: 0 0 auto;
+  margin-top: 1px;
+}
+
+.admin-employee-secure-note > div {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.admin-employee-secure-note strong {
+  color: var(--color-dark);
+  font-size: 10px;
+  font-weight: 800;
+}
+
+.admin-employee-secure-note span {
+  color: var(--color-text-muted);
+  font-size: 9px;
+  line-height: 1.5;
+}
+
+/* ============================================================
+   ANIMATIONS
+   ============================================================ */
+
+@keyframes adminEmployeesPageIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes adminEmployeesHeaderIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes adminEmployeesCardIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes adminEmployeesPanelIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes adminEmployeeRowReveal {
+  from {
+    opacity: 0;
+    transform: translateY(5px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes adminMoreMenuIn {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes adminEmployeeOverlayIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes adminEmployeeModalIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.99);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* ============================================================
+   DARK MODE
+   ============================================================ */
+
+:root[data-theme="dark"] .admin-employees-search:focus-within {
+  box-shadow: 0 0 0 3px rgba(154, 61, 95, 0.12);
+}
+
+:root[data-theme="dark"] .admin-employees-stat-card:hover {
+  border-color: rgba(154, 61, 95, 0.28);
+}
+
+:root[data-theme="dark"]
+  .admin-employees-stat-card:hover
+  .admin-employees-stat-icon {
+  background: rgba(154, 61, 95, 0.1);
+  border-color: rgba(154, 61, 95, 0.25);
+}
+
+:root[data-theme="dark"] .admin-employee-avatar,
+:root[data-theme="dark"] .admin-employee-modal-avatar {
+  background: rgba(154, 61, 95, 0.12);
+  border-color: rgba(154, 61, 95, 0.22);
+}
+
+:root[data-theme="dark"] .admin-employee-row:hover {
+  background: rgba(154, 61, 95, 0.045);
+  box-shadow: inset 3px 0 0 rgba(154, 61, 95, 0.65);
+}
+
+:root[data-theme="dark"] .admin-employee-status-note {
+  background: rgba(201, 166, 107, 0.07);
+}
+
+:root[data-theme="dark"] .admin-employee-secure-note {
+  background: rgba(201, 166, 107, 0.07);
+}
+
+:root[data-theme="dark"] .admin-employee-modal-overlay {
+  background: rgba(0, 0, 0, 0.6);
+}
+
+:root[data-theme="dark"] .admin-employees-panel::before {
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(201, 166, 107, 0.3),
+    transparent
+  );
+}
+
+/* ============================================================
+   TABLET
+   ============================================================ */
+
+@media (max-width: 1250px) {
+  .admin-employees-stat-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
-
-  .employees-table {
-    min-width: 1080px;
-  }
 }
 
+@media (max-width: 900px) {
+  .admin-employees {
+    padding: 2px 0 20px;
+  }
 
-/* ============================================================
-   RESPONSIVE — 800px
-============================================================ */
-
-@media (max-width: 800px) {
-  .employees-page-header {
+  .admin-employees-header {
     align-items: flex-start;
     flex-direction: column;
   }
 
-  .employees-primary-btn {
-    align-self: flex-start;
+  .admin-employees-primary {
+    width: 100%;
   }
 
-  .employees-toolbar {
-    flex-wrap: wrap;
+  .admin-employees-toolbar {
+    align-items: flex-start;
+    flex-direction: column;
   }
 
-  .employees-search {
-    min-width: 100%;
-    flex-basis: 100%;
+  .admin-employees-toolbar-right {
+    width: 100%;
   }
 
-  .employees-toolbar select {
+  .admin-employees-search {
     flex: 1;
     width: auto;
   }
-
-  .employee-detail-grid {
-    grid-template-columns: 1fr;
-  }
 }
 
-
 /* ============================================================
-   RESPONSIVE — 600px
-============================================================ */
+   MOBILE
+   ============================================================ */
 
-@media (max-width: 600px) {
-  .employees-summary-grid {
-    grid-template-columns: 1fr;
+@media (max-width: 650px) {
+  .admin-employees {
+    padding: 2px 0 20px;
   }
 
-  .employees-table-header {
+  .admin-employees-header {
+    gap: 14px;
+    margin-bottom: 18px;
+  }
+
+  .admin-employees-header h1 {
+    font-size: 25px;
+  }
+
+  .admin-employees-header p {
+    margin-top: 6px;
+    font-size: 12px;
+  }
+
+  .admin-employees-primary {
+    width: 100%;
+  }
+
+  .admin-employees-stat-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+    margin-bottom: 18px;
+  }
+
+  .admin-employees-stat-card {
+    padding: 13px;
+  }
+
+  .admin-employees-stat-card > strong {
+    font-size: 23px;
+  }
+
+  .admin-employees-toolbar {
+    gap: 12px;
+    padding: 14px 16px;
+  }
+
+  .admin-employees-toolbar-right {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .admin-employees-search,
+  .admin-employees-filter {
+    width: 100%;
+  }
+
+  .admin-employees-footer {
     align-items: flex-start;
     flex-direction: column;
   }
 
-  .directory-status {
-    align-self: flex-start;
+  .admin-employees-pagination {
+    width: 100%;
+    justify-content: flex-end;
   }
 
-  .employees-table-footer {
-    align-items: flex-start;
-    flex-direction: column;
+  .admin-employee-modal-overlay {
+    align-items: flex-end;
+    padding: 8px;
   }
 
-  .employee-form-grid {
+  .admin-employee-modal,
+  .admin-employee-form-modal {
+    width: 100%;
+    max-height: calc(100vh - 16px);
+    border-radius: 10px;
+  }
+
+  .admin-employee-details-grid {
     grid-template-columns: 1fr;
   }
 
-  .employee-form-full {
+  .admin-employee-form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-employee-form-full {
     grid-column: auto;
   }
-
-  .employee-secure-account {
-    gap: 0.7rem;
-    padding: 0.9rem;
-  }
-
-  .employee-secure-account-content > strong {
-    font-size: 0.66rem;
-  }
-
-  .employee-secure-account-content p {
-    font-size: 0.57rem;
-    line-height: 1.6;
-  }
-
-  .employee-secure-account-flow {
-    align-items: flex-start;
-    flex-direction: column;
-  }
-
-  .employee-secure-account-flow .flow-arrow {
-    display: none;
-  }
-
-  .employee-secure-account-flow
-    > span:not(.flow-arrow) {
-    width: fit-content;
-  }
-
-  .employee-modal-overlay {
-    align-items: flex-start;
-    padding: 0.75rem;
-  }
-
-  .employee-modal {
-    max-height: calc(100vh - 1.5rem);
-  }
 }
 
+@media (max-width: 430px) {
+  .admin-employees-stat-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-employees-stat-card {
+    padding: 14px;
+  }
+
+  .admin-employees-stat-card > strong {
+    font-size: 24px;
+  }
+
+  .admin-employees-toolbar {
+    padding: 13px 14px;
+  }
+
+  .admin-employees-footer {
+    padding: 10px 14px;
+  }
+
+  .admin-employee-modal-actions,
+  .admin-employee-form-actions {
+    flex-direction: column-reverse;
+  }
+
+  .admin-employee-modal-primary,
+  .admin-employee-modal-secondary {
+    width: 100%;
+  }
+}
 
 /* ============================================================
-   RESPONSIVE — 480px
-============================================================ */
+   REDUCED MOTION
+   ============================================================ */
 
-@media (max-width: 480px) {
-  .employees-page-header h1 {
-    font-size: 1.4rem;
+@media (prefers-reduced-motion: reduce) {
+  .admin-employees,
+  .admin-employees-header,
+  .admin-employees-stat-card,
+  .admin-employees-panel,
+  .admin-employee-row,
+  .admin-employee-modal,
+  .admin-employee-form-modal,
+  .admin-employee-modal-overlay {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
   }
 
-  .employees-page-header p {
-    font-size: 0.58rem;
-  }
-
-  .employees-toolbar {
-    flex-direction: column;
-    align-items: stretch;
-  }
-
-  .employees-toolbar select {
-    width: 100%;
-    flex: none;
-  }
-
-  .employee-modal-header {
-    padding: 0.9rem;
-  }
-
-  .employee-add-form {
-    padding: 0.9rem;
-  }
-
-  .employee-modal-section,
-  .employee-detail-grid {
-    padding-left: 0.9rem;
-    padding-right: 0.9rem;
-  }
-
-  .employee-modal-actions,
-  .employee-add-form-actions,
-  .employee-edit-form-actions {
-    padding-left: 0.9rem;
-    padding-right: 0.9rem;
-  }
-
-  .employee-profile-summary {
-    padding: 0.9rem;
-  }
-
-  .employee-secure-account {
-    align-items: flex-start;
-  }
-
-  .employee-secure-account-icon {
-    width: 32px;
-    height: 32px;
-  }
-
-  .employee-secure-account-content > strong {
-    font-size: 0.63rem;
-  }
-
-  .employee-secure-account-content p {
-    font-size: 0.55rem;
-  }
-
-  .employee-modal-actions,
-  .employee-add-form-actions,
-  .employee-edit-form-actions {
-    flex-wrap: wrap;
-  }
-
-  .employee-modal-actions button,
-  .employee-add-form-actions button,
-  .employee-edit-form-actions button {
-    flex: 1;
+  .admin-employees-stat-card,
+  .admin-employees-stat-card::before,
+  .admin-employees-stat-card::after,
+  .admin-employees-stat-icon,
+  .admin-employees-search,
+  .admin-table-action,
+  .admin-employees-primary,
+  .admin-pagination-button,
+  .admin-employee-modal-close,
+  .admin-employee-modal-primary,
+  .admin-employee-modal-secondary,
+  .admin-employee-detail-card,
+  .admin-employee-detail-card::before {
+    transition: none !important;
   }
 }
+

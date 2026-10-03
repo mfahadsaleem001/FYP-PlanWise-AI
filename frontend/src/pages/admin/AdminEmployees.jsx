@@ -5,7 +5,6 @@ import {
   Plus,
   Eye,
   Pencil,
-  MoreHorizontal,
   Users,
   UserCheck,
   UserX,
@@ -25,11 +24,8 @@ function Employees() {
   const [statusFilter, setStatusFilter] = useState("All");
   const [roleFilter, setRoleFilter] = useState("All");
 
-  const [selectedEmployee, setSelectedEmployee] =
-    useState(null);
-
-  const [showEmployeeModal, setShowEmployeeModal] =
-    useState(false);
+  const [selectedEmployee, setSelectedEmployee] = useState(null);
+  const [showEmployeeModal, setShowEmployeeModal] = useState(false);
 
   const [showAddEmployeeModal, setShowAddEmployeeModal] =
     useState(false);
@@ -37,11 +33,10 @@ function Employees() {
   const [showEditEmployeeModal, setShowEditEmployeeModal] =
     useState(false);
 
-  const [editingEmployee, setEditingEmployee] =
-    useState(null);
+  const [editingEmployee, setEditingEmployee] = useState(null);
 
-  const [openMoreMenu, setOpenMoreMenu] =
-    useState(null);
+  // Separate text state for editing skills
+  const [editingSkillsInput, setEditingSkillsInput] = useState("");
 
   const [newEmployee, setNewEmployee] = useState({
     name: "",
@@ -62,12 +57,7 @@ function Employees() {
       phone: "+92 300 1234567",
       role: "Backend Developer",
       experience: "5 Years",
-      skills: [
-        "Python",
-        "FastAPI",
-        "PostgreSQL",
-        "Docker",
-      ],
+      skills: ["Python", "FastAPI", "PostgreSQL", "Docker"],
       availability: "Available",
       workload: 40,
       currentProject: "E-Commerce Platform",
@@ -84,12 +74,7 @@ function Employees() {
       phone: "+92 301 2345678",
       role: "Backend Developer",
       experience: "4 Years",
-      skills: [
-        "Django",
-        "Python",
-        "REST API",
-        "MySQL",
-      ],
+      skills: ["Django", "Python", "REST API", "MySQL"],
       availability: "Assigned",
       workload: 80,
       currentProject: "Business Analytics Portal",
@@ -106,12 +91,7 @@ function Employees() {
       phone: "+92 302 3456789",
       role: "Frontend Developer",
       experience: "3 Years",
-      skills: [
-        "React",
-        "JavaScript",
-        "HTML",
-        "CSS",
-      ],
+      skills: ["React", "JavaScript", "HTML", "CSS"],
       availability: "Available",
       workload: 30,
       currentProject: "—",
@@ -128,12 +108,7 @@ function Employees() {
       phone: "+92 303 4567890",
       role: "UI/UX Designer",
       experience: "4 Years",
-      skills: [
-        "Figma",
-        "Wireframing",
-        "Prototyping",
-        "Design Systems",
-      ],
+      skills: ["Figma", "Wireframing", "Prototyping", "Design Systems"],
       availability: "Available",
       workload: 35,
       currentProject: "Customer Mobile App",
@@ -150,12 +125,7 @@ function Employees() {
       phone: "+92 304 5678901",
       role: "QA Engineer",
       experience: "3 Years",
-      skills: [
-        "Manual Testing",
-        "Automation",
-        "Postman",
-        "Selenium",
-      ],
+      skills: ["Manual Testing", "Automation", "Postman", "Selenium"],
       availability: "Available",
       workload: 25,
       currentProject: "Healthcare Management System",
@@ -172,12 +142,7 @@ function Employees() {
       phone: "+92 305 6789012",
       role: "ML Engineer",
       experience: "5 Years",
-      skills: [
-        "Python",
-        "Scikit-learn",
-        "PyTorch",
-        "Pandas",
-      ],
+      skills: ["Python", "Scikit-learn", "PyTorch", "Pandas"],
       availability: "Assigned",
       workload: 90,
       currentProject: "AI Recommendation Engine",
@@ -194,12 +159,7 @@ function Employees() {
       phone: "+92 306 7890123",
       role: "Project Manager",
       experience: "6 Years",
-      skills: [
-        "Agile",
-        "Scrum",
-        "Planning",
-        "Risk Management",
-      ],
+      skills: ["Agile", "Scrum", "Planning", "Risk Management"],
       availability: "Available",
       workload: 45,
       currentProject: "SaaS Project Management Tool",
@@ -216,12 +176,7 @@ function Employees() {
       phone: "+92 307 8901234",
       role: "Frontend Developer",
       experience: "2 Years",
-      skills: [
-        "React",
-        "TypeScript",
-        "Tailwind CSS",
-        "Next.js",
-      ],
+      skills: ["React", "TypeScript", "Tailwind CSS", "Next.js"],
       availability: "Unavailable",
       workload: 100,
       currentProject: "Customer Mobile App",
@@ -233,65 +188,37 @@ function Employees() {
     },
   ]);
 
-  /* ============================================================
-     FILTER EMPLOYEES
-  ============================================================ */
+  const filteredEmployees = employees.filter((employee) => {
+    const normalizedSearch = searchTerm.toLowerCase().trim();
 
-  const filteredEmployees = employees.filter(
-    (employee) => {
-      const normalizedSearch =
-        searchTerm.toLowerCase();
-
-      const matchesSearch =
-        employee.name
-          .toLowerCase()
-          .includes(normalizedSearch) ||
-        employee.role
-          .toLowerCase()
-          .includes(normalizedSearch) ||
-        employee.email
-          .toLowerCase()
-          .includes(normalizedSearch) ||
-        employee.skills.some((skill) =>
-          skill
-            .toLowerCase()
-            .includes(normalizedSearch)
-        );
-
-      const matchesStatus =
-        statusFilter === "All" ||
-        employee.availability === statusFilter;
-
-      const matchesRole =
-        roleFilter === "All" ||
-        employee.role === roleFilter;
-
-      return (
-        matchesSearch &&
-        matchesStatus &&
-        matchesRole
+    const matchesSearch =
+      employee.name.toLowerCase().includes(normalizedSearch) ||
+      employee.email.toLowerCase().includes(normalizedSearch) ||
+      employee.role.toLowerCase().includes(normalizedSearch) ||
+      employee.skills.some((skill) =>
+        skill.toLowerCase().includes(normalizedSearch)
       );
-    }
-  );
 
-  /* ============================================================
-     VIEW EMPLOYEE
-  ============================================================ */
+    const matchesStatus =
+      statusFilter === "All" ||
+      employee.availability === statusFilter;
+
+    const matchesRole =
+      roleFilter === "All" ||
+      employee.role === roleFilter;
+
+    return matchesSearch && matchesStatus && matchesRole;
+  });
 
   const openEmployee = (employee) => {
     setSelectedEmployee(employee);
     setShowEmployeeModal(true);
-    setOpenMoreMenu(null);
   };
 
   const closeEmployee = () => {
     setSelectedEmployee(null);
     setShowEmployeeModal(false);
   };
-
-  /* ============================================================
-     ADD EMPLOYEE
-  ============================================================ */
 
   const openAddEmployee = () => {
     setNewEmployee({
@@ -324,6 +251,10 @@ function Employees() {
   const handleAddEmployee = (event) => {
     event.preventDefault();
 
+    if (!newEmployee.name.trim() || !newEmployee.email.trim()) {
+      return;
+    }
+
     const skillsArray = newEmployee.skills
       .split(",")
       .map((skill) => skill.trim())
@@ -331,76 +262,26 @@ function Employees() {
 
     const employee = {
       id: Date.now(),
-
       name: newEmployee.name.trim(),
-
-      email: newEmployee.email
-        .trim()
-        .toLowerCase(),
-
+      email: newEmployee.email.trim().toLowerCase(),
       phone: newEmployee.phone.trim(),
-
       role: newEmployee.role,
-
-      experience:
-        newEmployee.experience.trim(),
-
+      experience: newEmployee.experience.trim(),
       skills: skillsArray,
-
-      availability:
-        newEmployee.availability,
-
+      availability: newEmployee.availability,
       workload:
-        newEmployee.availability ===
-        "Unavailable"
-          ? 100
-          : 0,
-
+        newEmployee.availability === "Unavailable" ? 100 : 0,
       currentProject: "—",
-
-      location:
-        newEmployee.location.trim(),
-
+      location: newEmployee.location.trim(),
       joined: "September 2026",
-
       status: "Active",
-
-      /*
-        New employees do not receive a password
-        from Admin.
-
-        Their account starts in Pending Setup.
-        Later the backend will generate a secure
-        one-time invitation and send it to the
-        employee's registered email address.
-      */
       accountStatus: "Pending Setup",
-
       assignedProjects: 0,
     };
 
-    setEmployees((previous) => [
-      employee,
-      ...previous,
-    ]);
-
+    setEmployees((previous) => [employee, ...previous]);
     setShowAddEmployeeModal(false);
-
-    setNewEmployee({
-      name: "",
-      email: "",
-      phone: "",
-      role: "Backend Developer",
-      experience: "",
-      skills: "",
-      availability: "Available",
-      location: "",
-    });
   };
-
-  /* ============================================================
-     EDIT EMPLOYEE
-  ============================================================ */
 
   const openEditEmployee = (employee) => {
     setEditingEmployee({
@@ -408,15 +289,18 @@ function Employees() {
       skills: [...employee.skills],
     });
 
+    // Keep skills as normal text while editing
+    setEditingSkillsInput(employee.skills.join(", "));
+
     setShowEmployeeModal(false);
     setSelectedEmployee(null);
     setShowEditEmployeeModal(true);
-    setOpenMoreMenu(null);
   };
 
   const closeEditEmployee = () => {
     setShowEditEmployeeModal(false);
     setEditingEmployee(null);
+    setEditingSkillsInput("");
   };
 
   const handleEditEmployeeInput = (event) => {
@@ -428,47 +312,36 @@ function Employees() {
     }));
   };
 
+  // Only update the text field while typing
   const handleEditSkillsInput = (event) => {
-    const skillsArray = event.target.value
-      .split(",")
-      .map((skill) => skill.trim())
-      .filter(Boolean);
-
-    setEditingEmployee((previous) => ({
-      ...previous,
-      skills: skillsArray,
-    }));
+    setEditingSkillsInput(event.target.value);
   };
 
   const handleUpdateEmployee = (event) => {
     event.preventDefault();
 
-    if (!editingEmployee) return;
+    if (!editingEmployee) {
+      return;
+    }
+
+    // Convert unlimited comma-separated skills into an array on save
+    const skillsArray = editingSkillsInput
+      .split(",")
+      .map((skill) => skill.trim())
+      .filter(Boolean);
 
     const updatedEmployee = {
       ...editingEmployee,
-
       name: editingEmployee.name.trim(),
-
-      email: editingEmployee.email
-        .trim()
-        .toLowerCase(),
-
+      email: editingEmployee.email.trim().toLowerCase(),
       phone: editingEmployee.phone.trim(),
-
-      experience:
-        editingEmployee.experience.trim(),
-
-      skills: editingEmployee.skills,
-
-      location:
-        editingEmployee.location.trim(),
-
+      experience: editingEmployee.experience.trim(),
+      location: editingEmployee.location.trim(),
+      skills: skillsArray,
       workload:
-        editingEmployee.availability ===
-        "Unavailable"
+        editingEmployee.availability === "Unavailable"
           ? 100
-          : editingEmployee.workload,
+          : Number(editingEmployee.workload) || 0,
     };
 
     setEmployees((previous) =>
@@ -479,31 +352,10 @@ function Employees() {
       )
     );
 
-    setSelectedEmployee(null);
-    setShowEmployeeModal(false);
-    setShowEditEmployeeModal(false);
-    setEditingEmployee(null);
+    closeEditEmployee();
   };
 
-  /* ============================================================
-     MORE MENU
-  ============================================================ */
-
-  const toggleMoreMenu = (employeeId) => {
-    setOpenMoreMenu((previous) =>
-      previous === employeeId
-        ? null
-        : employeeId
-    );
-  };
-
-  /* ============================================================
-     HELPERS
-  ============================================================ */
-
-  const getAvailabilityClass = (
-    availability
-  ) => {
+  const getAvailabilityClass = (availability) => {
     if (availability === "Available") {
       return "available";
     }
@@ -531,395 +383,299 @@ function Employees() {
     return "low";
   };
 
-  const getAccountStatusClass = (
-    accountStatus
-  ) => {
-    if (accountStatus === "Active") {
-      return "active";
-    }
+  const getAccountStatusClass = (accountStatus) => {
+    return accountStatus === "Active" ? "active" : "pending";
+  };
 
-    return "pending";
+  const getInitials = (name) => {
+    return name
+      .split(" ")
+      .map((part) => part[0])
+      .join("")
+      .slice(0, 2)
+      .toUpperCase();
   };
 
   return (
     <div className="admin-employees">
-
-      {/* =====================================================
-          PAGE HEADER
-      ===================================================== */}
-
-      <div className="employees-page-header">
-        <div>
-          <span className="employees-eyebrow">
+      {/* PAGE HEADER */}
+      <div className="admin-employees-header">
+        <div className="admin-employees-header-content">
+          <span className="admin-employees-eyebrow">
             RESOURCE MANAGEMENT
           </span>
 
-          <h1>
-            Employees & Resources
-          </h1>
+          <h1>Employees & Resources</h1>
 
           <p>
-            Manage employees, skills, availability,
-            workload, and project assignments.
+            Manage employees, skills, availability, workload, and
+            project assignments.
           </p>
         </div>
 
         <button
-          className="employees-primary-btn"
+          className="admin-employees-primary"
           onClick={openAddEmployee}
         >
-          <Plus size={17} />
+          <Plus size={16} />
           Add Employee
         </button>
       </div>
 
-      {/* =====================================================
-          SUMMARY CARDS
-      ===================================================== */}
+      {/* SUMMARY CARDS */}
+      <div className="admin-employees-stat-grid">
+        <div className="admin-employees-stat-card">
+          <div className="admin-employees-stat-top">
+            <span>Total Employees</span>
 
-      <div className="employees-summary-grid">
-
-        <div className="employee-summary-card">
-          <div className="summary-icon">
-            <Users size={20} />
+            <div className="admin-employees-stat-icon">
+              <Users size={17} />
+            </div>
           </div>
 
-          <div>
-            <span>
-              Total Employees
-            </span>
+          <strong>{employees.length}</strong>
 
-            <strong>
-              {employees.length}
-            </strong>
-
-            <small>
-              Active resources
-            </small>
-          </div>
+          <small>Active resources</small>
         </div>
 
-        <div className="employee-summary-card">
-          <div className="summary-icon">
-            <UserCheck size={20} />
+        <div className="admin-employees-stat-card">
+          <div className="admin-employees-stat-top">
+            <span>Available</span>
+
+            <div className="admin-employees-stat-icon">
+              <UserCheck size={17} />
+            </div>
           </div>
 
-          <div>
-            <span>
-              Available
-            </span>
-
-            <strong>
-              {
-                employees.filter(
-                  (employee) =>
-                    employee.availability ===
-                    "Available"
-                ).length
-              }
-            </strong>
-
-            <small>
-              Ready for assignment
-            </small>
-          </div>
-        </div>
-
-        <div className="employee-summary-card">
-          <div className="summary-icon">
-            <BriefcaseBusiness size={20} />
-          </div>
-
-          <div>
-            <span>
-              Currently Assigned
-            </span>
-
-            <strong>
-              {
-                employees.filter(
-                  (employee) =>
-                    employee.availability ===
-                    "Assigned"
-                ).length
-              }
-            </strong>
-
-            <small>
-              Working on projects
-            </small>
-          </div>
-        </div>
-
-        <div className="employee-summary-card">
-          <div className="summary-icon">
-            <UserX size={20} />
-          </div>
-
-          <div>
-            <span>
-              Unavailable
-            </span>
-
-            <strong>
-              {
-                employees.filter(
-                  (employee) =>
-                    employee.availability ===
-                    "Unavailable"
-                ).length
-              }
-            </strong>
-
-            <small>
-              At full capacity
-            </small>
-          </div>
-        </div>
-
-      </div>
-
-      {/* =====================================================
-          TOOLBAR
-      ===================================================== */}
-
-      <div className="employees-toolbar">
-
-        <div className="employees-search">
-          <Search size={17} />
-
-          <input
-            type="text"
-            placeholder="Search employees, roles or skills..."
-            value={searchTerm}
-            onChange={(event) =>
-              setSearchTerm(
-                event.target.value
-              )
+          <strong>
+            {
+              employees.filter(
+                (employee) =>
+                  employee.availability === "Available"
+              ).length
             }
-          />
+          </strong>
+
+          <small>Ready for assignment</small>
         </div>
 
-        <select
-          value={statusFilter}
-          onChange={(event) =>
-            setStatusFilter(
-              event.target.value
-            )
-          }
-        >
-          <option value="All">
-            All Availability
-          </option>
+        <div className="admin-employees-stat-card">
+          <div className="admin-employees-stat-top">
+            <span>Currently Assigned</span>
 
-          <option value="Available">
-            Available
-          </option>
-
-          <option value="Assigned">
-            Assigned
-          </option>
-
-          <option value="Unavailable">
-            Unavailable
-          </option>
-        </select>
-
-        <select
-          value={roleFilter}
-          onChange={(event) =>
-            setRoleFilter(
-              event.target.value
-            )
-          }
-        >
-          <option value="All">
-            All Roles
-          </option>
-
-          <option value="Backend Developer">
-            Backend Developer
-          </option>
-
-          <option value="Frontend Developer">
-            Frontend Developer
-          </option>
-
-          <option value="UI/UX Designer">
-            UI/UX Designer
-          </option>
-
-          <option value="QA Engineer">
-            QA Engineer
-          </option>
-
-          <option value="ML Engineer">
-            ML Engineer
-          </option>
-
-          <option value="Project Manager">
-            Project Manager
-          </option>
-        </select>
-
-      </div>
-
-      {/* =====================================================
-          EMPLOYEES TABLE
-      ===================================================== */}
-
-      <div className="employees-table-card">
-
-        <div className="employees-table-header">
-          <div>
-            <h2>
-              Resource Directory
-            </h2>
-
-            <p>
-              {filteredEmployees.length} employees shown
-            </p>
+            <div className="admin-employees-stat-icon">
+              <BriefcaseBusiness size={17} />
+            </div>
           </div>
 
-          <span className="directory-status">
-            Resource Management
-          </span>
+          <strong>
+            {
+              employees.filter(
+                (employee) =>
+                  employee.availability === "Assigned"
+              ).length
+            }
+          </strong>
+
+          <small>Working on projects</small>
         </div>
 
-        <div className="employees-table-wrapper">
+        <div className="admin-employees-stat-card">
+          <div className="admin-employees-stat-top">
+            <span>Unavailable</span>
 
-          <table className="employees-table">
+            <div className="admin-employees-stat-icon">
+              <UserX size={17} />
+            </div>
+          </div>
 
+          <strong>
+            {
+              employees.filter(
+                (employee) =>
+                  employee.availability === "Unavailable"
+              ).length
+            }
+          </strong>
+
+          <small>At full capacity</small>
+        </div>
+      </div>
+
+      {/* MAIN PANEL */}
+      <section className="admin-employees-panel">
+        <div className="admin-employees-toolbar">
+          <div className="admin-employees-toolbar-left">
+            <div className="admin-employees-panel-title">
+              <span>Resource Directory</span>
+
+              <small>
+                {filteredEmployees.length} employees
+              </small>
+            </div>
+          </div>
+
+          <div className="admin-employees-toolbar-right">
+            <label className="admin-employees-search">
+              <Search size={15} />
+
+              <input
+                type="text"
+                placeholder="Search employees, roles or skills..."
+                value={searchTerm}
+                onChange={(event) =>
+                  setSearchTerm(event.target.value)
+                }
+              />
+            </label>
+
+            <select
+              className="admin-employees-filter"
+              value={statusFilter}
+              onChange={(event) =>
+                setStatusFilter(event.target.value)
+              }
+            >
+              <option value="All">All Availability</option>
+              <option value="Available">Available</option>
+              <option value="Assigned">Assigned</option>
+              <option value="Unavailable">Unavailable</option>
+            </select>
+
+            <select
+              className="admin-employees-filter"
+              value={roleFilter}
+              onChange={(event) =>
+                setRoleFilter(event.target.value)
+              }
+            >
+              <option value="All">All Roles</option>
+
+              <option value="Backend Developer">
+                Backend Developer
+              </option>
+
+              <option value="Frontend Developer">
+                Frontend Developer
+              </option>
+
+              <option value="UI/UX Designer">
+                UI/UX Designer
+              </option>
+
+              <option value="QA Engineer">
+                QA Engineer
+              </option>
+
+              <option value="ML Engineer">
+                ML Engineer
+              </option>
+
+              <option value="Project Manager">
+                Project Manager
+              </option>
+            </select>
+          </div>
+        </div>
+
+        {/* TABLE */}
+        <div className="admin-employees-table-wrapper">
+          <table className="admin-employees-table">
             <thead>
               <tr>
-                <th>
-                  Employee
-                </th>
-
-                <th>
-                  Role
-                </th>
-
-                <th>
-                  Experience
-                </th>
-
-                <th>
-                  Skills
-                </th>
-
-                <th>
-                  Availability
-                </th>
-
-                <th>
-                  Workload
-                </th>
-
-                <th>
-                  Account
-                </th>
-
-                <th>
-                  Current Project
-                </th>
-
-                <th>
-                  Actions
-                </th>
+                <th>Employee</th>
+                <th>Role</th>
+                <th>Experience</th>
+                <th>Skills</th>
+                <th>Availability</th>
+                <th>Workload</th>
+                <th>Account</th>
+                <th>Current Project</th>
+                <th>Actions</th>
               </tr>
             </thead>
 
             <tbody>
+              {filteredEmployees.length === 0 ? (
+                <tr>
+                  <td
+                    colSpan="9"
+                    className="admin-employees-empty"
+                  >
+                    <Users size={25} />
 
-              {filteredEmployees.map(
-                (employee) => (
-                  <tr key={employee.id}>
+                    <strong>No employees found</strong>
 
+                    <span>
+                      Try changing your search or filters.
+                    </span>
+                  </td>
+                </tr>
+              ) : (
+                filteredEmployees.map((employee, index) => (
+                  <tr
+                    key={employee.id}
+                    className="admin-employee-row"
+                    style={{
+                      "--row-index": index,
+                    }}
+                  >
                     <td>
-                      <div className="employee-name-cell">
-
-                        <div className="employee-avatar">
-                          {employee.name
-                            .split(" ")
-                            .map(
-                              (name) =>
-                                name[0]
-                            )
-                            .join("")
-                            .slice(0, 2)}
+                      <div className="admin-employee-cell">
+                        <div className="admin-employee-avatar">
+                          {getInitials(employee.name)}
                         </div>
 
-                        <div>
-                          <strong>
-                            {employee.name}
-                          </strong>
-
-                          <span>
-                            {employee.email}
-                          </span>
+                        <div className="admin-employee-info">
+                          <strong>{employee.name}</strong>
+                          <span>{employee.email}</span>
                         </div>
-
                       </div>
                     </td>
 
                     <td>
-                      <span className="employee-role">
+                      <span className="admin-employee-role">
                         {employee.role}
                       </span>
                     </td>
 
                     <td>
-                      <span className="employee-experience">
+                      <span className="admin-employee-experience">
                         {employee.experience}
                       </span>
                     </td>
 
                     <td>
-                      <div className="employee-skills">
-
-                        {employee.skills
-                          .slice(0, 3)
-                          .map((skill) => (
-                            <span key={skill}>
-                              {skill}
-                            </span>
-                          ))}
-
-                        {employee.skills.length >
-                          3 && (
-                          <span className="more-skill">
-                            +
-                            {employee.skills.length -
-                              3}
+                      <div className="admin-employee-skills">
+                        {employee.skills.map((skill, skillIndex) => (
+                          <span key={`${skill}-${skillIndex}`}>
+                            {skill}
                           </span>
-                        )}
-
+                        ))}
                       </div>
                     </td>
 
                     <td>
                       <span
-                        className={`availability-badge ${getAvailabilityClass(
+                        className={`admin-availability-badge ${getAvailabilityClass(
                           employee.availability
                         )}`}
                       >
-                        <span className="availability-dot"></span>
+                        <span className="admin-availability-dot" />
 
                         {employee.availability}
                       </span>
                     </td>
 
                     <td>
-                      <div className="workload-cell">
-
-                        <div className="workload-top">
+                      <div className="admin-workload">
+                        <div className="admin-workload-top">
                           <span>
                             {employee.workload}%
                           </span>
                         </div>
 
-                        <div className="workload-bar">
+                        <div className="admin-workload-track">
                           <span
                             className={getWorkloadClass(
                               employee.workload
@@ -927,1136 +683,620 @@ function Employees() {
                             style={{
                               width: `${employee.workload}%`,
                             }}
-                          ></span>
+                          />
                         </div>
-
                       </div>
                     </td>
 
                     <td>
                       <span
-                        className={`employee-account-status ${getAccountStatusClass(
+                        className={`admin-account-status ${getAccountStatusClass(
                           employee.accountStatus
                         )}`}
                       >
-                        <span className="employee-account-status-dot"></span>
+                        <span className="admin-account-status-dot" />
 
                         {employee.accountStatus}
                       </span>
                     </td>
 
                     <td>
-                      <span className="current-project">
+                      <span className="admin-current-project">
                         {employee.currentProject}
                       </span>
                     </td>
 
                     <td>
-                      <div className="employee-actions">
-
+                      <div className="admin-employee-actions">
                         <button
-                          className="employee-action-btn"
+                          className="admin-table-action"
                           title="View employee"
                           onClick={() =>
-                            openEmployee(
-                              employee
-                            )
+                            openEmployee(employee)
                           }
                         >
-                          <Eye size={16} />
+                          <Eye size={15} />
                         </button>
 
                         <button
-                          className="employee-action-btn"
+                          className="admin-table-action"
                           title="Edit employee"
                           onClick={() =>
-                            openEditEmployee(
-                              employee
-                            )
+                            openEditEmployee(employee)
                           }
                         >
-                          <Pencil size={16} />
+                          <Pencil size={15} />
                         </button>
-
-                        <div className="employee-more-wrapper">
-
-                          <button
-                            className="employee-action-btn"
-                            title="More options"
-                            onClick={() =>
-                              toggleMoreMenu(
-                                employee.id
-                              )
-                            }
-                          >
-                            <MoreHorizontal
-                              size={16}
-                            />
-                          </button>
-
-                          {openMoreMenu ===
-                            employee.id && (
-                            <div className="employee-more-menu">
-
-                              <button
-                                onClick={() =>
-                                  openEmployee(
-                                    employee
-                                  )
-                                }
-                              >
-                                <Eye size={14} />
-                                View Profile
-                              </button>
-
-                              <button
-                                onClick={() =>
-                                  openEditEmployee(
-                                    employee
-                                  )
-                                }
-                              >
-                                <Pencil
-                                  size={14}
-                                />
-                                Edit Employee
-                              </button>
-
-                            </div>
-                          )}
-
-                        </div>
-
                       </div>
                     </td>
-
                   </tr>
-                )
+                ))
               )}
-
-              {filteredEmployees.length ===
-                0 && (
-                <tr>
-                  <td colSpan="9">
-
-                    <div className="employees-empty-state">
-
-                      <Users size={30} />
-
-                      <h3>
-                        No employees found
-                      </h3>
-
-                      <p>
-                        Try changing your search
-                        or filter criteria.
-                      </p>
-
-                    </div>
-
-                  </td>
-                </tr>
-              )}
-
             </tbody>
-
           </table>
-
         </div>
 
-        <div className="employees-table-footer">
-
+        <div className="admin-employees-footer">
           <span>
             Showing{" "}
-            {filteredEmployees.length} of{" "}
-            {employees.length} employees
+            <strong>{filteredEmployees.length}</strong>{" "}
+            of{" "}
+            <strong>{employees.length}</strong>{" "}
+            employees
           </span>
 
-          <div className="employees-pagination">
-
-            <button disabled>
+          <div className="admin-employees-pagination">
+            <button
+              className="admin-pagination-button"
+              disabled
+            >
               Previous
             </button>
 
-            <button className="active">
+            <button className="admin-pagination-current">
               1
             </button>
 
-            <button>
-              2
-            </button>
-
-            <button>
+            <button className="admin-pagination-button">
               Next
             </button>
-
           </div>
-
         </div>
-
-      </div>
-
-      {/* =====================================================
-          EMPLOYEE PROFILE MODAL
-      ===================================================== */}
-
-      {showEmployeeModal &&
-        selectedEmployee && (
-          <div className="employee-modal-overlay">
-
-            <div className="employee-modal">
-
-              <div className="employee-modal-header">
-
-                <div>
-                  <span>
-                    EMPLOYEE PROFILE
-                  </span>
-
-                  <h2>
-                    {selectedEmployee.name}
-                  </h2>
-                </div>
-
-                <button
-                  className="employee-modal-close"
-                  onClick={closeEmployee}
-                >
-                  <X size={18} />
-                </button>
-
-              </div>
-
-              <div className="employee-profile-summary">
-
-                <div className="employee-profile-avatar">
-                  {selectedEmployee.name
-                    .split(" ")
-                    .map(
-                      (name) =>
-                        name[0]
-                    )
-                    .join("")
-                    .slice(0, 2)}
-                </div>
-
-                <div>
-
-                  <h3>
-                    {selectedEmployee.role}
-                  </h3>
-
-                  <span
-                    className={`availability-badge ${getAvailabilityClass(
-                      selectedEmployee.availability
-                    )}`}
-                  >
-                    <span className="availability-dot"></span>
-
-                    {
-                      selectedEmployee.availability
-                    }
-                  </span>
-
-                </div>
-
-              </div>
-
-              <div className="employee-detail-grid">
-
-                <div className="employee-detail-item">
-                  <Mail size={16} />
-
-                  <div>
-                    <span>
-                      Email
-                    </span>
-
-                    <strong>
-                      {
-                        selectedEmployee.email
-                      }
-                    </strong>
-                  </div>
-                </div>
-
-                <div className="employee-detail-item">
-                  <Phone size={16} />
-
-                  <div>
-                    <span>
-                      Phone
-                    </span>
-
-                    <strong>
-                      {
-                        selectedEmployee.phone
-                      }
-                    </strong>
-                  </div>
-                </div>
-
-                <div className="employee-detail-item">
-                  <MapPin size={16} />
-
-                  <div>
-                    <span>
-                      Location
-                    </span>
-
-                    <strong>
-                      {
-                        selectedEmployee.location
-                      }
-                    </strong>
-                  </div>
-                </div>
-
-                <div className="employee-detail-item">
-                  <CalendarDays
-                    size={16}
-                  />
-
-                  <div>
-                    <span>
-                      Joined
-                    </span>
-
-                    <strong>
-                      {
-                        selectedEmployee.joined
-                      }
-                    </strong>
-                  </div>
-                </div>
-
-              </div>
-
-              <div className="employee-modal-section">
-
-                <h3>
-                  Account Status
-                </h3>
-
-                <div className="employee-info-row">
-                  <span>
-                    Account
-                  </span>
-
-                  <strong>
-                    {
-                      selectedEmployee.accountStatus
-                    }
-                  </strong>
-                </div>
-
-                <div className="employee-info-row">
-                  <span>
-                    Email
-                  </span>
-
-                  <strong>
-                    {
-                      selectedEmployee.email
-                    }
-                  </strong>
-                </div>
-
-                <div className="employee-info-row">
-                  <span>
-                    Password Management
-                  </span>
-
-                  <strong>
-                    Employee Controlled
-                  </strong>
-                </div>
-
-              </div>
-
-              <div className="employee-modal-section">
-
-                <h3>
-                  Professional Information
-                </h3>
-
-                <div className="employee-info-row">
-                  <span>
-                    Experience
-                  </span>
-
-                  <strong>
-                    {
-                      selectedEmployee.experience
-                    }
-                  </strong>
-                </div>
-
-                <div className="employee-info-row">
-                  <span>
-                    Current Project
-                  </span>
-
-                  <strong>
-                    {
-                      selectedEmployee.currentProject
-                    }
-                  </strong>
-                </div>
-
-                <div className="employee-info-row">
-                  <span>
-                    Assigned Projects
-                  </span>
-
-                  <strong>
-                    {
-                      selectedEmployee.assignedProjects
-                    }
-                  </strong>
-                </div>
-
-                <div className="employee-info-row">
-                  <span>
-                    Current Workload
-                  </span>
-
-                  <strong>
-                    {
-                      selectedEmployee.workload
-                    }%
-                  </strong>
-                </div>
-
-              </div>
-
-              <div className="employee-modal-section">
-
-                <h3>
-                  Skills
-                </h3>
-
-                <div className="modal-skills">
-
-                  {selectedEmployee.skills.map(
-                    (skill) => (
-                      <span key={skill}>
-                        {skill}
-                      </span>
-                    )
-                  )}
-
-                </div>
-
-              </div>
-
-              <div className="employee-modal-section">
-
-                <h3>
-                  Resource Assignment
-                </h3>
-
-                <div className="assignment-info-box">
-
-                  <ShieldCheck size={18} />
-
-                  <div>
-
-                    <strong>
-                      Admin Controlled Assignment
-                    </strong>
-
-                    <p>
-                      Project assignments are managed
-                      by Admin based on role, skills,
-                      availability, workload, and
-                      project requirements.
-                    </p>
-
-                  </div>
-
-                </div>
-
-              </div>
-
-              <div className="employee-modal-actions">
-
-                <button
-                  className="employee-secondary-btn"
-                  onClick={closeEmployee}
-                >
-                  Close
-                </button>
-
-                <button
-                  className="employee-primary-btn employee-profile-edit-btn"
-                  onClick={() =>
-                    openEditEmployee(
-                      selectedEmployee
-                    )
-                  }
-                >
-                  <Pencil size={16} />
-                  Edit Employee
-                </button>
-
-              </div>
-
-            </div>
-
-          </div>
-        )}
-
-      {/* =====================================================
-          ADD EMPLOYEE MODAL
-      ===================================================== */}
-
-      {showAddEmployeeModal && (
-        <div className="employee-modal-overlay">
-
-          <div className="employee-modal employee-add-modal">
-
-            <div className="employee-modal-header">
-
+      </section>
+
+      {/* VIEW EMPLOYEE MODAL */}
+      {showEmployeeModal && selectedEmployee && (
+        <div
+          className="admin-employee-modal-overlay"
+          onClick={closeEmployee}
+        >
+          <div
+            className="admin-employee-modal"
+            onClick={(event) =>
+              event.stopPropagation()
+            }
+          >
+            <div className="admin-employee-modal-header">
               <div>
-                <span>
-                  RESOURCE MANAGEMENT
+                <span className="admin-employee-modal-eyebrow">
+                  EMPLOYEE PROFILE
                 </span>
 
-                <h2>
-                  Add Employee
-                </h2>
+                <h2>Employee Details</h2>
               </div>
 
               <button
-                className="employee-modal-close"
-                onClick={closeAddEmployee}
+                className="admin-employee-modal-close"
+                onClick={closeEmployee}
               >
-                <X size={18} />
+                <X size={15} />
+              </button>
+            </div>
+
+            <div className="admin-employee-profile">
+              <div className="admin-employee-modal-avatar">
+                {getInitials(selectedEmployee.name)}
+              </div>
+
+              <div>
+                <h3>{selectedEmployee.name}</h3>
+
+                <span className="admin-employee-modal-email">
+                  <Mail size={12} />
+
+                  {selectedEmployee.email}
+                </span>
+
+                <span
+                  className={`admin-availability-badge ${getAvailabilityClass(
+                    selectedEmployee.availability
+                  )}`}
+                >
+                  <span className="admin-availability-dot" />
+
+                  {selectedEmployee.availability}
+                </span>
+              </div>
+            </div>
+
+            <div className="admin-employee-details-grid">
+              <div className="admin-employee-detail-card">
+                <div className="admin-employee-detail-icon">
+                  <BriefcaseBusiness size={14} />
+                </div>
+
+                <div>
+                  <span>Role</span>
+
+                  <strong>
+                    {selectedEmployee.role}
+                  </strong>
+                </div>
+              </div>
+
+              <div className="admin-employee-detail-card">
+                <div className="admin-employee-detail-icon">
+                  <CalendarDays size={14} />
+                </div>
+
+                <div>
+                  <span>Experience</span>
+
+                  <strong>
+                    {selectedEmployee.experience}
+                  </strong>
+                </div>
+              </div>
+
+              <div className="admin-employee-detail-card">
+                <div className="admin-employee-detail-icon">
+                  <Phone size={14} />
+                </div>
+
+                <div>
+                  <span>Phone</span>
+
+                  <strong>
+                    {selectedEmployee.phone ||
+                      "Not provided"}
+                  </strong>
+                </div>
+              </div>
+
+              <div className="admin-employee-detail-card">
+                <div className="admin-employee-detail-icon">
+                  <MapPin size={14} />
+                </div>
+
+                <div>
+                  <span>Location</span>
+
+                  <strong>
+                    {selectedEmployee.location}
+                  </strong>
+                </div>
+              </div>
+
+              <div className="admin-employee-detail-card">
+                <div className="admin-employee-detail-icon">
+                  <BriefcaseBusiness size={14} />
+                </div>
+
+                <div>
+                  <span>Assigned Projects</span>
+
+                  <strong>
+                    {selectedEmployee.assignedProjects}
+                  </strong>
+                </div>
+              </div>
+
+              <div className="admin-employee-detail-card">
+                <div className="admin-employee-detail-icon">
+                  <CalendarDays size={14} />
+                </div>
+
+                <div>
+                  <span>Joined</span>
+
+                  <strong>
+                    {selectedEmployee.joined}
+                  </strong>
+                </div>
+              </div>
+            </div>
+
+            <div className="admin-employee-modal-section">
+              <span>Skills</span>
+
+              <div className="admin-employee-modal-skills">
+                {selectedEmployee.skills.map(
+                  (skill, skillIndex) => (
+                    <span
+                      key={`${skill}-${skillIndex}`}
+                    >
+                      {skill}
+                    </span>
+                  )
+                )}
+              </div>
+            </div>
+
+            <div className="admin-employee-status-note">
+              <div>
+                <ShieldCheck size={14} />
+              </div>
+
+              <p>
+                Account status:{" "}
+                <strong>
+                  {selectedEmployee.accountStatus}
+                </strong>
+              </p>
+            </div>
+
+            <div className="admin-employee-modal-actions">
+              <button
+                className="admin-employee-modal-secondary"
+                onClick={closeEmployee}
+              >
+                Close
               </button>
 
+              <button
+                className="admin-employee-modal-primary"
+                onClick={() =>
+                  openEditEmployee(selectedEmployee)
+                }
+              >
+                <Pencil size={13} />
+
+                Edit Employee
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ADD EMPLOYEE MODAL */}
+      {showAddEmployeeModal && (
+        <div
+          className="admin-employee-modal-overlay"
+          onClick={closeAddEmployee}
+        >
+          <div
+            className="admin-employee-form-modal"
+            onClick={(event) =>
+              event.stopPropagation()
+            }
+          >
+            <div className="admin-employee-modal-header">
+              <div>
+                <span className="admin-employee-modal-eyebrow">
+                  RESOURCE MANAGEMENT
+                </span>
+
+                <h2>Add Employee</h2>
+              </div>
+
+              <button
+                className="admin-employee-modal-close"
+                onClick={closeAddEmployee}
+              >
+                <X size={15} />
+              </button>
             </div>
 
             <form
-              className="employee-add-form"
+              className="admin-employee-form"
               onSubmit={handleAddEmployee}
             >
-
-              {/* =================================================
-                  EMPLOYEE INFORMATION
-              ================================================= */}
-
-              <div className="employee-form-grid">
-
-                <div className="employee-form-field">
-
-                  <label>
-                    Full Name
-                  </label>
+              <div className="admin-employee-form-grid">
+                <label>
+                  <span>Full Name</span>
 
                   <input
-                    type="text"
                     name="name"
-                    value={
-                      newEmployee.name
-                    }
-                    onChange={
-                      handleEmployeeInput
-                    }
-                    placeholder="e.g. Hassan Ahmed"
-                    required
-                  />
-
-                </div>
-
-                <div className="employee-form-field">
-
-                  <label>
-                    Email Address
-                  </label>
-
-                  <input
-                    type="email"
-                    name="email"
-                    value={
-                      newEmployee.email
-                    }
-                    onChange={
-                      handleEmployeeInput
-                    }
-                    placeholder="e.g. hassan@gmail.com"
-                    required
-                  />
-
-                </div>
-
-                <div className="employee-form-field">
-
-                  <label>
-                    Phone
-                  </label>
-
-                  <input
                     type="text"
-                    name="phone"
-                    value={
-                      newEmployee.phone
-                    }
-                    onChange={
-                      handleEmployeeInput
-                    }
-                    placeholder="+92 300 1234567"
+                    placeholder="Enter employee name"
+                    value={newEmployee.name}
+                    onChange={handleEmployeeInput}
                     required
                   />
+                </label>
 
-                </div>
+                <label>
+                  <span>Email Address</span>
 
-                <div className="employee-form-field">
+                  <input
+                    name="email"
+                    type="email"
+                    placeholder="employee@planwise.com"
+                    value={newEmployee.email}
+                    onChange={handleEmployeeInput}
+                    required
+                  />
+                </label>
 
-                  <label>
-                    Role
-                  </label>
+                <label>
+                  <span>Phone</span>
+
+                  <input
+                    name="phone"
+                    type="text"
+                    placeholder="+92 300 0000000"
+                    value={newEmployee.phone}
+                    onChange={handleEmployeeInput}
+                  />
+                </label>
+
+                <label>
+                  <span>Role</span>
 
                   <select
                     name="role"
-                    value={
-                      newEmployee.role
-                    }
-                    onChange={
-                      handleEmployeeInput
-                    }
+                    value={newEmployee.role}
+                    onChange={handleEmployeeInput}
                   >
-                    <option value="Backend Developer">
-                      Backend Developer
-                    </option>
-
-                    <option value="Frontend Developer">
-                      Frontend Developer
-                    </option>
-
-                    <option value="UI/UX Designer">
-                      UI/UX Designer
-                    </option>
-
-                    <option value="QA Engineer">
-                      QA Engineer
-                    </option>
-
-                    <option value="ML Engineer">
-                      ML Engineer
-                    </option>
-
-                    <option value="Project Manager">
-                      Project Manager
-                    </option>
+                    <option>Backend Developer</option>
+                    <option>Frontend Developer</option>
+                    <option>UI/UX Designer</option>
+                    <option>QA Engineer</option>
+                    <option>ML Engineer</option>
+                    <option>Project Manager</option>
                   </select>
+                </label>
 
-                </div>
-
-                <div className="employee-form-field">
-
-                  <label>
-                    Experience
-                  </label>
+                <label>
+                  <span>Experience</span>
 
                   <input
-                    type="text"
                     name="experience"
-                    value={
-                      newEmployee.experience
-                    }
-                    onChange={
-                      handleEmployeeInput
-                    }
+                    type="text"
                     placeholder="e.g. 3 Years"
-                    required
+                    value={newEmployee.experience}
+                    onChange={handleEmployeeInput}
                   />
+                </label>
 
-                </div>
-
-                <div className="employee-form-field">
-
-                  <label>
-                    Availability
-                  </label>
+                <label>
+                  <span>Availability</span>
 
                   <select
                     name="availability"
-                    value={
-                      newEmployee.availability
-                    }
-                    onChange={
-                      handleEmployeeInput
-                    }
+                    value={newEmployee.availability}
+                    onChange={handleEmployeeInput}
                   >
-                    <option value="Available">
-                      Available
-                    </option>
-
-                    <option value="Assigned">
-                      Assigned
-                    </option>
-
-                    <option value="Unavailable">
-                      Unavailable
-                    </option>
+                    <option>Available</option>
+                    <option>Assigned</option>
+                    <option>Unavailable</option>
                   </select>
+                </label>
 
-                </div>
-
-                <div className="employee-form-field employee-form-full">
-
-                  <label>
-                    Skills
-                  </label>
+                <label className="admin-employee-form-full">
+                  <span>Skills</span>
 
                   <input
-                    type="text"
                     name="skills"
-                    value={
-                      newEmployee.skills
-                    }
-                    onChange={
-                      handleEmployeeInput
-                    }
+                    type="text"
                     placeholder="Python, FastAPI, PostgreSQL, Docker"
-                    required
+                    value={newEmployee.skills}
+                    onChange={handleEmployeeInput}
                   />
 
                   <small>
-                    Separate multiple skills
-                    with commas.
+                    Separate multiple skills with commas.
                   </small>
+                </label>
 
-                </div>
-
-                <div className="employee-form-field employee-form-full">
-
-                  <label>
-                    Location
-                  </label>
+                <label className="admin-employee-form-full">
+                  <span>Location</span>
 
                   <input
-                    type="text"
                     name="location"
-                    value={
-                      newEmployee.location
-                    }
-                    onChange={
-                      handleEmployeeInput
-                    }
-                    placeholder="e.g. Islamabad, Pakistan"
-                    required
+                    type="text"
+                    placeholder="Islamabad, Pakistan"
+                    value={newEmployee.location}
+                    onChange={handleEmployeeInput}
                   />
-
-                </div>
-
+                </label>
               </div>
 
-              {/* =================================================
-                  SECURE ACCOUNT SETUP
-              ================================================= */}
+              <div className="admin-employee-secure-note">
+                <ShieldCheck size={16} />
 
-              <div className="employee-secure-account">
-
-                <div className="employee-secure-account-icon">
-                  <ShieldCheck size={17} />
-                </div>
-
-                <div className="employee-secure-account-content">
-
+                <div>
                   <strong>
                     Secure employee account setup
                   </strong>
 
-                  <p>
-                    New employees start in{" "}
-                    <strong>
-                      Pending Setup
-                    </strong>{" "}
-                    status. After the employee is
-                    added, PlanWise AI will send a
-                    secure invitation to the registered
-                    email address. The employee will use
-                    that invitation to create their own
-                    password and activate the account.
-                    Admins never set, access, or view
-                    employee passwords.
-                  </p>
-
-                  <div className="employee-secure-account-flow">
-
-                    <span>
-                      Pending Setup
-                    </span>
-
-                    <span className="flow-arrow">
-                      →
-                    </span>
-
-                    <span>
-                      Invitation Sent
-                    </span>
-
-                    <span className="flow-arrow">
-                      →
-                    </span>
-
-                    <span>
-                      Employee Creates Password
-                    </span>
-
-                    <span className="flow-arrow">
-                      →
-                    </span>
-
-                    <span>
-                      Account Active
-                    </span>
-
-                  </div>
-
+                  <span>
+                    New employees start with Pending Setup.
+                    The employee creates their password through
+                    the secure account setup flow.
+                  </span>
                 </div>
-
               </div>
 
-              {/* =================================================
-                  FORM ACTIONS
-              ================================================= */}
-
-              <div className="employee-add-form-actions">
-
+              <div className="admin-employee-form-actions">
                 <button
                   type="button"
-                  className="employee-secondary-btn"
-                  onClick={
-                    closeAddEmployee
-                  }
+                  className="admin-employee-modal-secondary"
+                  onClick={closeAddEmployee}
                 >
                   Cancel
                 </button>
 
                 <button
                   type="submit"
-                  className="employee-primary-btn"
+                  className="admin-employee-modal-primary"
                 >
-                  <Plus size={16} />
+                  <Plus size={13} />
+
                   Add Employee
                 </button>
-
               </div>
-
             </form>
-
           </div>
-
         </div>
       )}
 
-      {/* =====================================================
-          EDIT EMPLOYEE MODAL
-      ===================================================== */}
+      {/* EDIT EMPLOYEE MODAL */}
+      {showEditEmployeeModal && editingEmployee && (
+        <div
+          className="admin-employee-modal-overlay"
+          onClick={closeEditEmployee}
+        >
+          <div
+            className="admin-employee-form-modal"
+            onClick={(event) =>
+              event.stopPropagation()
+            }
+          >
+            <div className="admin-employee-modal-header">
+              <div>
+                <span className="admin-employee-modal-eyebrow">
+                  RESOURCE MANAGEMENT
+                </span>
 
-      {showEditEmployeeModal &&
-        editingEmployee && (
-          <div className="employee-modal-overlay">
-
-            <div className="employee-modal employee-edit-modal">
-
-              <div className="employee-modal-header">
-
-                <div>
-                  <span>
-                    RESOURCE MANAGEMENT
-                  </span>
-
-                  <h2>
-                    Edit Employee
-                  </h2>
-                </div>
-
-                <button
-                  type="button"
-                  className="employee-modal-close"
-                  onClick={
-                    closeEditEmployee
-                  }
-                >
-                  <X size={18} />
-                </button>
-
+                <h2>Edit Employee</h2>
               </div>
 
-              <form
-                className="employee-add-form employee-edit-form"
-                onSubmit={
-                  handleUpdateEmployee
-                }
+              <button
+                className="admin-employee-modal-close"
+                onClick={closeEditEmployee}
               >
-
-                <div className="employee-form-grid">
-
-                  <div className="employee-form-field">
-
-                    <label>
-                      Full Name
-                    </label>
-
-                    <input
-                      type="text"
-                      name="name"
-                      value={
-                        editingEmployee.name
-                      }
-                      onChange={
-                        handleEditEmployeeInput
-                      }
-                      required
-                    />
-
-                  </div>
-
-                  <div className="employee-form-field">
-
-                    <label>
-                      Email Address
-                    </label>
-
-                    <input
-                      type="email"
-                      name="email"
-                      value={
-                        editingEmployee.email
-                      }
-                      onChange={
-                        handleEditEmployeeInput
-                      }
-                      required
-                    />
-
-                  </div>
-
-                  <div className="employee-form-field">
-
-                    <label>
-                      Phone
-                    </label>
-
-                    <input
-                      type="text"
-                      name="phone"
-                      value={
-                        editingEmployee.phone
-                      }
-                      onChange={
-                        handleEditEmployeeInput
-                      }
-                      required
-                    />
-
-                  </div>
-
-                  <div className="employee-form-field">
-
-                    <label>
-                      Role
-                    </label>
-
-                    <select
-                      name="role"
-                      value={
-                        editingEmployee.role
-                      }
-                      onChange={
-                        handleEditEmployeeInput
-                      }
-                    >
-                      <option value="Backend Developer">
-                        Backend Developer
-                      </option>
-
-                      <option value="Frontend Developer">
-                        Frontend Developer
-                      </option>
-
-                      <option value="UI/UX Designer">
-                        UI/UX Designer
-                      </option>
-
-                      <option value="QA Engineer">
-                        QA Engineer
-                      </option>
-
-                      <option value="ML Engineer">
-                        ML Engineer
-                      </option>
-
-                      <option value="Project Manager">
-                        Project Manager
-                      </option>
-                    </select>
-
-                  </div>
-
-                  <div className="employee-form-field">
-
-                    <label>
-                      Experience
-                    </label>
-
-                    <input
-                      type="text"
-                      name="experience"
-                      value={
-                        editingEmployee.experience
-                      }
-                      onChange={
-                        handleEditEmployeeInput
-                      }
-                      required
-                    />
-
-                  </div>
-
-                  <div className="employee-form-field">
-
-                    <label>
-                      Availability
-                    </label>
-
-                    <select
-                      name="availability"
-                      value={
-                        editingEmployee.availability
-                      }
-                      onChange={
-                        handleEditEmployeeInput
-                      }
-                    >
-                      <option value="Available">
-                        Available
-                      </option>
-
-                      <option value="Assigned">
-                        Assigned
-                      </option>
-
-                      <option value="Unavailable">
-                        Unavailable
-                      </option>
-                    </select>
-
-                  </div>
-
-                  <div className="employee-form-field employee-form-full">
-
-                    <label>
-                      Skills
-                    </label>
-
-                    <input
-                      type="text"
-                      value={editingEmployee.skills.join(
-                        ", "
-                      )}
-                      onChange={
-                        handleEditSkillsInput
-                      }
-                      placeholder="Python, FastAPI, PostgreSQL, Docker"
-                      required
-                    />
-
-                    <small>
-                      Separate multiple skills
-                      with commas.
-                    </small>
-
-                  </div>
-
-                  <div className="employee-form-field employee-form-full">
-
-                    <label>
-                      Location
-                    </label>
-
-                    <input
-                      type="text"
-                      name="location"
-                      value={
-                        editingEmployee.location
-                      }
-                      onChange={
-                        handleEditEmployeeInput
-                      }
-                      required
-                    />
-
-                  </div>
-
-                </div>
-
-                {/* =================================================
-                    ACCOUNT SECURITY NOTE
-                ================================================= */}
-
-                <div className="employee-secure-account employee-edit-security-note">
-
-                  <div className="employee-secure-account-icon">
-                    <ShieldCheck size={17} />
-                  </div>
-
-                  <div className="employee-secure-account-content">
-
-                    <strong>
-                      Employee password remains private
-                    </strong>
-
-                    <p>
-                      Employee passwords are never
-                      managed from the Admin panel.
-                      Password setup and password
-                      changes are handled securely by
-                      the employee through the account
-                      recovery or setup process.
-                    </p>
-
-                  </div>
-
-                </div>
-
-                {/* =================================================
-                    EDIT FORM ACTIONS
-                ================================================= */}
-
-                <div className="employee-edit-form-actions">
-
-                  <button
-                    type="button"
-                    className="employee-secondary-btn"
-                    onClick={
-                      closeEditEmployee
-                    }
-                  >
-                    Cancel
-                  </button>
-
-                  <button
-                    type="submit"
-                    className="employee-primary-btn employee-update-btn"
-                  >
-                    <Pencil size={16} />
-                    Update Employee
-                  </button>
-
-                </div>
-
-              </form>
-
+                <X size={15} />
+              </button>
             </div>
 
-          </div>
-        )}
+            <form
+              className="admin-employee-form"
+              onSubmit={handleUpdateEmployee}
+            >
+              <div className="admin-employee-form-grid">
+                <label>
+                  <span>Full Name</span>
 
+                  <input
+                    name="name"
+                    value={editingEmployee.name}
+                    onChange={handleEditEmployeeInput}
+                    required
+                  />
+                </label>
+
+                <label>
+                  <span>Email Address</span>
+
+                  <input
+                    name="email"
+                    type="email"
+                    value={editingEmployee.email}
+                    onChange={handleEditEmployeeInput}
+                    required
+                  />
+                </label>
+
+                <label>
+                  <span>Phone</span>
+
+                  <input
+                    name="phone"
+                    value={editingEmployee.phone}
+                    onChange={handleEditEmployeeInput}
+                  />
+                </label>
+
+                <label>
+                  <span>Role</span>
+
+                  <select
+                    name="role"
+                    value={editingEmployee.role}
+                    onChange={handleEditEmployeeInput}
+                  >
+                    <option>Backend Developer</option>
+                    <option>Frontend Developer</option>
+                    <option>UI/UX Designer</option>
+                    <option>QA Engineer</option>
+                    <option>ML Engineer</option>
+                    <option>Project Manager</option>
+                  </select>
+                </label>
+
+                <label>
+                  <span>Experience</span>
+
+                  <input
+                    name="experience"
+                    value={editingEmployee.experience}
+                    onChange={handleEditEmployeeInput}
+                  />
+                </label>
+
+                <label>
+                  <span>Availability</span>
+
+                  <select
+                    name="availability"
+                    value={editingEmployee.availability}
+                    onChange={handleEditEmployeeInput}
+                  >
+                    <option>Available</option>
+                    <option>Assigned</option>
+                    <option>Unavailable</option>
+                  </select>
+                </label>
+
+                <label className="admin-employee-form-full">
+                  <span>Skills</span>
+
+                  <input
+                    type="text"
+                    value={editingSkillsInput}
+                    onChange={handleEditSkillsInput}
+                    placeholder="Python, FastAPI, PostgreSQL, Docker"
+                  />
+
+                  <small>
+                    Separate multiple skills with commas.
+                  </small>
+                </label>
+
+                <label className="admin-employee-form-full">
+                  <span>Location</span>
+
+                  <input
+                    name="location"
+                    value={editingEmployee.location}
+                    onChange={handleEditEmployeeInput}
+                  />
+                </label>
+              </div>
+
+              <div className="admin-employee-form-actions">
+                <button
+                  type="button"
+                  className="admin-employee-modal-secondary"
+                  onClick={closeEditEmployee}
+                >
+                  Cancel
+                </button>
+
+                <button
+                  type="submit"
+                  className="admin-employee-modal-primary"
+                >
+                  <Pencil size={13} />
+
+                  Save Changes
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

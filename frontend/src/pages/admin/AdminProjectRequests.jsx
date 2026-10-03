@@ -1,426 +1,591 @@
-import { useState } from "react";
+import React, { useMemo, useState } from "react";
 import {
   Search,
+  Filter,
   Eye,
+  MessageCircle,
+  Check,
+  X,
+  RotateCcw,
+  Clock3,
+  FolderKanban,
+  Users,
   CheckCircle2,
   XCircle,
-  Clock3,
-  Users,
-  FolderKanban,
-  AlertTriangle,
-  MoreHorizontal,
-  MessageCircle,
+  AlertCircle,
   Send,
-  UserCheck,
-  X,
   ChevronLeft,
   ChevronRight,
+  CalendarDays,
+  CircleDollarSign,
+  Timer,
+  Activity,
+  UserRound,
+  ShieldCheck,
+  BriefcaseBusiness,
 } from "lucide-react";
+
 import "./AdminProjectRequests.css";
 
-const initialProjectRequests = [
+/* =========================================================
+   DEMO DATA
+   Replace this with backend/API data later.
+========================================================= */
+
+const INITIAL_REQUESTS = [
   {
-    id: 1,
-    projectName: "E-Commerce Platform",
-    owner: "Ali Raza",
-    ownerEmail: "ali.raza@example.com",
-    projectType: "Web Application",
-    estimatedCost: "$18,500",
-    duration: "14 Weeks",
-    resources: 5,
-    discussion: "Active discussion",
-    requestedDate: "Sep 12, 2026",
-    status: "Pending Admin Review",
-    resourceStatus: "Partial Gap",
+    id: 1001,
+    project_name: "Smart Inventory Management System",
+    user_name: "Ahmed Khan",
+    user_email: "ahmed.khan@example.com",
+    project_type: "Web Application",
     description:
-      "A scalable e-commerce platform with product management, customer accounts, shopping cart, order processing, and admin management.",
-    requiredTeam: [
+      "A web-based inventory management platform for tracking products, stock levels, suppliers, purchases, sales, and low-stock alerts.",
+    requested_at: "2026-09-18T10:30:00",
+    status: "pending",
+    team_size: 5,
+    estimated_cost: "PKR 480,000",
+    estimated_duration: "14 Weeks",
+    complexity: "Medium",
+    risk_level: "Medium",
+    required_resources: [
       {
         role: "Backend Developer",
-        required: 2,
-        available: 1,
-        gap: 1,
+        quantity: 1,
+        purpose: "API development and database integration.",
       },
       {
         role: "Frontend Developer",
-        required: 1,
-        available: 1,
-        gap: 0,
+        quantity: 2,
+        purpose: "Dashboard and inventory management interfaces.",
       },
       {
         role: "UI/UX Designer",
-        required: 1,
-        available: 1,
-        gap: 0,
+        quantity: 1,
+        purpose: "User experience and interface design.",
       },
       {
         role: "QA Engineer",
-        required: 1,
-        available: 1,
-        gap: 0,
+        quantity: 1,
+        purpose: "Testing and quality assurance.",
       },
     ],
   },
 
   {
-    id: 2,
-    projectName: "AI Recommendation Engine",
-    owner: "Sara Khan",
-    ownerEmail: "sara.khan@example.com",
-    projectType: "AI / Machine Learning",
-    estimatedCost: "$32,000",
-    duration: "20 Weeks",
-    resources: 6,
-    discussion: "Active",
-    requestedDate: "Sep 11, 2026",
-    status: "Pending Admin Review",
-    resourceStatus: "Gap Detected",
+    id: 1002,
+    project_name: "AI Customer Support Assistant",
+    user_name: "Sara Ahmed",
+    user_email: "sara.ahmed@example.com",
+    project_type: "AI / Machine Learning",
     description:
-      "An AI recommendation system that analyzes user behavior and recommends relevant products or content using machine learning.",
-    requiredTeam: [
+      "An AI-powered customer support assistant capable of understanding customer questions, retrieving relevant information, and generating helpful responses.",
+    requested_at: "2026-09-16T14:15:00",
+    status: "accepted",
+    team_size: 4,
+    estimated_cost: "PKR 620,000",
+    estimated_duration: "18 Weeks",
+    complexity: "High",
+    risk_level: "High",
+    required_resources: [
       {
-        role: "ML Engineer",
-        required: 2,
-        available: 1,
-        gap: 1,
+        role: "AI / ML Engineer",
+        quantity: 1,
+        purpose: "Model integration and AI pipeline development.",
       },
       {
         role: "Backend Developer",
-        required: 2,
-        available: 1,
-        gap: 1,
+        quantity: 1,
+        purpose: "API and application backend.",
       },
       {
         role: "Frontend Developer",
-        required: 1,
-        available: 1,
-        gap: 0,
+        quantity: 1,
+        purpose: "Support dashboard and chat interface.",
       },
       {
         role: "QA Engineer",
-        required: 1,
-        available: 1,
-        gap: 0,
+        quantity: 1,
+        purpose: "Functional and AI response testing.",
       },
     ],
   },
 
   {
-    id: 3,
-    projectName: "Customer Mobile App",
-    owner: "Ahmed Hassan",
-    ownerEmail: "ahmed.hassan@example.com",
-    projectType: "Mobile Application",
-    estimatedCost: "$14,800",
-    duration: "12 Weeks",
-    resources: 4,
-    discussion: "Completed discussion",
-    requestedDate: "Sep 10, 2026",
-    status: "Under Review",
-    resourceStatus: "Available",
+    id: 1003,
+    project_name: "Healthcare Appointment Platform",
+    user_name: "Bilal Hussain",
+    user_email: "bilal.hussain@example.com",
+    project_type: "SaaS",
     description:
-      "A customer-facing mobile application with account management, notifications, service browsing, and secure user interactions.",
-    requiredTeam: [
+      "A SaaS platform connecting patients with healthcare providers for appointment scheduling, doctor profiles, availability, and appointment management.",
+    requested_at: "2026-09-14T09:45:00",
+    status: "rejected",
+    team_size: 6,
+    estimated_cost: "PKR 750,000",
+    estimated_duration: "20 Weeks",
+    complexity: "High",
+    risk_level: "Critical",
+    required_resources: [
+      {
+        role: "Backend Developer",
+        quantity: 2,
+        purpose: "Secure APIs and scheduling logic.",
+      },
+      {
+        role: "Frontend Developer",
+        quantity: 2,
+        purpose: "Patient and provider dashboards.",
+      },
+      {
+        role: "UI/UX Designer",
+        quantity: 1,
+        purpose: "Healthcare-focused user experience.",
+      },
+      {
+        role: "QA Engineer",
+        quantity: 1,
+        purpose: "Testing and release validation.",
+      },
+    ],
+  },
+
+  {
+    id: 1004,
+    project_name: "E-Commerce Marketplace",
+    user_name: "Usman Ali",
+    user_email: "usman.ali@example.com",
+    project_type: "E-Commerce",
+    description:
+      "A multi-vendor e-commerce marketplace where vendors can manage products while customers can browse, purchase, and track orders.",
+    requested_at: "2026-09-11T16:20:00",
+    status: "in_development",
+    team_size: 7,
+    estimated_cost: "PKR 920,000",
+    estimated_duration: "24 Weeks",
+    complexity: "High",
+    risk_level: "Medium",
+    required_resources: [
+      {
+        role: "Backend Developer",
+        quantity: 2,
+        purpose: "Marketplace APIs and order management.",
+      },
+      {
+        role: "Frontend Developer",
+        quantity: 2,
+        purpose: "Customer and vendor interfaces.",
+      },
+      {
+        role: "UI/UX Designer",
+        quantity: 1,
+        purpose: "Marketplace experience.",
+      },
+      {
+        role: "QA Engineer",
+        quantity: 1,
+        purpose: "Testing and regression.",
+      },
+      {
+        role: "DevOps Engineer",
+        quantity: 1,
+        purpose: "Deployment and infrastructure.",
+      },
+    ],
+  },
+
+  {
+    id: 1005,
+    project_name: "Student Learning Portal",
+    user_name: "Hira Malik",
+    user_email: "hira.malik@example.com",
+    project_type: "Web Application",
+    description:
+      "An online learning portal for students with courses, assignments, progress tracking, announcements, and learning resources.",
+    requested_at: "2026-09-09T11:10:00",
+    status: "pending",
+    team_size: 4,
+    estimated_cost: "PKR 390,000",
+    estimated_duration: "12 Weeks",
+    complexity: "Medium",
+    risk_level: "Low",
+    required_resources: [
+      {
+        role: "Frontend Developer",
+        quantity: 1,
+        purpose: "Student learning interface.",
+      },
+      {
+        role: "Backend Developer",
+        quantity: 1,
+        purpose: "Course and user APIs.",
+      },
+      {
+        role: "UI/UX Designer",
+        quantity: 1,
+        purpose: "Learning experience design.",
+      },
+      {
+        role: "QA Engineer",
+        quantity: 1,
+        purpose: "Application testing.",
+      },
+    ],
+  },
+
+  {
+    id: 1006,
+    project_name: "Mobile Expense Tracker",
+    user_name: "Hamza Raza",
+    user_email: "hamza.raza@example.com",
+    project_type: "Mobile Application",
+    description:
+      "A mobile application that helps users record expenses, organize spending categories, and visualize monthly financial activity.",
+    requested_at: "2026-09-07T13:35:00",
+    status: "accepted",
+    team_size: 4,
+    estimated_cost: "PKR 430,000",
+    estimated_duration: "13 Weeks",
+    complexity: "Medium",
+    risk_level: "Low",
+    required_resources: [
       {
         role: "Mobile Developer",
-        required: 2,
-        available: 2,
-        gap: 0,
+        quantity: 2,
+        purpose: "Mobile application development.",
       },
       {
-        role: "UI/UX Designer",
-        required: 1,
-        available: 1,
-        gap: 0,
+        role: "Backend Developer",
+        quantity: 1,
+        purpose: "Authentication and cloud APIs.",
       },
       {
         role: "QA Engineer",
-        required: 1,
-        available: 1,
-        gap: 0,
+        quantity: 1,
+        purpose: "Mobile application testing.",
       },
     ],
   },
 
   {
-    id: 4,
-    projectName: "Business Analytics Portal",
-    owner: "Mariam Iqbal",
-    ownerEmail: "mariam.iqbal@example.com",
-    projectType: "Web Application",
-    estimatedCost: "$16,400",
-    duration: "13 Weeks",
-    resources: 4,
-    discussion: "Completed",
-    requestedDate: "Sep 09, 2026",
-    status: "Accepted",
-    resourceStatus: "Available",
+    id: 1007,
+    project_name: "AI Document Analysis Platform",
+    user_name: "Ayesha Noor",
+    user_email: "ayesha.noor@example.com",
+    project_type: "AI / Machine Learning",
     description:
-      "A business analytics portal providing dashboards, reporting, data visualization, and business performance insights.",
-    requiredTeam: [
+      "An intelligent document analysis system for extracting useful information from uploaded documents and generating structured insights.",
+    requested_at: "2026-09-05T15:00:00",
+    status: "rejected",
+    team_size: 5,
+    estimated_cost: "PKR 680,000",
+    estimated_duration: "17 Weeks",
+    complexity: "High",
+    risk_level: "High",
+    required_resources: [
       {
-        role: "Frontend Developer",
-        required: 1,
-        available: 1,
-        gap: 0,
+        role: "AI / ML Engineer",
+        quantity: 2,
+        purpose: "Document intelligence pipeline.",
       },
       {
         role: "Backend Developer",
-        required: 1,
-        available: 1,
-        gap: 0,
-      },
-      {
-        role: "Data Analyst",
-        required: 1,
-        available: 1,
-        gap: 0,
-      },
-      {
-        role: "QA Engineer",
-        required: 1,
-        available: 1,
-        gap: 0,
-      },
-    ],
-  },
-
-  {
-    id: 5,
-    projectName: "Healthcare Management System",
-    owner: "Usman Ahmed",
-    ownerEmail: "usman.ahmed@example.com",
-    projectType: "Desktop Software",
-    estimatedCost: "$21,700",
-    duration: "16 Weeks",
-    resources: 5,
-    discussion: "Completed",
-    requestedDate: "Sep 07, 2026",
-    status: "In Development",
-    resourceStatus: "Assigned",
-    description:
-      "A healthcare management system for handling patient records, appointments, staff workflows, and operational reporting.",
-    requiredTeam: [
-      {
-        role: "Backend Developer",
-        required: 2,
-        available: 2,
-        gap: 0,
-      },
-      {
-        role: "Desktop Developer",
-        required: 1,
-        available: 1,
-        gap: 0,
-      },
-      {
-        role: "UI/UX Designer",
-        required: 1,
-        available: 1,
-        gap: 0,
-      },
-      {
-        role: "QA Engineer",
-        required: 1,
-        available: 1,
-        gap: 0,
-      },
-    ],
-  },
-
-  {
-    id: 6,
-    projectName: "SaaS Project Management Tool",
-    owner: "Ayesha Malik",
-    ownerEmail: "ayesha.malik@example.com",
-    projectType: "SaaS",
-    estimatedCost: "$28,500",
-    duration: "18 Weeks",
-    resources: 6,
-    discussion: "Completed",
-    requestedDate: "Sep 05, 2026",
-    status: "Rejected",
-    resourceStatus: "Insufficient Resources",
-    description:
-      "A SaaS project management platform for planning projects, tracking tasks, managing teams, and monitoring project progress.",
-    requiredTeam: [
-      {
-        role: "Backend Developer",
-        required: 2,
-        available: 0,
-        gap: 2,
+        quantity: 1,
+        purpose: "Document processing APIs.",
       },
       {
         role: "Frontend Developer",
-        required: 2,
-        available: 1,
-        gap: 1,
-      },
-      {
-        role: "UI/UX Designer",
-        required: 1,
-        available: 1,
-        gap: 0,
+        quantity: 1,
+        purpose: "Upload and analysis dashboard.",
       },
       {
         role: "QA Engineer",
-        required: 1,
-        available: 0,
-        gap: 1,
+        quantity: 1,
+        purpose: "Validation and testing.",
+      },
+    ],
+  },
+
+  {
+    id: 1008,
+    project_name: "Company Task Management Suite",
+    user_name: "Omar Farooq",
+    user_email: "omar.farooq@example.com",
+    project_type: "SaaS",
+    description:
+      "A team task management platform with projects, assignments, deadlines, progress tracking, notifications, and productivity dashboards.",
+    requested_at: "2026-09-02T12:25:00",
+    status: "under_review",
+    team_size: 5,
+    estimated_cost: "PKR 540,000",
+    estimated_duration: "15 Weeks",
+    complexity: "Medium",
+    risk_level: "Medium",
+    required_resources: [
+      {
+        role: "Frontend Developer",
+        quantity: 2,
+        purpose: "Workspace and dashboard interfaces.",
+      },
+      {
+        role: "Backend Developer",
+        quantity: 1,
+        purpose: "Project and task APIs.",
+      },
+      {
+        role: "UI/UX Designer",
+        quantity: 1,
+        purpose: "Product experience.",
+      },
+      {
+        role: "QA Engineer",
+        quantity: 1,
+        purpose: "Testing and validation.",
       },
     ],
   },
 ];
 
-const demoMessages = [
+const DEMO_EMPLOYEES = [
   {
     id: 1,
-    sender: "user",
-    text: "Hi, I wanted to check the status of our project development request.",
-    time: "10:20 AM",
+    name: "Usman Khalid",
+    role: "Senior Backend Developer",
+    active_projects_count: 2,
   },
   {
     id: 2,
-    sender: "admin",
-    text: "We are currently reviewing the required resources and project scope.",
-    time: "10:35 AM",
+    name: "Maryam Shah",
+    role: "Frontend Developer",
+    active_projects_count: 1,
   },
   {
     id: 3,
-    sender: "user",
-    text: "Thank you. Please let me know if you need any additional information.",
-    time: "10:42 AM",
+    name: "Ali Hassan",
+    role: "AI / ML Engineer",
+    active_projects_count: 3,
+  },
+  {
+    id: 4,
+    name: "Fatima Noor",
+    role: "UI/UX Designer",
+    active_projects_count: 0,
+  },
+  {
+    id: 5,
+    name: "Danish Ahmed",
+    role: "QA Engineer",
+    active_projects_count: 2,
   },
 ];
 
+const DEMO_MESSAGES = [
+  {
+    id: 1,
+    sender_role: "user",
+    sender_name: "Ahmed Khan",
+    message:
+      "Hi Admin, I wanted to know if there is any additional information required for my project request.",
+    created_at: "2026-09-18T11:05:00",
+  },
+  {
+    id: 2,
+    sender_role: "admin",
+    sender_name: "Admin",
+    message:
+      "Your request is currently under review. We will let you know if any clarification is needed.",
+    created_at: "2026-09-18T11:30:00",
+  },
+];
+
+/* =========================================================
+   HELPERS
+========================================================= */
+
+const normalizeStatus = (status = "") =>
+  String(status).toLowerCase().replace(/\s+/g, "_");
+
+const formatDate = (date) => {
+  if (!date) return "—";
+
+  const parsed = new Date(date);
+
+  if (Number.isNaN(parsed.getTime())) {
+    return date;
+  }
+
+  return parsed.toLocaleDateString("en-US", {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+  });
+};
+
+const getStatusLabel = (status) => {
+  const labels = {
+    pending: "Pending Review",
+    under_review: "Under Review",
+    accepted: "Accepted",
+    rejected: "Rejected",
+    in_development: "In Development",
+    completed: "Completed",
+  };
+
+  return labels[normalizeStatus(status)] || "Pending Review";
+};
+
+const getStatusClass = (status) => {
+  const normalized = normalizeStatus(status);
+
+  if (
+    normalized === "accepted" ||
+    normalized === "in_development" ||
+    normalized === "completed"
+  ) {
+    return "success";
+  }
+
+  if (normalized === "rejected") {
+    return "danger";
+  }
+
+  if (normalized === "under_review") {
+    return "review";
+  }
+
+  return "pending";
+};
+
+const getInitials = (name = "") =>
+  name
+    .split(" ")
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((part) => part.charAt(0).toUpperCase())
+    .join("");
+
+/* =========================================================
+   COMPONENT
+========================================================= */
+
 function AdminProjectRequests() {
-  const [requests, setRequests] = useState(
-    initialProjectRequests
+  const [requests, setRequests] = useState(INITIAL_REQUESTS);
+
+  const [search, setSearch] = useState("");
+  const [statusFilter, setStatusFilter] = useState("all");
+
+  const [selectedRequest, setSelectedRequest] = useState(null);
+  const [modalType, setModalType] = useState(null);
+
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const [chatMessages, setChatMessages] = useState(DEMO_MESSAGES);
+  const [chatMessage, setChatMessage] = useState("");
+
+  const [employees] = useState(DEMO_EMPLOYEES);
+  const [selectedEmployees, setSelectedEmployees] = useState([]);
+
+  const ITEMS_PER_PAGE = 6;
+
+  /* =========================================================
+     FILTER
+  ========================================================= */
+
+  const filteredRequests = useMemo(() => {
+    const query = search.trim().toLowerCase();
+
+    return requests.filter((request) => {
+      const status = normalizeStatus(request.status);
+
+      const matchesStatus =
+        statusFilter === "all" || status === statusFilter;
+
+      if (!matchesStatus) {
+        return false;
+      }
+
+      if (!query) {
+        return true;
+      }
+
+      return [
+        request.project_name,
+        request.user_name,
+        request.user_email,
+        request.project_type,
+        status,
+      ]
+        .join(" ")
+        .toLowerCase()
+        .includes(query);
+    });
+  }, [requests, search, statusFilter]);
+
+  const totalPages = Math.max(
+    1,
+    Math.ceil(filteredRequests.length / ITEMS_PER_PAGE)
   );
 
-  const [selectedRequest, setSelectedRequest] =
-    useState(null);
+  const paginatedRequests = filteredRequests.slice(
+    (currentPage - 1) * ITEMS_PER_PAGE,
+    currentPage * ITEMS_PER_PAGE
+  );
 
-  const [showRequestModal, setShowRequestModal] =
-    useState(false);
+  const summary = useMemo(() => {
+    return {
+      total: requests.length,
 
-  const [showChat, setShowChat] = useState(false);
+      pending: requests.filter((request) =>
+        ["pending", "under_review"].includes(
+          normalizeStatus(request.status)
+        )
+      ).length,
 
-  const [chatRequest, setChatRequest] =
-    useState(null);
+      accepted: requests.filter((request) =>
+        ["accepted", "in_development", "completed"].includes(
+          normalizeStatus(request.status)
+        )
+      ).length,
 
-  const [messageInput, setMessageInput] =
-    useState("");
+      rejected: requests.filter(
+        (request) =>
+          normalizeStatus(request.status) === "rejected"
+      ).length,
+    };
+  }, [requests]);
 
-  const [messages, setMessages] =
-    useState(demoMessages);
+  /* =========================================================
+     MODALS
+  ========================================================= */
 
-  const [searchTerm, setSearchTerm] =
-    useState("");
-
-  const [statusFilter, setStatusFilter] =
-    useState("all");
-
-  const [resourceFilter, setResourceFilter] =
-    useState("all");
-
-  const [currentPage, setCurrentPage] =
-    useState(1);
-
-  const [openMoreMenu, setOpenMoreMenu] =
-    useState(null);
-
-  const [showAssignModal, setShowAssignModal] =
-    useState(false);
-
-  const [assignRequest, setAssignRequest] =
-    useState(null);
-
-  const requestsPerPage = 10;
-
-  // ============================================================
-  // SUMMARY COUNTS
-  // ============================================================
-
-  const pendingCount = requests.filter(
-    (request) =>
-      request.status === "Pending Admin Review"
-  ).length;
-
-  const acceptedCount = requests.filter(
-    (request) =>
-      request.status === "Accepted" ||
-      request.status === "In Development"
-  ).length;
-
-  const resourceGapCount = requests.filter(
-    (request) =>
-      request.resourceStatus === "Partial Gap" ||
-      request.resourceStatus === "Gap Detected" ||
-      request.resourceStatus === "Insufficient Resources"
-  ).length;
-
-  // ============================================================
-  // OPEN REQUEST
-  // ============================================================
-
-  const openRequest = (request) => {
+  const openModal = (type, request) => {
     setSelectedRequest(request);
-    setShowRequestModal(true);
-    setOpenMoreMenu(null);
-  };
+    setModalType(type);
 
-  // ============================================================
-  // CHAT
-  // ============================================================
-
-  const openChat = (request) => {
-    setChatRequest(request);
-    setShowChat(true);
-    setMessageInput("");
-    setOpenMoreMenu(null);
-  };
-
-  const sendMessage = () => {
-    const message = messageInput.trim();
-
-    if (!message) {
-      return;
+    if (type === "chat") {
+      setChatMessages(DEMO_MESSAGES);
+      setChatMessage("");
     }
 
-    setMessages((currentMessages) => [
-      ...currentMessages,
-      {
-        id: Date.now(),
-        sender: "admin",
-        text: message,
-        time: "Just now",
-      },
-    ]);
-
-    setMessageInput("");
-  };
-
-  const handleMessageKeyDown = (event) => {
-    if (
-      event.key === "Enter" &&
-      !event.shiftKey
-    ) {
-      event.preventDefault();
-      sendMessage();
+    if (type === "assign") {
+      setSelectedEmployees([]);
     }
   };
 
-  // ============================================================
-  // ACCEPT / REJECT
-  // ============================================================
+  const closeModal = () => {
+    setSelectedRequest(null);
+    setModalType(null);
+    setChatMessage("");
+    setSelectedEmployees([]);
+  };
 
-  const updateRequestStatus = (
-    requestId,
-    newStatus
-  ) => {
-    setRequests((currentRequests) =>
-      currentRequests.map((request) =>
+  /* =========================================================
+     STATUS ACTIONS
+  ========================================================= */
+
+  const changeStatus = (requestId, newStatus) => {
+    setRequests((previous) =>
+      previous.map((request) =>
         request.id === requestId
           ? {
               ...request,
@@ -430,1407 +595,1028 @@ function AdminProjectRequests() {
       )
     );
 
-    setSelectedRequest((currentRequest) =>
-      currentRequest &&
-      currentRequest.id === requestId
+    setSelectedRequest((previous) =>
+      previous && previous.id === requestId
         ? {
-            ...currentRequest,
+            ...previous,
             status: newStatus,
           }
-        : currentRequest
-    );
-
-    setOpenMoreMenu(null);
-  };
-
-  const acceptRequest = (request) => {
-    updateRequestStatus(
-      request.id,
-      "Accepted"
+        : previous
     );
   };
 
-  const rejectRequest = (request) => {
-    updateRequestStatus(
-      request.id,
-      "Rejected"
-    );
+  const handleAccept = (request) => {
+    changeStatus(request.id, "accepted");
   };
 
-  // ============================================================
-  // ASSIGN RESOURCES
-  // ============================================================
-
-  const openAssignResources = (request) => {
-    setAssignRequest(request);
-    setShowAssignModal(true);
-    setOpenMoreMenu(null);
+  const handleReject = (request) => {
+    changeStatus(request.id, "rejected");
   };
 
-  const closeAssignResources = () => {
-    setShowAssignModal(false);
-    setAssignRequest(null);
+  const handleAcceptAgain = (request) => {
+    changeStatus(request.id, "accepted");
   };
 
-  // ============================================================
-  // FILTERING
-  // ============================================================
+  /* =========================================================
+     CHAT
+  ========================================================= */
 
-  const filteredRequests = requests.filter(
-    (request) => {
-      const search =
-        searchTerm.toLowerCase();
+  const sendMessage = () => {
+    const message = chatMessage.trim();
 
-      const matchesSearch =
-        request.projectName
-          .toLowerCase()
-          .includes(search) ||
-        request.owner
-          .toLowerCase()
-          .includes(search) ||
-        request.projectType
-          .toLowerCase()
-          .includes(search) ||
-        request.ownerEmail
-          .toLowerCase()
-          .includes(search);
+    if (!message) return;
 
-      const matchesStatus =
-        statusFilter === "all" ||
-        request.status === statusFilter;
+    const newMessage = {
+      id: Date.now(),
+      sender_role: "admin",
+      sender_name: "Admin",
+      message,
+      created_at: new Date().toISOString(),
+    };
 
-      let matchesResource = true;
+    setChatMessages((previous) => [
+      ...previous,
+      newMessage,
+    ]);
 
-      if (resourceFilter === "available") {
-        matchesResource =
-          request.resourceStatus ===
-          "Available";
-      }
+    setChatMessage("");
+  };
 
-      if (resourceFilter === "assigned") {
-        matchesResource =
-          request.resourceStatus ===
-          "Assigned";
-      }
+  /* =========================================================
+     EMPLOYEE ASSIGNMENT
+  ========================================================= */
 
-      if (resourceFilter === "gap") {
-        matchesResource =
-          request.resourceStatus ===
-            "Partial Gap" ||
-          request.resourceStatus ===
-            "Gap Detected" ||
-          request.resourceStatus ===
-            "Insufficient Resources";
-      }
-
-      return (
-        matchesSearch &&
-        matchesStatus &&
-        matchesResource
-      );
-    }
-  );
-
-  // ============================================================
-  // PAGINATION
-  // ============================================================
-
-  const totalPages = Math.ceil(
-    filteredRequests.length /
-      requestsPerPage
-  );
-
-  const safeCurrentPage =
-    totalPages === 0
-      ? 1
-      : Math.min(
-          currentPage,
-          totalPages
-        );
-
-  const startIndex =
-    (safeCurrentPage - 1) *
-    requestsPerPage;
-
-  const currentRequests =
-    filteredRequests.slice(
-      startIndex,
-      startIndex + requestsPerPage
-    );
-
-  const changePage = (page) => {
-    if (
-      page < 1 ||
-      page > totalPages
-    ) {
+  const toggleEmployee = (employee) => {
+    if (employee.active_projects_count >= 3) {
       return;
     }
 
-    setCurrentPage(page);
-    setOpenMoreMenu(null);
-  };
-
-  // ============================================================
-  // PAGINATION BUTTON WINDOW
-  // ============================================================
-
-  const getPaginationItems = () => {
-    if (totalPages <= 5) {
-      return Array.from(
-        { length: totalPages },
-        (_, index) => index + 1
-      );
-    }
-
-    const pages = [];
-
-    pages.push(1);
-
-    if (safeCurrentPage > 3) {
-      pages.push("...");
-    }
-
-    const start = Math.max(
-      2,
-      safeCurrentPage - 1
+    setSelectedEmployees((previous) =>
+      previous.includes(employee.id)
+        ? previous.filter((id) => id !== employee.id)
+        : [...previous, employee.id]
     );
+  };
 
-    const end = Math.min(
-      totalPages - 1,
-      safeCurrentPage + 1
+  /* =========================================================
+     STATUS BADGE
+  ========================================================= */
+
+  const renderStatusBadge = (request) => {
+    const statusClass = getStatusClass(request.status);
+
+    return (
+      <span
+        className={`request-status-badge ${statusClass}`}
+      >
+        {getStatusLabel(request.status)}
+      </span>
     );
-
-    for (
-      let page = start;
-      page <= end;
-      page++
-    ) {
-      pages.push(page);
-    }
-
-    if (
-      safeCurrentPage <
-      totalPages - 2
-    ) {
-      pages.push("...");
-    }
-
-    pages.push(totalPages);
-
-    return pages;
   };
 
-  // ============================================================
-  // RESET PAGINATION WHEN FILTERS CHANGE
-  // ============================================================
+  /* =========================================================
+     ACTIONS
+  ========================================================= */
 
-  const handleSearchChange = (event) => {
-    setSearchTerm(event.target.value);
-    setCurrentPage(1);
+  const renderActions = (request) => {
+    const status = normalizeStatus(request.status);
+
+    const isPending =
+      status === "pending" || status === "under_review";
+
+    const isRejected = status === "rejected";
+
+    return (
+      <div className="request-actions">
+        <button
+          type="button"
+          className="request-action-btn view"
+          title="View Request"
+          onClick={() => openModal("view", request)}
+        >
+          <Eye size={15} />
+        </button>
+
+        <button
+          type="button"
+          className="request-action-btn chat"
+          title="Contact User"
+          onClick={() => openModal("chat", request)}
+        >
+          <MessageCircle size={15} />
+        </button>
+
+        {isPending && (
+          <>
+            <button
+              type="button"
+              className="request-action-btn accept"
+              title="Accept Project"
+              onClick={() => handleAccept(request)}
+            >
+              <Check size={15} />
+            </button>
+
+            <button
+              type="button"
+              className="request-action-btn reject"
+              title="Reject Project"
+              onClick={() => handleReject(request)}
+            >
+              <X size={15} />
+            </button>
+          </>
+        )}
+
+        {isRejected && (
+          <button
+            type="button"
+            className="request-action-btn accept"
+            title="Accept Again"
+            onClick={() => handleAcceptAgain(request)}
+          >
+            <RotateCcw size={15} />
+          </button>
+        )}
+      </div>
+    );
   };
-
-  const handleStatusChange = (event) => {
-    setStatusFilter(event.target.value);
-    setCurrentPage(1);
-  };
-
-  const handleResourceChange = (event) => {
-    setResourceFilter(event.target.value);
-    setCurrentPage(1);
-  };
-
-  // ============================================================
-  // CLOSE REQUEST MODAL
-  // ============================================================
-
-  const closeRequestModal = () => {
-    setShowRequestModal(false);
-    setSelectedRequest(null);
-  };
-
-  // ============================================================
-  // STATUS CLASS
-  // ============================================================
-
-  const getStatusClass = (status) => {
-    if (
-      status ===
-      "Pending Admin Review"
-    ) {
-      return "pending";
-    }
-
-    if (status === "Accepted") {
-      return "accepted";
-    }
-
-    if (status === "Rejected") {
-      return "rejected";
-    }
-
-    if (status === "In Development") {
-      return "development";
-    }
-
-    return "review";
-  };
-
-  const getResourceClass = (
-    resourceStatus
-  ) => {
-    if (
-      resourceStatus === "Available" ||
-      resourceStatus === "Assigned"
-    ) {
-      return "available";
-    }
-
-    return "gap";
-  };
-
-  // ============================================================
-  // RENDER
-  // ============================================================
 
   return (
     <div className="admin-project-requests">
-
-      {/* ======================================================
+      {/* =====================================================
           HEADER
-      ====================================================== */}
+      ===================================================== */}
 
-      <div className="admin-requests-header">
+      <header className="admin-project-requests-header">
         <div>
+          <span className="project-requests-eyebrow">
+            PROJECT MANAGEMENT
+          </span>
+
           <h1>Project Requests</h1>
+
           <p>
-            Review development requests,
-            manage resources, and communicate
-            with project owners.
+            Review incoming project requests, communicate with
+            users, and manage project approval decisions.
           </p>
+        </div>
+      </header>
+
+      {/* =====================================================
+          DEMO NOTICE
+      ===================================================== */}
+
+      <div className="request-demo-notice">
+        <AlertCircle size={15} />
+
+        <div>
+          <strong>Frontend Demo Mode</strong>
+
+          <span>
+            These requests are temporary demo data for UI
+            preview. They will be replaced with real backend
+            data later.
+          </span>
         </div>
       </div>
 
-      {/* ======================================================
-          SUMMARY CARDS
-      ====================================================== */}
+      {/* =====================================================
+          SUMMARY
+      ===================================================== */}
 
-      <div className="admin-requests-summary">
-
-        <div className="admin-request-summary-card">
-          <div className="admin-request-summary-icon">
-            <FolderKanban size={20} />
+      <section className="project-request-summary">
+        <div className="request-summary-card">
+          <div className="request-summary-icon">
+            <FolderKanban size={18} />
           </div>
 
           <div>
             <span>Total Requests</span>
-            <strong>{requests.length}</strong>
+            <strong>{summary.total}</strong>
           </div>
         </div>
 
-        <div className="admin-request-summary-card">
-          <div className="admin-request-summary-icon">
-            <Clock3 size={20} />
+        <div className="request-summary-card">
+          <div className="request-summary-icon pending-icon">
+            <Clock3 size={18} />
           </div>
 
           <div>
             <span>Pending Review</span>
-            <strong>{pendingCount}</strong>
+            <strong>{summary.pending}</strong>
           </div>
         </div>
 
-        <div className="admin-request-summary-card">
-          <div className="admin-request-summary-icon">
-            <CheckCircle2 size={20} />
+        <div className="request-summary-card">
+          <div className="request-summary-icon success-icon">
+            <CheckCircle2 size={18} />
           </div>
 
           <div>
-            <span>Accepted / Active</span>
-            <strong>{acceptedCount}</strong>
+            <span>Accepted</span>
+            <strong>{summary.accepted}</strong>
           </div>
         </div>
 
-        <div className="admin-request-summary-card">
-          <div className="admin-request-summary-icon">
-            <AlertTriangle size={20} />
+        <div className="request-summary-card">
+          <div className="request-summary-icon danger-icon">
+            <XCircle size={18} />
           </div>
 
           <div>
-            <span>Resource Gaps</span>
-            <strong>{resourceGapCount}</strong>
+            <span>Rejected</span>
+            <strong>{summary.rejected}</strong>
+          </div>
+        </div>
+      </section>
+
+      {/* =====================================================
+          MAIN PANEL
+      ===================================================== */}
+
+      <section className="admin-project-request-panel">
+        <div className="admin-project-request-toolbar">
+          <div className="request-toolbar-title">
+            <strong>Development Requests</strong>
+
+            <span>
+              {filteredRequests.length} request
+              {filteredRequests.length !== 1 ? "s" : ""}
+            </span>
+          </div>
+
+          <div className="request-toolbar-controls">
+            <div className="project-request-search-box">
+              <Search size={14} />
+
+              <input
+                type="text"
+                placeholder="Search requests..."
+                value={search}
+                onChange={(event) => {
+                  setSearch(event.target.value);
+                  setCurrentPage(1);
+                }}
+              />
+            </div>
+
+            <div className="admin-request-filter">
+              <Filter size={14} />
+
+              <select
+                value={statusFilter}
+                onChange={(event) => {
+                  setStatusFilter(event.target.value);
+                  setCurrentPage(1);
+                }}
+              >
+                <option value="all">All Status</option>
+                <option value="pending">
+                  Pending Review
+                </option>
+                <option value="under_review">
+                  Under Review
+                </option>
+                <option value="accepted">Accepted</option>
+                <option value="rejected">Rejected</option>
+                <option value="in_development">
+                  In Development
+                </option>
+              </select>
+            </div>
           </div>
         </div>
 
-      </div>
+        {/* =====================================================
+            TABLE
+        ===================================================== */}
 
-      {/* ======================================================
-          TOOLBAR
-      ====================================================== */}
-
-      <div className="admin-requests-toolbar">
-
-        <div className="admin-requests-search">
-          <Search size={18} />
-
-          <input
-            type="text"
-            placeholder="Search project, owner, type..."
-            value={searchTerm}
-            onChange={handleSearchChange}
-          />
-        </div>
-
-        <select
-          value={statusFilter}
-          onChange={handleStatusChange}
-        >
-          <option value="all">
-            All Statuses
-          </option>
-
-          <option value="Pending Admin Review">
-            Pending Admin Review
-          </option>
-
-          <option value="Under Review">
-            Under Review
-          </option>
-
-          <option value="Accepted">
-            Accepted
-          </option>
-
-          <option value="Rejected">
-            Rejected
-          </option>
-
-          <option value="In Development">
-            In Development
-          </option>
-        </select>
-
-        <select
-          value={resourceFilter}
-          onChange={handleResourceChange}
-        >
-          <option value="all">
-            All Resources
-          </option>
-
-          <option value="available">
-            Available
-          </option>
-
-          <option value="assigned">
-            Assigned
-          </option>
-
-          <option value="gap">
-            Resource Gap
-          </option>
-        </select>
-
-      </div>
-
-      {/* ======================================================
-          TABLE
-      ====================================================== */}
-
-      <div className="admin-requests-table-card">
-
-        <div className="admin-requests-table-wrapper">
-
-          <table className="admin-requests-table">
-
+        <div className="admin-project-request-table-wrapper">
+          <table className="admin-project-request-table">
             <thead>
               <tr>
                 <th>Project</th>
                 <th>Owner</th>
                 <th>Type</th>
-                <th>Estimate</th>
-                <th>Resources</th>
                 <th>Requested</th>
+                <th>Team</th>
+                <th>Estimation</th>
                 <th>Status</th>
                 <th>Actions</th>
               </tr>
             </thead>
 
             <tbody>
+              {paginatedRequests.map((request, index) => (
+                <tr
+                  key={request.id}
+                  style={{
+                    "--row-index": index,
+                  }}
+                >
+                  <td>
+                    <div className="request-project-cell">
+                      <div className="request-project-icon">
+                        <FolderKanban size={16} />
+                      </div>
 
-              {currentRequests.length > 0 ? (
-                currentRequests.map(
-                  (request) => (
-                    <tr key={request.id}>
-
-                      <td>
-                        <div className="admin-request-project">
-                          <strong>
-                            {request.projectName}
-                          </strong>
-
-                          <span>
-                            {request.duration}
-                          </span>
-                        </div>
-                      </td>
-
-                      <td>
-                        <div className="admin-request-owner">
-                          <strong>
-                            {request.owner}
-                          </strong>
-
-                          <span>
-                            {request.ownerEmail}
-                          </span>
-                        </div>
-                      </td>
-
-                      <td>
-                        {request.projectType}
-                      </td>
-
-                      <td>
+                      <div>
                         <strong>
-                          {request.estimatedCost}
+                          {request.project_name}
                         </strong>
-                      </td>
 
-                      <td>
-                        <div className="admin-request-resource-cell">
-                          <Users size={16} />
-                          <span>
-                            {request.resources}
-                          </span>
-                        </div>
-
-                        <small
-                          className={`admin-request-resource-badge ${getResourceClass(
-                            request.resourceStatus
-                          )}`}
-                        >
-                          {request.resourceStatus}
-                        </small>
-                      </td>
-
-                      <td>
-                        {request.requestedDate}
-                      </td>
-
-                      <td>
-                        <span
-                          className={`admin-request-status-badge ${getStatusClass(
-                            request.status
-                          )}`}
-                        >
-                          {request.status}
+                        <span>
+                          Request #{request.id}
                         </span>
-                      </td>
+                      </div>
+                    </div>
+                  </td>
 
-                      <td>
+                  <td>
+                    <div className="request-owner-cell">
+                      <div className="request-owner-avatar">
+                        {getInitials(request.user_name)}
+                      </div>
 
-                        <div className="admin-request-actions">
+                      <div>
+                        <strong>{request.user_name}</strong>
 
-                          {/* VIEW */}
+                        <span>
+                          {request.user_email}
+                        </span>
+                      </div>
+                    </div>
+                  </td>
 
-                          <button
-                            className="admin-request-icon-btn"
-                            title="View Request"
-                            onClick={() =>
-                              openRequest(request)
-                            }
-                          >
-                            <Eye size={17} />
-                          </button>
+                  <td>
+                    <span className="request-type-text">
+                      {request.project_type}
+                    </span>
+                  </td>
 
-                          {/* CHAT */}
+                  <td>
+                    <span className="request-date-text">
+                      {formatDate(request.requested_at)}
+                    </span>
+                  </td>
 
-                          <button
-                            className="admin-request-icon-btn"
-                            title="Contact User"
-                            onClick={() =>
-                              openChat(request)
-                            }
-                          >
-                            <MessageCircle
-                              size={17}
-                            />
-                          </button>
+                  <td>
+                    <div className="request-team-cell">
+                      <Users size={14} />
 
-                          {/* ACCEPT */}
+                      <span>
+                        {request.team_size} Members
+                      </span>
+                    </div>
+                  </td>
 
-                          {request.status !==
-                            "In Development" &&
-                            request.status !==
-                              "Accepted" && (
-                              <button
-                                className="admin-request-accept-btn"
-                                title="Accept Request"
-                                onClick={() =>
-                                  acceptRequest(
-                                    request
-                                  )
-                                }
-                              >
-                                <CheckCircle2
-                                  size={16}
-                                />
-                              </button>
-                            )}
+                  <td>
+                    <div className="request-estimation-cell">
+                      <strong>
+                        {request.estimated_cost}
+                      </strong>
 
-                          {/* REJECT */}
+                      <span>
+                        {request.estimated_duration}
+                      </span>
+                    </div>
+                  </td>
 
-                          {request.status !==
-                            "Rejected" &&
-                            request.status !==
-                              "In Development" && (
-                              <button
-                                className="admin-request-reject-btn"
-                                title="Reject Request"
-                                onClick={() =>
-                                  rejectRequest(
-                                    request
-                                  )
-                                }
-                              >
-                                <XCircle
-                                  size={16}
-                                />
-                              </button>
-                            )}
+                  <td>
+                    {renderStatusBadge(request)}
+                  </td>
 
-                          {/* MORE */}
+                  <td>
+                    {renderActions(request)}
+                  </td>
+                </tr>
+              ))}
 
-                          <div className="admin-request-more-wrapper">
-
-                            <button
-                              className="admin-request-icon-btn"
-                              title="More"
-                              onClick={() =>
-                                setOpenMoreMenu(
-                                  openMoreMenu ===
-                                    request.id
-                                    ? null
-                                    : request.id
-                                )
-                              }
-                            >
-                              <MoreHorizontal
-                                size={17}
-                              />
-                            </button>
-
-                            {openMoreMenu ===
-                              request.id && (
-                              <div className="admin-request-more-menu">
-
-                                <button
-                                  className="admin-request-more-item"
-                                  onClick={() =>
-                                    openRequest(
-                                      request
-                                    )
-                                  }
-                                >
-                                  <Eye
-                                    size={15}
-                                  />
-                                  View Request
-                                </button>
-
-                                <button
-                                  className="admin-request-more-item"
-                                  onClick={() =>
-                                    openChat(
-                                      request
-                                    )
-                                  }
-                                >
-                                  <MessageCircle
-                                    size={15}
-                                  />
-                                  Contact User
-                                </button>
-
-                                <button
-                                  className="admin-request-more-item"
-                                  onClick={() =>
-                                    openAssignResources(
-                                      request
-                                    )
-                                  }
-                                >
-                                  <UserCheck
-                                    size={15}
-                                  />
-                                  Assign Resources
-                                </button>
-
-                                <div className="admin-request-more-divider" />
-
-                                <button
-                                  className="admin-request-more-item accept"
-                                  onClick={() =>
-                                    acceptRequest(
-                                      request
-                                    )
-                                  }
-                                >
-                                  <CheckCircle2
-                                    size={15}
-                                  />
-                                  Accept Request
-                                </button>
-
-                                <button
-                                  className="admin-request-more-item reject"
-                                  onClick={() =>
-                                    rejectRequest(
-                                      request
-                                    )
-                                  }
-                                >
-                                  <XCircle
-                                    size={15}
-                                  />
-                                  Reject Request
-                                </button>
-
-                              </div>
-                            )}
-
-                          </div>
-
-                        </div>
-
-                      </td>
-
-                    </tr>
-                  )
-                )
-              ) : (
+              {paginatedRequests.length === 0 && (
                 <tr>
                   <td
                     colSpan="8"
-                    className="admin-request-empty"
+                    className="project-request-state-cell"
                   >
-                    <FolderKanban size={30} />
+                    <div className="request-empty-state">
+                      <div className="request-empty-icon">
+                        <FolderKanban size={25} />
+                      </div>
 
-                    <strong>
-                      No project requests found
-                    </strong>
+                      <strong>
+                        No project requests found
+                      </strong>
 
-                    <span>
-                      Try changing your search or
-                      filter criteria.
-                    </span>
+                      <span>
+                        Try changing your search or status
+                        filter.
+                      </span>
+                    </div>
                   </td>
                 </tr>
               )}
-
             </tbody>
-
           </table>
-
         </div>
 
-        {/* ====================================================
-            PAGINATION
-        ==================================================== */}
+        {/* =====================================================
+            FOOTER
+        ===================================================== */}
 
-        <div className="admin-request-table-footer">
-
-          <div className="admin-request-footer-info">
-
-            {filteredRequests.length === 0
-              ? "Showing 0 of 0 project requests"
-              : `Showing ${
-                  startIndex + 1
-                }-${Math.min(
-                  startIndex +
-                    currentRequests.length,
+        {filteredRequests.length > 0 && (
+          <div className="project-requests-footer">
+            <span>
+              Showing{" "}
+              <strong>
+                {(currentPage - 1) * ITEMS_PER_PAGE + 1}
+              </strong>{" "}
+              to{" "}
+              <strong>
+                {Math.min(
+                  currentPage * ITEMS_PER_PAGE,
                   filteredRequests.length
-                )} of ${
-                  filteredRequests.length
-                } project requests`}
+                )}
+              </strong>{" "}
+              of{" "}
+              <strong>{filteredRequests.length}</strong>
+            </span>
 
-          </div>
-
-          {totalPages > 0 && (
-            <div className="admin-request-pagination">
-
+            <div className="request-pagination">
               <button
-                className="admin-request-page-button"
-                disabled={
-                  safeCurrentPage === 1
-                }
+                type="button"
+                disabled={currentPage === 1}
                 onClick={() =>
-                  changePage(
-                    safeCurrentPage - 1
+                  setCurrentPage((page) =>
+                    Math.max(1, page - 1)
                   )
                 }
               >
-                <ChevronLeft size={16} />
-                Previous
+                <ChevronLeft size={15} />
               </button>
 
-              {getPaginationItems().map(
-                (item, index) =>
-                  item === "..." ? (
-                    <span
-                      key={`ellipsis-${index}`}
-                      className="admin-request-pagination-ellipsis"
-                    >
-                      ...
-                    </span>
-                  ) : (
-                    <button
-                      key={item}
-                      className={`admin-request-page-button ${
-                        safeCurrentPage ===
-                        item
-                          ? "active"
-                          : ""
-                      }`}
-                      onClick={() =>
-                        changePage(item)
-                      }
-                    >
-                      {item}
-                    </button>
-                  )
-              )}
+              <span>
+                {currentPage} / {totalPages}
+              </span>
 
               <button
-                className="admin-request-page-button"
-                disabled={
-                  safeCurrentPage ===
-                  totalPages
-                }
+                type="button"
+                disabled={currentPage === totalPages}
                 onClick={() =>
-                  changePage(
-                    safeCurrentPage + 1
+                  setCurrentPage((page) =>
+                    Math.min(totalPages, page + 1)
                   )
                 }
               >
-                Next
-                <ChevronRight size={16} />
+                <ChevronRight size={15} />
               </button>
-
-            </div>
-          )}
-
-        </div>
-
-      </div>
-
-      {/* ======================================================
-          PROJECT REQUEST MODAL
-      ====================================================== */}
-
-      {showRequestModal &&
-        selectedRequest && (
-          <div
-            className="admin-request-modal-overlay"
-            onClick={closeRequestModal}
-          >
-            <div
-              className="admin-request-modal"
-              onClick={(event) =>
-                event.stopPropagation()
-              }
-            >
-
-              <div className="admin-request-modal-header">
-
-                <div>
-                  <span>
-                    PROJECT REQUEST
-                  </span>
-
-                  <h2>
-                    {selectedRequest.projectName}
-                  </h2>
-                </div>
-
-                <button
-                  className="admin-request-modal-close"
-                  onClick={
-                    closeRequestModal
-                  }
-                >
-                  <X size={20} />
-                </button>
-
-              </div>
-
-              <div className="admin-request-modal-body">
-
-                {/* PROJECT INFORMATION */}
-
-                <section className="admin-request-detail-section">
-
-                  <div className="admin-request-detail-heading">
-                    <FolderKanban
-                      size={18}
-                    />
-
-                    <h3>
-                      Project Information
-                    </h3>
-                  </div>
-
-                  <div className="admin-request-detail-grid">
-
-                    <div>
-                      <span>
-                        Project Type
-                      </span>
-
-                      <strong>
-                        {
-                          selectedRequest.projectType
-                        }
-                      </strong>
-                    </div>
-
-                    <div>
-                      <span>
-                        Project Owner
-                      </span>
-
-                      <strong>
-                        {
-                          selectedRequest.owner
-                        }
-                      </strong>
-                    </div>
-
-                    <div>
-                      <span>
-                        Estimated Cost
-                      </span>
-
-                      <strong>
-                        {
-                          selectedRequest.estimatedCost
-                        }
-                      </strong>
-                    </div>
-
-                    <div>
-                      <span>
-                        Estimated Duration
-                      </span>
-
-                      <strong>
-                        {
-                          selectedRequest.duration
-                        }
-                      </strong>
-                    </div>
-
-                    <div>
-                      <span>
-                        Requested Date
-                      </span>
-
-                      <strong>
-                        {
-                          selectedRequest.requestedDate
-                        }
-                      </strong>
-                    </div>
-
-                    <div>
-                      <span>
-                        Current Status
-                      </span>
-
-                      <strong>
-                        <span
-                          className={`admin-request-status-badge ${getStatusClass(
-                            selectedRequest.status
-                          )}`}
-                        >
-                          {
-                            selectedRequest.status
-                          }
-                        </span>
-                      </strong>
-                    </div>
-
-                  </div>
-
-                </section>
-
-                {/* DESCRIPTION */}
-
-                <section className="admin-request-detail-section">
-
-                  <div className="admin-request-detail-heading">
-                    <FolderKanban
-                      size={18}
-                    />
-
-                    <h3>
-                      Project Description
-                    </h3>
-                  </div>
-
-                  <p className="admin-request-description">
-                    {
-                      selectedRequest.description
-                    }
-                  </p>
-
-                </section>
-
-                {/* REQUIRED TEAM */}
-
-                <section className="admin-request-detail-section">
-
-                  <div className="admin-request-detail-heading">
-                    <Users size={18} />
-
-                    <h3>
-                      Required Team
-                    </h3>
-                  </div>
-
-                  <div className="admin-required-team-list">
-
-                    {selectedRequest.requiredTeam.map(
-                      (team) => (
-                        <div
-                          key={team.role}
-                          className="admin-required-team-row"
-                        >
-
-                          <div>
-                            <strong>
-                              {team.role}
-                            </strong>
-
-                            <span>
-                              Required:{" "}
-                              {team.required}
-                            </span>
-                          </div>
-
-                          <div className="admin-team-availability">
-
-                            <span>
-                              Available:{" "}
-                              {team.available}
-                            </span>
-
-                            {team.gap > 0 && (
-                              <span className="admin-team-gap">
-                                Gap: {team.gap}
-                              </span>
-                            )}
-
-                          </div>
-
-                        </div>
-                      )
-                    )}
-
-                  </div>
-
-                </section>
-
-                {/* RESOURCE STATUS */}
-
-                <section className="admin-request-detail-section">
-
-                  <div className="admin-request-detail-heading">
-                    <AlertTriangle
-                      size={18}
-                    />
-
-                    <h3>
-                      Resource Availability
-                    </h3>
-                  </div>
-
-                  <div
-                    className={`admin-request-resource-summary ${getResourceClass(
-                      selectedRequest.resourceStatus
-                    )}`}
-                  >
-                    <Users size={18} />
-
-                    <div>
-                      <strong>
-                        {
-                          selectedRequest.resourceStatus
-                        }
-                      </strong>
-
-                      <span>
-                        Review resource
-                        availability before
-                        assigning employees.
-                      </span>
-                    </div>
-                  </div>
-
-                </section>
-
-              </div>
-
-              {/* ==================================================
-                  MODAL FOOTER
-              ================================================== */}
-
-              <div className="admin-request-modal-footer">
-
-                <button
-                  className="admin-request-secondary-btn"
-                  onClick={() =>
-                    openChat(
-                      selectedRequest
-                    )
-                  }
-                >
-                  <MessageCircle
-                    size={16}
-                  />
-                  Contact User
-                </button>
-
-                <button
-                  className="admin-request-secondary-btn"
-                  onClick={() =>
-                    openAssignResources(
-                      selectedRequest
-                    )
-                  }
-                >
-                  <UserCheck size={16} />
-                  Assign Resources
-                </button>
-
-                <div className="admin-request-footer-actions">
-
-                  {/* REJECT */}
-
-                  <button
-                    className="admin-request-modal-reject-btn"
-                    onClick={() => {
-                      rejectRequest(
-                        selectedRequest
-                      );
-                      closeRequestModal();
-                    }}
-                  >
-                    <XCircle size={16} />
-                    Reject Request
-                  </button>
-
-                  {/* ACCEPT */}
-
-                  <button
-                    className="admin-request-modal-accept-btn"
-                    onClick={() => {
-                      acceptRequest(
-                        selectedRequest
-                      );
-                      closeRequestModal();
-                    }}
-                  >
-                    <CheckCircle2 size={16} />
-                    Accept Request
-                  </button>
-
-                </div>
-
-              </div>
-
             </div>
           </div>
         )}
+      </section>
 
-      {/* ======================================================
-          CHAT MODAL
-      ====================================================== */}
+      {/* =====================================================
+          VIEW MODAL
+      ===================================================== */}
 
-      {showChat &&
-        chatRequest && (
-          <div
-            className="admin-request-modal-overlay"
-            onClick={() =>
-              setShowChat(false)
+      {modalType === "view" && selectedRequest && (
+        <div
+          className="project-request-modal-overlay"
+          onMouseDown={(event) => {
+            if (event.target === event.currentTarget) {
+              closeModal();
             }
-          >
-            <div
-              className="admin-request-chat-modal"
-              onClick={(event) =>
-                event.stopPropagation()
-              }
-            >
+          }}
+        >
+          <div className="project-request-modal project-request-full-modal">
+            <div className="project-request-modal-header">
+              <div>
+                <span>PROJECT REQUEST</span>
 
-              <div className="admin-request-modal-header">
-
-                <div>
-                  <span>
-                    PROJECT DISCUSSION
-                  </span>
-
-                  <h2>
-                    {chatRequest.projectName}
-                  </h2>
-                </div>
-
-                <button
-                  className="admin-request-modal-close"
-                  onClick={() =>
-                    setShowChat(false)
-                  }
-                >
-                  <X size={20} />
-                </button>
-
+                <h2>
+                  {selectedRequest.project_name}
+                </h2>
               </div>
 
-              <div className="admin-request-chat-body">
-
-                {messages.map((message) => (
-                  <div
-                    key={message.id}
-                    className={`admin-chat-message ${
-                      message.sender ===
-                      "admin"
-                        ? "admin"
-                        : "user"
-                    }`}
-                  >
-
-                    <div className="admin-chat-message-bubble">
-                      <p>
-                        {message.text}
-                      </p>
-
-                      <span>
-                        {message.time}
-                      </span>
-                    </div>
-
-                  </div>
-                ))}
-
-              </div>
-
-              <div className="admin-request-chat-input-area">
-
-                <textarea
-                  placeholder="Write a message..."
-                  value={messageInput}
-                  onChange={(event) =>
-                    setMessageInput(
-                      event.target.value
-                    )
-                  }
-                  onKeyDown={
-                    handleMessageKeyDown
-                  }
-                  rows={2}
-                />
-
-                <button
-                  className="admin-request-send-btn"
-                  onClick={sendMessage}
-                >
-                  <Send size={17} />
-                  Send
-                </button>
-
-              </div>
-
+              <button
+                type="button"
+                onClick={closeModal}
+                aria-label="Close modal"
+              >
+                <X size={18} />
+              </button>
             </div>
-          </div>
-        )}
 
-      {/* ======================================================
-          ASSIGN RESOURCES MODAL
-      ====================================================== */}
+            <div className="project-request-modal-body">
+              {/* STATUS */}
+              <div className="request-detail-status-row">
+                <div className="request-status-with-icon">
+                  {renderStatusBadge(selectedRequest)}
 
-      {showAssignModal &&
-        assignRequest && (
-          <div
-            className="admin-assign-resource-modal-overlay"
-            onClick={
-              closeAssignResources
-            }
-          >
-            <div
-              className="admin-assign-resource-modal"
-              onClick={(event) =>
-                event.stopPropagation()
-              }
-            >
-
-              <div className="admin-assign-resource-modal-header">
-
-                <div>
                   <span>
-                    RESOURCE PLANNING
+                    Request #{selectedRequest.id}
                   </span>
-
-                  <h2>
-                    Assign Resources
-                  </h2>
-
-                  <p>
-                    {
-                      assignRequest.projectName
-                    }
-                  </p>
                 </div>
 
-                <button
-                  className="admin-request-modal-close"
-                  onClick={
-                    closeAssignResources
-                  }
-                >
-                  <X size={20} />
-                </button>
+                <span className="request-date-detail">
+                  <CalendarDays size={13} />
 
+                  {formatDate(
+                    selectedRequest.requested_at
+                  )}
+                </span>
               </div>
 
-              <div className="admin-assign-resource-modal-body">
+              {/* DESCRIPTION */}
+              <div className="request-detail-description">
+                <div className="request-detail-heading">
+                  <span>PROJECT OVERVIEW</span>
 
-                <div className="admin-assign-resource-info">
-                  <Users size={18} />
+                  <FolderKanban size={15} />
+                </div>
+
+                <p>
+                  {selectedRequest.description}
+                </p>
+              </div>
+
+              {/* DETAILS */}
+              <div className="request-detail-grid">
+                <div className="request-detail-item">
+                  <div className="request-detail-item-icon">
+                    <UserRound size={14} />
+                  </div>
 
                   <div>
+                    <span>Project Owner</span>
                     <strong>
-                      Required team:
+                      {selectedRequest.user_name}
                     </strong>
-
-                    <span>
-                      {
-                        assignRequest.resources
-                      } resources required
-                    </span>
                   </div>
                 </div>
 
-                {assignRequest.requiredTeam.map(
-                  (team) => (
-                    <div
-                      key={team.role}
-                      className="admin-resource-assignment-row"
-                    >
+                <div className="request-detail-item">
+                  <div className="request-detail-item-icon">
+                    <BriefcaseBusiness size={14} />
+                  </div>
 
-                      <div className="admin-resource-assignment-info">
-
-                        <strong>
-                          {team.role}
-                        </strong>
-
-                        <span>
-                          Required:{" "}
-                          {team.required}
-                        </span>
-
-                      </div>
-
-                      <div className="admin-resource-assignment-availability">
-
-                        <span>
-                          Available:{" "}
-                          {team.available}
-                        </span>
-
-                        {team.gap > 0 && (
-                          <span className="admin-team-gap">
-                            Gap: {team.gap}
-                          </span>
-                        )}
-
-                      </div>
-
-                      <button
-                        className="admin-resource-select-btn"
-                        disabled={
-                          team.available ===
-                          0
-                        }
-                        onClick={() => {
-                          if (
-                            team.available >
-                            0
-                          ) {
-                            alert(
-                              `Resource assignment for ${team.role} will be connected to the employee directory in the backend.`
-                            );
-                          }
-                        }}
-                      >
-                        <UserCheck
-                          size={15}
-                        />
-
-                        {team.available ===
-                        0
-                          ? "No Resource"
-                          : "Select Resource"}
-                      </button>
-
-                    </div>
-                  )
-                )}
-
-                <div className="admin-assign-resource-note">
-                  <AlertTriangle
-                    size={16}
-                  />
-
-                  <span>
-                    Employee assignment will be
-                    validated against role,
-                    availability, workload, and
-                    project conflicts when the
-                    backend resource system is
-                    connected.
-                  </span>
+                  <div>
+                    <span>Project Type</span>
+                    <strong>
+                      {selectedRequest.project_type}
+                    </strong>
+                  </div>
                 </div>
 
+                <div className="request-detail-item">
+                  <div className="request-detail-item-icon">
+                    <CircleDollarSign size={14} />
+                  </div>
+
+                  <div>
+                    <span>Estimated Cost</span>
+                    <strong>
+                      {selectedRequest.estimated_cost}
+                    </strong>
+                  </div>
+                </div>
+
+                <div className="request-detail-item">
+                  <div className="request-detail-item-icon">
+                    <Timer size={14} />
+                  </div>
+
+                  <div>
+                    <span>Estimated Duration</span>
+                    <strong>
+                      {selectedRequest.estimated_duration}
+                    </strong>
+                  </div>
+                </div>
+
+                <div className="request-detail-item">
+                  <div className="request-detail-item-icon">
+                    <Users size={14} />
+                  </div>
+
+                  <div>
+                    <span>Required Team</span>
+                    <strong>
+                      {selectedRequest.team_size} Members
+                    </strong>
+                  </div>
+                </div>
+
+                <div className="request-detail-item">
+                  <div className="request-detail-item-icon">
+                    <Activity size={14} />
+                  </div>
+
+                  <div>
+                    <span>Complexity</span>
+                    <strong>
+                      {selectedRequest.complexity}
+                    </strong>
+                  </div>
+                </div>
+
+                <div className="request-detail-item">
+                  <div className="request-detail-item-icon">
+                    <ShieldCheck size={14} />
+                  </div>
+
+                  <div>
+                    <span>Risk Level</span>
+                    <strong>
+                      {selectedRequest.risk_level}
+                    </strong>
+                  </div>
+                </div>
+
+                <div className="request-detail-item">
+                  <div className="request-detail-item-icon">
+                    <CalendarDays size={14} />
+                  </div>
+
+                  <div>
+                    <span>Requested On</span>
+                    <strong>
+                      {formatDate(
+                        selectedRequest.requested_at
+                      )}
+                    </strong>
+                  </div>
+                </div>
               </div>
 
-              <div className="admin-assign-resource-modal-footer">
+              {/* RESOURCES */}
+              <div className="request-modal-section">
+                <div className="request-section-heading">
+                  <div>
+                    <span>RESOURCE REQUIREMENTS</span>
 
+                    <h3>Required Team</h3>
+                  </div>
+
+                  <Users size={18} />
+                </div>
+
+                <div className="required-resource-list">
+                  {selectedRequest.required_resources.map(
+                    (resource, index) => (
+                      <div
+                        className="required-resource-card"
+                        key={index}
+                      >
+                        <div className="required-resource-number">
+                          0{index + 1}
+                        </div>
+
+                        <div className="required-resource-content">
+                          <strong>
+                            {resource.role}
+                          </strong>
+
+                          <span>
+                            {resource.purpose}
+                          </span>
+                        </div>
+
+                        <div className="required-resource-quantity">
+                          ×{resource.quantity}
+                        </div>
+                      </div>
+                    )
+                  )}
+                </div>
+              </div>
+            </div>
+
+            {/* MODAL ACTIONS */}
+            <div className="project-request-modal-footer">
+              <button
+                type="button"
+                className="request-modal-secondary-btn"
+                onClick={() =>
+                  openModal("chat", selectedRequest)
+                }
+              >
+                <MessageCircle size={15} />
+                Contact User
+              </button>
+
+              <button
+                type="button"
+                className="request-modal-secondary-btn"
+                onClick={() =>
+                  openModal("assign", selectedRequest)
+                }
+              >
+                <Users size={15} />
+                Assign Resources
+              </button>
+
+              {(normalizeStatus(selectedRequest.status) ===
+                "pending" ||
+                normalizeStatus(selectedRequest.status) ===
+                  "under_review") && (
+                <>
+                  <button
+                    type="button"
+                    className="request-modal-danger-btn"
+                    onClick={() =>
+                      handleReject(selectedRequest)
+                    }
+                  >
+                    <X size={15} />
+                    Reject
+                  </button>
+
+                  <button
+                    type="button"
+                    className="request-modal-primary-btn"
+                    onClick={() =>
+                      handleAccept(selectedRequest)
+                    }
+                  >
+                    <Check size={15} />
+                    Accept
+                  </button>
+                </>
+              )}
+
+              {normalizeStatus(selectedRequest.status) ===
+                "rejected" && (
                 <button
-                  className="admin-request-secondary-btn"
-                  onClick={
-                    closeAssignResources
+                  type="button"
+                  className="request-modal-primary-btn"
+                  onClick={() =>
+                    handleAcceptAgain(selectedRequest)
                   }
                 >
-                  Cancel
+                  <RotateCcw size={15} />
+                  Accept Again
                 </button>
-
-                <button
-                  className="admin-request-modal-accept-btn"
-                  onClick={() => {
-                    alert(
-                      "Resource assignment saved for this demo. Actual employee assignment will be handled by the backend resource system."
-                    );
-                    closeAssignResources();
-                  }}
-                >
-                  <UserCheck size={16} />
-                  Save Assignment
-                </button>
-
-              </div>
-
+              )}
             </div>
           </div>
-        )}
+        </div>
+      )}
 
+      {/* =====================================================
+          CHAT MODAL
+      ===================================================== */}
+
+      {modalType === "chat" && selectedRequest && (
+        <div
+          className="project-request-modal-overlay"
+          onMouseDown={(event) => {
+            if (event.target === event.currentTarget) {
+              closeModal();
+            }
+          }}
+        >
+          <div className="project-request-modal request-chat-modal">
+            <div className="project-request-modal-header">
+              <div>
+                <span>DIRECT CONVERSATION</span>
+
+                <h2>
+                  {selectedRequest.user_name}
+                </h2>
+              </div>
+
+              <button
+                type="button"
+                onClick={closeModal}
+                aria-label="Close chat"
+              >
+                <X size={18} />
+              </button>
+            </div>
+
+            <div className="request-chat-project">
+              <FolderKanban size={15} />
+
+              <div>
+                <span>Project</span>
+
+                <strong>
+                  {selectedRequest.project_name}
+                </strong>
+              </div>
+            </div>
+
+            <div className="request-chat-body">
+              {chatMessages.length === 0 ? (
+                <div className="chat-empty">
+                  <div className="chat-empty-icon">
+                    <MessageCircle size={21} />
+                  </div>
+
+                  <strong>No messages yet</strong>
+
+                  <span>
+                    Start a conversation with the project
+                    owner.
+                  </span>
+                </div>
+              ) : (
+                <div className="request-message-list">
+                  {chatMessages.map((message) => {
+                    const isAdmin =
+                      message.sender_role === "admin";
+
+                    return (
+                      <div
+                        className={`request-message ${
+                          isAdmin
+                            ? "admin-message"
+                            : "user-message"
+                        }`}
+                        key={message.id}
+                      >
+                        <div className="request-message-meta">
+                          <strong>
+                            {message.sender_name}
+                          </strong>
+
+                          <span>
+                            {formatDate(
+                              message.created_at
+                            )}
+                          </span>
+                        </div>
+
+                        <p>{message.message}</p>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+
+            <div className="request-chat-composer">
+              <textarea
+                value={chatMessage}
+                onChange={(event) =>
+                  setChatMessage(event.target.value)
+                }
+                placeholder="Write a message to the project owner..."
+                rows="2"
+                onKeyDown={(event) => {
+                  if (
+                    event.key === "Enter" &&
+                    !event.shiftKey
+                  ) {
+                    event.preventDefault();
+                    sendMessage();
+                  }
+                }}
+              />
+
+              <button
+                type="button"
+                onClick={sendMessage}
+                disabled={!chatMessage.trim()}
+                title="Send Message"
+              >
+                <Send size={16} />
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* =====================================================
+          ASSIGN RESOURCES MODAL
+      ===================================================== */}
+
+      {modalType === "assign" && selectedRequest && (
+        <div
+          className="project-request-modal-overlay"
+          onMouseDown={(event) => {
+            if (event.target === event.currentTarget) {
+              closeModal();
+            }
+          }}
+        >
+          <div className="project-request-modal assign-resource-modal">
+            <div className="project-request-modal-header">
+              <div>
+                <span>RESOURCE ASSIGNMENT</span>
+
+                <h2>Assign Employees</h2>
+              </div>
+
+              <button
+                type="button"
+                onClick={closeModal}
+                aria-label="Close assignment"
+              >
+                <X size={18} />
+              </button>
+            </div>
+
+            <div className="assign-project-context">
+              <FolderKanban size={15} />
+
+              <div>
+                <span>Project</span>
+
+                <strong>
+                  {selectedRequest.project_name}
+                </strong>
+              </div>
+            </div>
+
+            <div className="assign-resource-info">
+              <ShieldCheck size={14} />
+
+              <span>
+                Every employee remains visible. Employees can
+                handle a maximum of{" "}
+                <strong>3 active projects</strong>.
+                Employees at 3/3 cannot be assigned another
+                project.
+              </span>
+            </div>
+
+            <div className="employee-assignment-list">
+              {employees.map((employee) => {
+                const isFull =
+                  employee.active_projects_count >= 3;
+
+                const isSelected =
+                  selectedEmployees.includes(employee.id);
+
+                return (
+                  <button
+                    type="button"
+                    className={`employee-assignment-card ${
+                      isSelected ? "selected" : ""
+                    } ${isFull ? "full" : ""}`}
+                    key={employee.id}
+                    disabled={isFull}
+                    onClick={() =>
+                      toggleEmployee(employee)
+                    }
+                  >
+                    <div className="employee-assignment-avatar">
+                      {getInitials(employee.name)}
+                    </div>
+
+                    <div className="employee-assignment-details">
+                      <strong>{employee.name}</strong>
+
+                      <span>{employee.role}</span>
+                    </div>
+
+                    <div
+                      className={`employee-project-count ${
+                        isFull ? "full-count" : ""
+                      }`}
+                    >
+                      {employee.active_projects_count} / 3
+                      <span>Projects</span>
+                    </div>
+
+                    {isSelected && (
+                      <CheckCircle2
+                        className="employee-selected-icon"
+                        size={17}
+                      />
+                    )}
+                  </button>
+                );
+              })}
+            </div>
+
+            <div className="project-request-modal-footer">
+              <button
+                type="button"
+                className="request-modal-secondary-btn"
+                onClick={closeModal}
+              >
+                Cancel
+              </button>
+
+              <button
+                type="button"
+                className="request-modal-primary-btn"
+                disabled={selectedEmployees.length === 0}
+                onClick={closeModal}
+              >
+                <Users size={15} />
+                Assign{" "}
+                {selectedEmployees.length > 0
+                  ? selectedEmployees.length
+                  : ""}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

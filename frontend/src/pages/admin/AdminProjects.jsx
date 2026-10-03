@@ -1,8 +1,8 @@
 import { useState } from "react";
+
 import {
   Search,
   Eye,
-  MoreHorizontal,
   FolderKanban,
   Clock3,
   CheckCircle2,
@@ -31,22 +31,14 @@ function AdminProjects() {
   const [statusFilter, setStatusFilter] = useState("All");
   const [typeFilter, setTypeFilter] = useState("All");
 
-  const [selectedProject, setSelectedProject] =
-    useState(null);
-
-  const [showProjectModal, setShowProjectModal] =
-    useState(false);
-
+  const [selectedProject, setSelectedProject] = useState(null);
+  const [showProjectModal, setShowProjectModal] = useState(false);
   const [showFullProjectModal, setShowFullProjectModal] =
     useState(false);
 
-  const [openMoreMenu, setOpenMoreMenu] =
-    useState(null);
-
   // Pagination
   const [currentPage, setCurrentPage] = useState(1);
-
-  const projectsPerPage = 5;
+  const projectsPerPage = 10;
 
   // ============================================================
   // DEMO PROJECT DATA
@@ -270,6 +262,212 @@ function AdminProjects() {
         },
       ],
     },
+
+    {
+      id: 7,
+      name: "AI Document Intelligence",
+      owner: "Hamza Khan",
+      type: "AI / Machine Learning",
+      status: "Planning",
+      cost: "$26,800",
+      duration: "17 Weeks",
+      progress: 12,
+      teamSize: 5,
+      risk: "High",
+      created: "02 Sep 2026",
+      deadline: "01 Jan 2027",
+      description:
+        "An AI-powered document intelligence system for extracting, classifying, summarizing, and analyzing structured information from business documents.",
+      team: [
+        {
+          name: "Usman Tariq",
+          role: "ML Engineer",
+        },
+        {
+          name: "Ali Raza",
+          role: "Backend Developer",
+        },
+        {
+          name: "Sara Ahmed",
+          role: "QA Engineer",
+        },
+      ],
+    },
+
+    {
+      id: 8,
+      name: "Inventory Management System",
+      owner: "Ahmed Hassan",
+      type: "Web Application",
+      status: "In Development",
+      cost: "$15,900",
+      duration: "11 Weeks",
+      progress: 76,
+      teamSize: 4,
+      risk: "Low",
+      created: "15 Jul 2026",
+      deadline: "30 Sep 2026",
+      description:
+        "An inventory management platform for stock tracking, product management, suppliers, purchase orders, warehouse operations, and reporting.",
+      team: [
+        {
+          name: "Ali Raza",
+          role: "Backend Developer",
+        },
+        {
+          name: "Ahmed Ali",
+          role: "Frontend Developer",
+        },
+        {
+          name: "Sara Ahmed",
+          role: "QA Engineer",
+        },
+        {
+          name: "Ayesha Malik",
+          role: "Project Manager",
+        },
+      ],
+    },
+
+    {
+      id: 9,
+      name: "Learning Management Platform",
+      owner: "Sara Khan",
+      type: "SaaS",
+      status: "In Development",
+      cost: "$24,600",
+      duration: "19 Weeks",
+      progress: 55,
+      teamSize: 6,
+      risk: "Medium",
+      created: "08 Jul 2026",
+      deadline: "20 Nov 2026",
+      description:
+        "A SaaS-based learning management platform supporting courses, instructors, students, assessments, progress tracking, certificates, and reporting.",
+      team: [
+        {
+          name: "Hamza Khan",
+          role: "Backend Developer",
+        },
+        {
+          name: "Ahmed Ali",
+          role: "Frontend Developer",
+        },
+        {
+          name: "Mariam Iqbal",
+          role: "UI/UX Designer",
+        },
+        {
+          name: "Sara Ahmed",
+          role: "QA Engineer",
+        },
+        {
+          name: "Ayesha Malik",
+          role: "Project Manager",
+        },
+      ],
+    },
+
+    {
+      id: 10,
+      name: "Financial Reporting Desktop App",
+      owner: "Usman Ahmed",
+      type: "Desktop Software",
+      status: "Completed",
+      cost: "$12,900",
+      duration: "10 Weeks",
+      progress: 100,
+      teamSize: 3,
+      risk: "Low",
+      created: "04 Apr 2026",
+      deadline: "13 Jun 2026",
+      description:
+        "A desktop financial reporting application for generating financial statements, reports, summaries, and business performance analysis.",
+      team: [
+        {
+          name: "Hamza Khan",
+          role: "Backend Developer",
+        },
+        {
+          name: "Ayesha Malik",
+          role: "Project Manager",
+        },
+        {
+          name: "Sara Ahmed",
+          role: "QA Engineer",
+        },
+      ],
+    },
+
+    {
+      id: 11,
+      name: "Customer Support Automation",
+      owner: "Mariam Iqbal",
+      type: "AI / Machine Learning",
+      status: "Planning",
+      cost: "$19,700",
+      duration: "15 Weeks",
+      progress: 9,
+      teamSize: 4,
+      risk: "Medium",
+      created: "10 Sep 2026",
+      deadline: "25 Dec 2026",
+      description:
+        "An intelligent customer support automation platform for ticket classification, response assistance, issue prioritization, and support analytics.",
+      team: [
+        {
+          name: "Usman Tariq",
+          role: "ML Engineer",
+        },
+        {
+          name: "Ali Raza",
+          role: "Backend Developer",
+        },
+        {
+          name: "Sara Ahmed",
+          role: "QA Engineer",
+        },
+      ],
+    },
+
+    {
+      id: 12,
+      name: "Restaurant Ordering Platform",
+      owner: "Ali Raza",
+      type: "E-Commerce",
+      status: "In Development",
+      cost: "$17,200",
+      duration: "13 Weeks",
+      progress: 43,
+      teamSize: 5,
+      risk: "Medium",
+      created: "19 Aug 2026",
+      deadline: "18 Nov 2026",
+      description:
+        "An online restaurant ordering platform supporting menus, customer accounts, cart management, order processing, payments, delivery tracking, and reporting.",
+      team: [
+        {
+          name: "Ali Raza",
+          role: "Backend Developer",
+        },
+        {
+          name: "Ahmed Ali",
+          role: "Frontend Developer",
+        },
+        {
+          name: "Mariam Iqbal",
+          role: "UI/UX Designer",
+        },
+        {
+          name: "Sara Ahmed",
+          role: "QA Engineer",
+        },
+        {
+          name: "Ayesha Malik",
+          role: "Project Manager",
+        },
+      ],
+    },
   ];
 
   // ============================================================
@@ -297,16 +495,12 @@ function AdminProjects() {
   // ============================================================
 
   const filteredProjects = projects.filter((project) => {
+    const normalizedSearch = searchTerm.toLowerCase();
+
     const matchesSearch =
-      project.name
-        .toLowerCase()
-        .includes(searchTerm.toLowerCase()) ||
-      project.owner
-        .toLowerCase()
-        .includes(searchTerm.toLowerCase()) ||
-      project.type
-        .toLowerCase()
-        .includes(searchTerm.toLowerCase());
+      project.name.toLowerCase().includes(normalizedSearch) ||
+      project.owner.toLowerCase().includes(normalizedSearch) ||
+      project.type.toLowerCase().includes(normalizedSearch);
 
     const matchesStatus =
       statusFilter === "All" ||
@@ -316,11 +510,7 @@ function AdminProjects() {
       typeFilter === "All" ||
       project.type === typeFilter;
 
-    return (
-      matchesSearch &&
-      matchesStatus &&
-      matchesType
-    );
+    return matchesSearch && matchesStatus && matchesType;
   });
 
   // ============================================================
@@ -354,7 +544,6 @@ function AdminProjects() {
     }
 
     setCurrentPage(page);
-    setOpenMoreMenu(null);
   };
 
   // ============================================================
@@ -364,7 +553,6 @@ function AdminProjects() {
   const handleSearchChange = (event) => {
     setSearchTerm(event.target.value);
     setCurrentPage(1);
-    setOpenMoreMenu(null);
   };
 
   // ============================================================
@@ -374,7 +562,6 @@ function AdminProjects() {
   const handleStatusChange = (event) => {
     setStatusFilter(event.target.value);
     setCurrentPage(1);
-    setOpenMoreMenu(null);
   };
 
   // ============================================================
@@ -384,18 +571,16 @@ function AdminProjects() {
   const handleTypeChange = (event) => {
     setTypeFilter(event.target.value);
     setCurrentPage(1);
-    setOpenMoreMenu(null);
   };
 
   // ============================================================
-  // PROJECT MODAL
+  // PROJECT DETAILS
   // ============================================================
 
   const openProject = (project) => {
     setSelectedProject(project);
     setShowProjectModal(true);
     setShowFullProjectModal(false);
-    setOpenMoreMenu(null);
   };
 
   const closeProject = () => {
@@ -404,31 +589,18 @@ function AdminProjects() {
   };
 
   // ============================================================
-  // FULL PROJECT MODAL
+  // FULL PROJECT
   // ============================================================
 
   const openFullProject = (project) => {
     setSelectedProject(project);
     setShowProjectModal(false);
     setShowFullProjectModal(true);
-    setOpenMoreMenu(null);
   };
 
   const closeFullProject = () => {
     setSelectedProject(null);
     setShowFullProjectModal(false);
-  };
-
-  // ============================================================
-  // MORE MENU
-  // ============================================================
-
-  const toggleMoreMenu = (projectId) => {
-    setOpenMoreMenu((current) =>
-      current === projectId
-        ? null
-        : projectId
-    );
   };
 
   // ============================================================
@@ -480,14 +652,16 @@ function AdminProjects() {
 
   return (
     <div className="admin-projects">
-
       {/* ======================================================
           PAGE HEADER
       ====================================================== */}
 
       <div className="admin-projects-header">
+        <div className="admin-projects-header-content">
+          <span className="admin-projects-eyebrow">
+            PROJECT MANAGEMENT
+          </span>
 
-        <div>
           <h1>Projects</h1>
 
           <p>
@@ -495,7 +669,6 @@ function AdminProjects() {
             progress, and project risks.
           </p>
         </div>
-
       </div>
 
       {/* ======================================================
@@ -503,9 +676,7 @@ function AdminProjects() {
       ====================================================== */}
 
       <div className="admin-project-summary">
-
         <div className="project-summary-card">
-
           <div className="project-summary-icon">
             <FolderKanban size={19} />
           </div>
@@ -514,11 +685,9 @@ function AdminProjects() {
             <span>Total Projects</span>
             <strong>{totalProjects}</strong>
           </div>
-
         </div>
 
         <div className="project-summary-card">
-
           <div className="project-summary-icon">
             <Activity size={19} />
           </div>
@@ -527,11 +696,9 @@ function AdminProjects() {
             <span>Active Projects</span>
             <strong>{activeProjects}</strong>
           </div>
-
         </div>
 
         <div className="project-summary-card">
-
           <div className="project-summary-icon">
             <CheckCircle2 size={19} />
           </div>
@@ -540,11 +707,9 @@ function AdminProjects() {
             <span>Completed</span>
             <strong>{completedProjects}</strong>
           </div>
-
         </div>
 
         <div className="project-summary-card">
-
           <div className="project-summary-icon">
             <AlertTriangle size={19} />
           </div>
@@ -553,172 +718,135 @@ function AdminProjects() {
             <span>High Risk</span>
             <strong>{highRiskProjects}</strong>
           </div>
-
         </div>
-
       </div>
 
       {/* ======================================================
-          TOOLBAR
+          PROJECT PANEL
       ====================================================== */}
 
-      <div className="admin-project-toolbar">
+      <div className="admin-project-panel">
+        {/* ====================================================
+            TOOLBAR
+        ==================================================== */}
 
-        <div className="project-search-box">
+        <div className="admin-project-toolbar">
+          <div className="admin-project-toolbar-left">
+            <div className="admin-project-panel-title">
+              <span>Project Directory</span>
+              <small>
+                {filteredProjects.length} projects
+              </small>
+            </div>
+          </div>
 
-          <Search size={17} />
+          <div className="admin-project-toolbar-right">
+            <div className="project-search-box">
+              <Search size={16} />
 
-          <input
-            type="text"
-            placeholder="Search projects, owners or types..."
-            value={searchTerm}
-            onChange={handleSearchChange}
-          />
+              <input
+                type="text"
+                placeholder="Search projects, owners or types..."
+                value={searchTerm}
+                onChange={handleSearchChange}
+              />
+            </div>
 
+            <select
+              className="admin-project-filter"
+              value={statusFilter}
+              onChange={handleStatusChange}
+            >
+              <option value="All">All Status</option>
+              <option value="Planning">Planning</option>
+              <option value="In Development">
+                In Development
+              </option>
+              <option value="Completed">Completed</option>
+              <option value="On Hold">On Hold</option>
+            </select>
+
+            <select
+              className="admin-project-filter"
+              value={typeFilter}
+              onChange={handleTypeChange}
+            >
+              <option value="All">All Types</option>
+              <option value="Web Application">
+                Web Application
+              </option>
+              <option value="Mobile Application">
+                Mobile Application
+              </option>
+              <option value="Desktop Software">
+                Desktop Software
+              </option>
+              <option value="AI / Machine Learning">
+                AI / Machine Learning
+              </option>
+              <option value="SaaS">SaaS</option>
+              <option value="E-Commerce">E-Commerce</option>
+            </select>
+          </div>
         </div>
 
-        <select
-          value={statusFilter}
-          onChange={handleStatusChange}
-        >
-          <option value="All">
-            All Status
-          </option>
-
-          <option value="Planning">
-            Planning
-          </option>
-
-          <option value="In Development">
-            In Development
-          </option>
-
-          <option value="Completed">
-            Completed
-          </option>
-
-          <option value="On Hold">
-            On Hold
-          </option>
-        </select>
-
-        <select
-          value={typeFilter}
-          onChange={handleTypeChange}
-        >
-          <option value="All">
-            All Types
-          </option>
-
-          <option value="Web Application">
-            Web Application
-          </option>
-
-          <option value="Mobile Application">
-            Mobile Application
-          </option>
-
-          <option value="Desktop Software">
-            Desktop Software
-          </option>
-
-          <option value="AI / Machine Learning">
-            AI / Machine Learning
-          </option>
-
-          <option value="SaaS">
-            SaaS
-          </option>
-        </select>
-
-      </div>
-
-      {/* ======================================================
-          PROJECT TABLE
-      ====================================================== */}
-
-      <div className="admin-project-table-card">
+        {/* ====================================================
+            PROJECT TABLE
+        ==================================================== */}
 
         <div className="admin-project-table-wrapper">
-
           <table className="admin-project-table">
-
             <thead>
               <tr>
-
                 <th>Project</th>
-
                 <th>Owner</th>
-
                 <th>Type</th>
-
                 <th>Estimation</th>
-
                 <th>Progress</th>
-
                 <th>Team</th>
-
                 <th>Risk</th>
-
                 <th>Status</th>
-
                 <th>Actions</th>
-
               </tr>
             </thead>
 
             <tbody>
-
               {currentProjects.length > 0 ? (
-
-                currentProjects.map((project) => (
-
-                  <tr key={project.id}>
-
+                currentProjects.map((project, index) => (
+                  <tr
+                    key={project.id}
+                    className="admin-project-row"
+                    style={{
+                      "--row-index": index,
+                    }}
+                  >
                     {/* PROJECT */}
-
                     <td>
-
                       <div className="project-name-cell">
-
                         <div className="project-name-icon">
                           <FolderKanban size={16} />
                         </div>
 
-                        <div>
-
-                          <strong>
-                            {project.name}
-                          </strong>
+                        <div className="project-name-info">
+                          <strong>{project.name}</strong>
 
                           <span>
                             Created {project.created}
                           </span>
-
                         </div>
-
                       </div>
-
                     </td>
 
                     {/* OWNER */}
-
                     <td>
-
                       <div className="project-owner-cell">
-
                         <UserRound size={15} />
 
-                        <span>
-                          {project.owner}
-                        </span>
-
+                        <span>{project.owner}</span>
                       </div>
-
                     </td>
 
                     {/* TYPE */}
-
                     <td>
                       <span className="project-type-text">
                         {project.type}
@@ -726,74 +854,45 @@ function AdminProjects() {
                     </td>
 
                     {/* ESTIMATION */}
-
                     <td>
-
                       <div className="project-estimation-cell">
-
-                        <strong>
-                          {project.cost}
-                        </strong>
+                        <strong>{project.cost}</strong>
 
                         <span>
                           <Clock3 size={13} />
                           {project.duration}
                         </span>
-
                       </div>
-
                     </td>
 
                     {/* PROGRESS */}
-
                     <td>
-
                       <div className="project-progress-cell">
-
                         <div className="project-progress-header">
-
-                          <span>
-                            {project.progress}%
-                          </span>
-
+                          <span>{project.progress}%</span>
                         </div>
 
                         <div className="project-progress-bar">
-
                           <div
                             className="project-progress-fill"
                             style={{
-                              width:
-                                `${project.progress}%`,
+                              width: `${project.progress}%`,
                             }}
                           />
-
                         </div>
-
                       </div>
-
                     </td>
 
                     {/* TEAM */}
-
                     <td>
-
                       <div className="project-team-cell">
-
                         <Users size={15} />
-
-                        <span>
-                          {project.teamSize}
-                        </span>
-
+                        <span>{project.teamSize}</span>
                       </div>
-
                     </td>
 
                     {/* RISK */}
-
                     <td>
-
                       <span
                         className={`project-risk-badge ${getRiskClass(
                           project.risk
@@ -801,13 +900,10 @@ function AdminProjects() {
                       >
                         {project.risk}
                       </span>
-
                     </td>
 
                     {/* STATUS */}
-
                     <td>
-
                       <span
                         className={`project-status-badge ${getStatusClass(
                           project.status
@@ -815,19 +911,17 @@ function AdminProjects() {
                       >
                         {project.status}
                       </span>
-
                     </td>
 
                     {/* ACTIONS */}
-
                     <td>
-
                       <div className="project-actions">
-
+                        {/* VIEW DETAILS */}
                         <button
                           type="button"
                           className="project-action-btn"
-                          title="View Project"
+                          title="View Project Details"
+                          aria-label="View Project Details"
                           onClick={() =>
                             openProject(project)
                           }
@@ -835,104 +929,40 @@ function AdminProjects() {
                           <Eye size={16} />
                         </button>
 
-                        <div className="project-more-wrapper">
-
-                          <button
-                            type="button"
-                            className="project-action-btn"
-                            title="More"
-                            onClick={() =>
-                              toggleMoreMenu(
-                                project.id
-                              )
-                            }
-                          >
-                            <MoreHorizontal
-                              size={17}
-                            />
-                          </button>
-
-                          {openMoreMenu ===
-                            project.id && (
-
-                            <div className="project-more-menu">
-
-                              <button
-                                type="button"
-                                onClick={() =>
-                                  openProject(
-                                    project
-                                  )
-                                }
-                              >
-                                <Eye size={15} />
-
-                                <span>
-                                  View Details
-                                </span>
-                              </button>
-
-                              <button
-                                type="button"
-                                onClick={() =>
-                                  openFullProject(
-                                    project
-                                  )
-                                }
-                              >
-                                <ExternalLink
-                                  size={15}
-                                />
-
-                                <span>
-                                  View Full Project
-                                </span>
-                              </button>
-
-                            </div>
-
-                          )}
-
-                        </div>
-
+                        {/* FULL PROJECT */}
+                        <button
+                          type="button"
+                          className="project-action-btn"
+                          title="View Full Project"
+                          aria-label="View Full Project"
+                          onClick={() =>
+                            openFullProject(project)
+                          }
+                        >
+                          <ClipboardList size={16} />
+                        </button>
                       </div>
-
                     </td>
-
                   </tr>
-
                 ))
-
               ) : (
-
                 <tr>
-
                   <td
                     colSpan="9"
                     className="project-empty-cell"
                   >
-
                     <FolderKanban size={30} />
 
-                    <strong>
-                      No projects found
-                    </strong>
+                    <strong>No projects found</strong>
 
                     <span>
-                      Try changing your search or
-                      filters.
+                      Try changing your search or filters.
                     </span>
-
                   </td>
-
                 </tr>
-
               )}
-
             </tbody>
-
           </table>
-
         </div>
 
         {/* ====================================================
@@ -940,58 +970,40 @@ function AdminProjects() {
         ==================================================== */}
 
         <div className="projects-footer">
-
           <div className="projects-footer-info">
-
             Showing{" "}
-
             {filteredProjects.length === 0
               ? 0
               : startIndex + 1}
-
             {" - "}
-
             {Math.min(
               startIndex + projectsPerPage,
               filteredProjects.length
             )}
-
             {" of "}
-
-            {filteredProjects.length}
-
-            {" projects"}
-
+            {filteredProjects.length} projects
           </div>
 
           <div className="projects-pagination">
-
             {/* PREVIOUS */}
-
             <button
               type="button"
               className="projects-page-btn"
               disabled={safeCurrentPage === 1}
               onClick={() =>
-                changePage(
-                  safeCurrentPage - 1
-                )
+                changePage(safeCurrentPage - 1)
               }
             >
               <ChevronLeft size={15} />
 
-              <span>
-                Previous
-              </span>
+              <span>Previous</span>
             </button>
 
             {/* PAGE NUMBERS */}
-
             {Array.from(
               { length: totalPages },
               (_, index) => index + 1
             ).map((page) => (
-
               <button
                 key={page}
                 type="button"
@@ -1000,17 +1012,13 @@ function AdminProjects() {
                     ? "active"
                     : ""
                 }`}
-                onClick={() =>
-                  changePage(page)
-                }
+                onClick={() => changePage(page)}
               >
                 {page}
               </button>
-
             ))}
 
             {/* NEXT */}
-
             <button
               type="button"
               className="projects-page-btn"
@@ -1019,72 +1027,53 @@ function AdminProjects() {
                 safeCurrentPage === totalPages
               }
               onClick={() =>
-                changePage(
-                  safeCurrentPage + 1
-                )
+                changePage(safeCurrentPage + 1)
               }
             >
-              <span>
-                Next
-              </span>
+              <span>Next</span>
 
               <ChevronRight size={15} />
-
             </button>
-
           </div>
-
         </div>
-
       </div>
 
       {/* ======================================================
           PROJECT DETAILS MODAL
       ====================================================== */}
 
-      {showProjectModal &&
-        selectedProject && (
-
+      {showProjectModal && selectedProject && (
         <div
           className="project-modal-overlay"
           onClick={closeProject}
         >
-
           <div
             className="project-modal"
             onClick={(event) =>
               event.stopPropagation()
             }
           >
-
             <div className="project-modal-header">
-
               <div>
-
                 <span className="project-modal-label">
                   PROJECT DETAILS
                 </span>
 
-                <h2>
-                  {selectedProject.name}
-                </h2>
-
+                <h2>{selectedProject.name}</h2>
               </div>
 
               <button
                 type="button"
                 className="project-modal-close"
                 onClick={closeProject}
+                aria-label="Close project details"
               >
                 <X size={18} />
               </button>
-
             </div>
 
             <div className="project-modal-body">
-
               <div className="project-modal-status-row">
-
                 <span
                   className={`project-status-badge ${getStatusClass(
                     selectedProject.status
@@ -1100,194 +1089,136 @@ function AdminProjects() {
                 >
                   {selectedProject.risk} Risk
                 </span>
-
               </div>
 
               <div className="project-modal-description">
-
-                <h3>
-                  Project Overview
-                </h3>
+                <h3>Project Overview</h3>
 
                 <p>
                   {selectedProject.description}
                 </p>
-
               </div>
 
               <div className="project-detail-grid">
-
                 <div className="project-detail-item">
-
-                  <span>
-                    Project Owner
-                  </span>
+                  <span>Project Owner</span>
 
                   <strong>
                     <UserRound size={15} />
                     {selectedProject.owner}
                   </strong>
-
                 </div>
 
                 <div className="project-detail-item">
-
-                  <span>
-                    Project Type
-                  </span>
+                  <span>Project Type</span>
 
                   <strong>
                     {selectedProject.type}
                   </strong>
-
                 </div>
 
                 <div className="project-detail-item">
-
-                  <span>
-                    Estimated Cost
-                  </span>
+                  <span>Estimated Cost</span>
 
                   <strong>
                     <DollarSign size={15} />
                     {selectedProject.cost}
                   </strong>
-
                 </div>
 
                 <div className="project-detail-item">
-
-                  <span>
-                    Estimated Duration
-                  </span>
+                  <span>Estimated Duration</span>
 
                   <strong>
                     <Clock3 size={15} />
                     {selectedProject.duration}
                   </strong>
-
                 </div>
 
                 <div className="project-detail-item">
-
-                  <span>
-                    Created
-                  </span>
+                  <span>Created</span>
 
                   <strong>
                     <CalendarDays size={15} />
                     {selectedProject.created}
                   </strong>
-
                 </div>
 
                 <div className="project-detail-item">
-
-                  <span>
-                    Deadline
-                  </span>
+                  <span>Deadline</span>
 
                   <strong>
                     <CalendarDays size={15} />
                     {selectedProject.deadline}
                   </strong>
-
                 </div>
-
               </div>
 
               <div className="project-modal-section">
-
                 <div className="project-section-heading">
-
                   <div>
                     <Activity size={17} />
 
-                    <h3>
-                      Project Progress
-                    </h3>
+                    <h3>Project Progress</h3>
                   </div>
 
                   <strong>
                     {selectedProject.progress}%
                   </strong>
-
                 </div>
 
                 <div className="project-progress-bar project-modal-progress">
-
                   <div
                     className="project-progress-fill"
                     style={{
-                      width:
-                        `${selectedProject.progress}%`,
+                      width: `${selectedProject.progress}%`,
                     }}
                   />
-
                 </div>
-
               </div>
 
               <div className="project-modal-section">
-
                 <div className="project-section-heading">
-
                   <div>
                     <Users size={17} />
 
-                    <h3>
-                      Assigned Resources
-                    </h3>
+                    <h3>Assigned Resources</h3>
                   </div>
 
                   <strong>
                     {selectedProject.teamSize}
                   </strong>
-
                 </div>
 
                 <div className="project-team-list">
-
                   {selectedProject.team.map(
                     (member, index) => (
+                      <div
+                        className="project-team-member"
+                        key={`${member.name}-${index}`}
+                      >
+                        <div className="project-team-avatar">
+                          {member.name
+                            .charAt(0)
+                            .toUpperCase()}
+                        </div>
 
-                    <div
-                      className="project-team-member"
-                      key={index}
-                    >
+                        <div>
+                          <strong>
+                            {member.name}
+                          </strong>
 
-                      <div className="project-team-avatar">
-
-                        {member.name
-                          .charAt(0)
-                          .toUpperCase()}
-
+                          <span>{member.role}</span>
+                        </div>
                       </div>
-
-                      <div>
-
-                        <strong>
-                          {member.name}
-                        </strong>
-
-                        <span>
-                          {member.role}
-                        </span>
-
-                      </div>
-
-                    </div>
-
-                  ))}
-
+                    )
+                  )}
                 </div>
-
               </div>
-
             </div>
 
+            {/* MODAL ACTIONS */}
             <div className="project-modal-actions">
-
               <button
                 type="button"
                 className="project-secondary-btn"
@@ -1300,323 +1231,219 @@ function AdminProjects() {
                 type="button"
                 className="project-primary-btn"
                 onClick={() =>
-                  openFullProject(
-                    selectedProject
-                  )
+                  openFullProject(selectedProject)
                 }
               >
                 <ClipboardList size={16} />
-
                 View Full Project
               </button>
-
             </div>
-
           </div>
-
         </div>
-
       )}
 
       {/* ======================================================
           FULL PROJECT MODAL
       ====================================================== */}
 
-      {showFullProjectModal &&
-        selectedProject && (
-
+      {showFullProjectModal && selectedProject && (
         <div
           className="project-modal-overlay"
           onClick={closeFullProject}
         >
-
           <div
             className="project-modal project-full-modal"
             onClick={(event) =>
               event.stopPropagation()
             }
           >
-
             <div className="project-modal-header">
-
               <div>
-
                 <span className="project-modal-label">
                   FULL PROJECT
                 </span>
 
-                <h2>
-                  {selectedProject.name}
-                </h2>
-
+                <h2>{selectedProject.name}</h2>
               </div>
 
               <button
                 type="button"
                 className="project-modal-close"
                 onClick={closeFullProject}
+                aria-label="Close full project"
               >
                 <X size={18} />
               </button>
-
             </div>
 
             <div className="project-modal-body">
-
               {/* OVERVIEW */}
-
               <div className="project-modal-description">
-
-                <h3>
-                  Project Overview
-                </h3>
+                <h3>Project Overview</h3>
 
                 <p>
                   {selectedProject.description}
                 </p>
-
               </div>
 
               {/* PROJECT INFORMATION */}
-
               <div className="project-modal-section">
-
                 <div className="project-section-heading">
-
                   <div>
                     <FolderKanban size={17} />
 
-                    <h3>
-                      Project Information
-                    </h3>
+                    <h3>Project Information</h3>
                   </div>
-
                 </div>
 
                 <div className="project-detail-grid">
-
                   <div className="project-detail-item">
-
-                    <span>
-                      Project Name
-                    </span>
+                    <span>Project Name</span>
 
                     <strong>
                       {selectedProject.name}
                     </strong>
-
                   </div>
 
                   <div className="project-detail-item">
-
-                    <span>
-                      Owner
-                    </span>
+                    <span>Owner</span>
 
                     <strong>
                       {selectedProject.owner}
                     </strong>
-
                   </div>
 
                   <div className="project-detail-item">
-
-                    <span>
-                      Project Type
-                    </span>
+                    <span>Project Type</span>
 
                     <strong>
                       {selectedProject.type}
                     </strong>
-
                   </div>
 
                   <div className="project-detail-item">
-
-                    <span>
-                      Status
-                    </span>
+                    <span>Status</span>
 
                     <strong>
                       {selectedProject.status}
                     </strong>
-
                   </div>
 
                   <div className="project-detail-item">
-
-                    <span>
-                      Created
-                    </span>
+                    <span>Created</span>
 
                     <strong>
                       {selectedProject.created}
                     </strong>
-
                   </div>
 
                   <div className="project-detail-item">
-
-                    <span>
-                      Deadline
-                    </span>
+                    <span>Deadline</span>
 
                     <strong>
                       {selectedProject.deadline}
                     </strong>
-
                   </div>
-
                 </div>
-
               </div>
 
               {/* ESTIMATION */}
-
               <div className="project-modal-section">
-
                 <div className="project-section-heading">
-
                   <div>
                     <DollarSign size={17} />
 
-                    <h3>
-                      Estimation & Progress
-                    </h3>
+                    <h3>Estimation & Progress</h3>
                   </div>
-
                 </div>
 
                 <div className="project-detail-grid">
-
                   <div className="project-detail-item">
-
-                    <span>
-                      Estimated Cost
-                    </span>
+                    <span>Estimated Cost</span>
 
                     <strong>
                       {selectedProject.cost}
                     </strong>
-
                   </div>
 
                   <div className="project-detail-item">
-
-                    <span>
-                      Estimated Duration
-                    </span>
+                    <span>Estimated Duration</span>
 
                     <strong>
                       {selectedProject.duration}
                     </strong>
-
                   </div>
 
                   <div className="project-detail-item">
-
-                    <span>
-                      Current Progress
-                    </span>
+                    <span>Current Progress</span>
 
                     <strong>
                       {selectedProject.progress}%
                     </strong>
-
                   </div>
 
                   <div className="project-detail-item">
-
-                    <span>
-                      Project Risk
-                    </span>
+                    <span>Project Risk</span>
 
                     <strong>
                       {selectedProject.risk}
                     </strong>
-
                   </div>
-
                 </div>
 
                 <div className="project-progress-bar project-modal-progress">
-
                   <div
                     className="project-progress-fill"
                     style={{
-                      width:
-                        `${selectedProject.progress}%`,
+                      width: `${selectedProject.progress}%`,
                     }}
                   />
-
                 </div>
-
               </div>
 
               {/* RESOURCES */}
-
               <div className="project-modal-section">
-
                 <div className="project-section-heading">
-
                   <div>
                     <Users size={17} />
 
-                    <h3>
-                      Assigned Resources
-                    </h3>
+                    <h3>Assigned Resources</h3>
                   </div>
 
                   <strong>
                     {selectedProject.teamSize}
                   </strong>
-
                 </div>
 
                 <div className="project-team-list">
-
                   {selectedProject.team.map(
                     (member, index) => (
+                      <div
+                        className="project-team-member"
+                        key={`${member.name}-${index}`}
+                      >
+                        <div className="project-team-avatar">
+                          {member.name
+                            .charAt(0)
+                            .toUpperCase()}
+                        </div>
 
-                    <div
-                      className="project-team-member"
-                      key={index}
-                    >
+                        <div>
+                          <strong>
+                            {member.name}
+                          </strong>
 
-                      <div className="project-team-avatar">
-
-                        {member.name
-                          .charAt(0)
-                          .toUpperCase()}
-
+                          <span>{member.role}</span>
+                        </div>
                       </div>
-
-                      <div>
-
-                        <strong>
-                          {member.name}
-                        </strong>
-
-                        <span>
-                          {member.role}
-                        </span>
-
-                      </div>
-
-                    </div>
-
-                  ))}
-
+                    )
+                  )}
                 </div>
-
               </div>
 
               {/* ADMIN MONITORING */}
-
               <div className="project-modal-section">
-
                 <div className="project-section-heading">
-
                   <div>
                     <ShieldAlert size={17} />
 
@@ -1624,11 +1451,9 @@ function AdminProjects() {
                       Administrative Monitoring
                     </h3>
                   </div>
-
                 </div>
 
                 <div className="project-admin-note">
-
                   <p>
                     This project is currently being
                     monitored through the PlanWise
@@ -1639,15 +1464,12 @@ function AdminProjects() {
                     and managed by authorized
                     administrators.
                   </p>
-
                 </div>
-
               </div>
-
             </div>
 
+            {/* FULL MODAL ACTIONS */}
             <div className="project-modal-actions">
-
               <button
                 type="button"
                 className="project-secondary-btn"
@@ -1666,15 +1488,10 @@ function AdminProjects() {
               >
                 Close
               </button>
-
             </div>
-
           </div>
-
         </div>
-
       )}
-
     </div>
   );
 }
