@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from sqlalchemy import DateTime, ForeignKey, Integer, String
+from sqlalchemy import DateTime, ForeignKey, Integer, JSON, String
 from sqlalchemy.orm import Mapped, mapped_column
 
 from app.database.base import Base
@@ -26,6 +26,22 @@ class Employee(Base):
         nullable=False,
     )
 
+    phone: Mapped[str | None] = mapped_column(
+        String(30),
+        nullable=True,
+    )
+
+    experience: Mapped[str | None] = mapped_column(
+        String(100),
+        nullable=True,
+    )
+
+    skills: Mapped[list[str]] = mapped_column(
+        JSON,
+        nullable=False,
+        default=list,
+    )
+
     availability_status: Mapped[str] = mapped_column(
         String(30),
         nullable=False,
@@ -36,6 +52,11 @@ class Employee(Base):
         Integer,
         nullable=False,
         default=40,
+    )
+
+    location: Mapped[str | None] = mapped_column(
+        String(150),
+        nullable=True,
     )
 
     created_at: Mapped[datetime] = mapped_column(
