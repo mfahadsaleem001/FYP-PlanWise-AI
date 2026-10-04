@@ -64,15 +64,46 @@
 }
 
 .admin-activity-summary-card {
+  position: relative;
   display: flex;
   align-items: center;
   gap: 0.8rem;
   min-width: 0;
+  min-height: 88px;
   padding: 1rem;
+  overflow: hidden;
   background: var(--color-surface);
   border: 1px solid var(--color-border);
-  border-radius: 10px;
+  border-radius: 9px;
   box-shadow: var(--shadow-sm);
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease,
+    border-color 0.25s ease;
+}
+
+/* Hidden normally, animated Burgundy line on hover */
+.admin-activity-summary-card::before {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  content: "";
+  background: #711d3c;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.35s ease;
+}
+
+.admin-activity-summary-card:hover::before {
+  transform: scaleX(1);
+}
+
+.admin-activity-summary-card:hover {
+  transform: translateY(-2px);
+  border-color: #d8c4c9;
+  box-shadow: 0 8px 24px rgba(44, 27, 27, 0.07);
 }
 
 .admin-activity-summary-icon {
@@ -85,6 +116,11 @@
   border-radius: 8px;
   background: var(--color-surface-muted);
   color: var(--color-primary);
+  transition: transform 0.25s ease;
+}
+
+.admin-activity-summary-card:hover .admin-activity-summary-icon {
+  transform: translateY(-1px);
 }
 
 .admin-activity-summary-card div:last-child {
@@ -115,7 +151,7 @@
   overflow: hidden;
   background: var(--color-surface);
   border: 1px solid var(--color-border);
-  border-radius: 12px;
+  border-radius: 10px;
   box-shadow: var(--shadow-sm);
 }
 
@@ -144,11 +180,16 @@
   border: 1px solid var(--color-border);
   border-radius: 7px;
   color: var(--color-text-muted);
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
 .admin-activity-search:focus-within {
   background: var(--color-surface);
   border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(113, 29, 60, 0.06);
 }
 
 .admin-activity-search input {
@@ -183,10 +224,14 @@
   font-family: var(--font-body);
   font-size: 0.68rem;
   cursor: pointer;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
 .admin-activity-filters select:focus {
   border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(113, 29, 60, 0.06);
 }
 
 
@@ -199,12 +244,33 @@
 }
 
 .admin-activity-item {
+  position: relative;
   display: flex;
   align-items: flex-start;
   gap: 0.9rem;
   padding: 1rem;
   border-bottom: 1px solid var(--color-border);
-  transition: background 0.2s ease;
+  transition:
+    background 0.2s ease,
+    padding-left 0.25s ease;
+  overflow: hidden;
+}
+
+/* Hidden normally, animated Burgundy indicator on hover */
+.admin-activity-item::before {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 3px;
+  height: 0;
+  content: "";
+  background: #711d3c;
+  border-radius: 0 3px 3px 0;
+  transition: height 0.35s ease;
+}
+
+.admin-activity-item:hover::before {
+  height: 100%;
 }
 
 .admin-activity-item:hover {
@@ -219,6 +285,11 @@
   justify-content: center;
   flex-shrink: 0;
   border-radius: 8px;
+  transition: transform 0.25s ease;
+}
+
+.admin-activity-item:hover .admin-activity-icon {
+  transform: translateY(-1px);
 }
 
 
@@ -351,12 +422,14 @@
   transition:
     background 0.2s ease,
     color 0.2s ease,
-    border-color 0.2s ease;
+    border-color 0.2s ease,
+    transform 0.2s ease;
 }
 
 .admin-activity-pagination button:hover:not(:disabled) {
   border-color: var(--color-primary);
   color: var(--color-primary);
+  transform: translateY(-1px);
 }
 
 .admin-activity-pagination button.active {
@@ -403,16 +476,12 @@
    ============================================================ */
 
 @media (max-width: 1050px) {
-
   .admin-activity-summary {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
-
 }
 
-
 @media (max-width: 800px) {
-
   .admin-activity-toolbar {
     align-items: stretch;
     flex-direction: column;
@@ -429,12 +498,9 @@
   .admin-activity-filters select {
     flex: 1;
   }
-
 }
 
-
 @media (max-width: 600px) {
-
   .admin-page-header h1 {
     font-size: 1.4rem;
   }
@@ -463,12 +529,9 @@
   .admin-activity-pagination button {
     flex: 1;
   }
-
 }
 
-
 @media (max-width: 430px) {
-
   .admin-activity-filters {
     flex-direction: column;
   }
@@ -476,5 +539,23 @@
   .admin-activity-filters select {
     width: 100%;
   }
+}
 
+
+/* ============================================================
+   REDUCED MOTION
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  .admin-activity-summary-card,
+  .admin-activity-summary-card::before,
+  .admin-activity-summary-icon,
+  .admin-activity-search,
+  .admin-activity-filters select,
+  .admin-activity-item,
+  .admin-activity-item::before,
+  .admin-activity-icon,
+  .admin-activity-pagination button {
+    transition: none;
+  }
 }

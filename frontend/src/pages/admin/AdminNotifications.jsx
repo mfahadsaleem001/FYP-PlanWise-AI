@@ -10,6 +10,11 @@ import {
   CheckCircle2,
   Check,
   CheckCheck,
+  Calculator,
+  Flag,
+  Wallet,
+  ShieldCheck,
+  Target,
 } from "lucide-react";
 
 import { useMemo, useState } from "react";
@@ -67,7 +72,7 @@ function AdminNotifications() {
       type: "model",
       title: "Model validation completed",
       description:
-        "The latest estimation model validation completed successfully.",
+        "The latest project estimation model validation completed successfully.",
       time: "4 hours ago",
       status: "read",
     },
@@ -85,9 +90,9 @@ function AdminNotifications() {
     {
       id: 7,
       type: "report",
-      title: "Report generation completed",
+      title: "Estimation report ready",
       description:
-        "Project estimation report was generated successfully.",
+        "The project estimation report for Customer Mobile App is ready to review.",
       time: "6 hours ago",
       status: "read",
     },
@@ -101,25 +106,125 @@ function AdminNotifications() {
       time: "Yesterday",
       status: "read",
     },
+
+    {
+      id: 9,
+      type: "estimate",
+      title: "Project estimate completed",
+      description:
+        "Cost, effort, duration, and team size estimation was completed for SaaS Analytics Platform.",
+      time: "Yesterday",
+      status: "read",
+    },
+
+    {
+      id: 10,
+      type: "milestone",
+      title: "Milestone approaching",
+      description:
+        "The Requirements Analysis milestone for AI Recommendation Engine is due in 3 days.",
+      time: "Yesterday",
+      status: "read",
+    },
+
+    {
+      id: 11,
+      type: "cost",
+      title: "Cost variance detected",
+      description:
+        "Estimated project cost for E-Commerce Platform is above the planned financial threshold.",
+      time: "Yesterday",
+      status: "unread",
+    },
+
+    {
+      id: 12,
+      type: "analysis",
+      title: "AI requirements analysis completed",
+      description:
+        "PlanWise AI completed requirement and feature analysis for Customer Mobile App.",
+      time: "Yesterday",
+      status: "read",
+    },
+
+    {
+      id: 13,
+      type: "resource",
+      title: "Resource availability gap",
+      description:
+        "The current project plan has insufficient frontend development capacity for the upcoming phase.",
+      time: "2 days ago",
+      status: "read",
+    },
+
+    {
+      id: 14,
+      type: "risk",
+      title: "Risk mitigation recommendation available",
+      description:
+        "PlanWise AI generated mitigation recommendations for the resource availability risk.",
+      time: "2 days ago",
+      status: "read",
+    },
+
+    {
+      id: 15,
+      type: "project",
+      title: "Project status updated",
+      description:
+        "AI Recommendation Engine has moved from Planning to In Progress.",
+      time: "2 days ago",
+      status: "read",
+    },
+
+    {
+      id: 16,
+      type: "model",
+      title: "Model drift detected",
+      description:
+        "The Risk Classification Model shows increased prediction error and requires monitoring.",
+      time: "3 days ago",
+      status: "unread",
+    },
+
+    {
+      id: 17,
+      type: "milestone",
+      title: "Milestone completed",
+      description:
+        "The Planning & Estimation milestone for SaaS Analytics Platform was completed successfully.",
+      time: "3 days ago",
+      status: "read",
+    },
+
+    {
+      id: 18,
+      type: "report",
+      title: "Comparison report generated",
+      description:
+        "A project comparison report was generated for two estimation scenarios.",
+      time: "4 days ago",
+      status: "read",
+    },
   ];
 
   // ============================================================
   // STATE
   // ============================================================
 
-  const [notifications, setNotifications] =
-    useState(initialNotifications);
+  const [notifications, setNotifications] = useState(
+    initialNotifications
+  );
 
-  const [searchTerm, setSearchTerm] =
-    useState("");
+  const [searchTerm, setSearchTerm] = useState("");
 
   const [notificationFilter, setNotificationFilter] =
     useState("all");
 
-  const [currentPage, setCurrentPage] =
-    useState(1);
+  const [currentPage, setCurrentPage] = useState(1);
 
-  const notificationsPerPage = 5;
+  // 10 NOTIFICATIONS PER PAGE
+  const notificationsPerPage = 10;
 
   // ============================================================
   // NOTIFICATION ICON
@@ -150,6 +255,24 @@ function AdminNotifications() {
 
       case "system":
         return <CheckCircle2 size={17} />;
+
+      case "estimate":
+        return <Calculator size={17} />;
+
+      case "milestone":
+        return <Flag size={17} />;
+
+      case "cost":
+        return <Wallet size={17} />;
+
+      case "analysis":
+        return <BrainCircuit size={17} />;
+
+      case "security":
+        return <ShieldCheck size={17} />;
+
+      case "target":
+        return <Target size={17} />;
 
       default:
         return <Bell size={17} />;
@@ -185,6 +308,24 @@ function AdminNotifications() {
 
       case "system":
         return "system";
+
+      case "estimate":
+        return "estimate";
+
+      case "milestone":
+        return "milestone";
+
+      case "cost":
+        return "cost";
+
+      case "analysis":
+        return "analysis";
+
+      case "security":
+        return "security";
+
+      case "target":
+        return "target";
 
       default:
         return "default";
@@ -222,30 +363,22 @@ function AdminNotifications() {
 
       let matchesFilter = true;
 
-      if (
-        notificationFilter === "unread"
-      ) {
+      if (notificationFilter === "unread") {
         matchesFilter =
           notification.status === "unread";
       }
 
-      if (
-        notificationFilter === "resource"
-      ) {
+      if (notificationFilter === "resource") {
         matchesFilter =
           notification.type === "resource";
       }
 
-      if (
-        notificationFilter === "risk"
-      ) {
+      if (notificationFilter === "risk") {
         matchesFilter =
           notification.type === "risk";
       }
 
-      if (
-        notificationFilter === "system"
-      ) {
+      if (notificationFilter === "system") {
         matchesFilter =
           notification.type === "system";
       }
@@ -306,10 +439,7 @@ function AdminNotifications() {
   // ============================================================
 
   const handleSearchChange = (event) => {
-    setSearchTerm(
-      event.target.value
-    );
-
+    setSearchTerm(event.target.value);
     setCurrentPage(1);
   };
 
@@ -403,9 +533,10 @@ function AdminNotifications() {
           </h1>
 
           <p>
-            Review system alerts, project risks,
-            resource issues, model events, and
-            important administrative notifications.
+            Review project risks, estimation
+            updates, resource issues, AI
+            analysis events, and important
+            PlanWise system notifications.
           </p>
 
         </div>
@@ -582,6 +713,7 @@ function AdminNotifications() {
         <div className="admin-notification-list">
 
           {paginatedNotifications.length > 0 ? (
+
             paginatedNotifications.map(
               (notification) => (
 
@@ -637,6 +769,7 @@ function AdminNotifications() {
 
                   {notification.status ===
                   "unread" ? (
+
                     <button
                       type="button"
                       className="admin-notification-read"
@@ -650,7 +783,9 @@ function AdminNotifications() {
                     >
                       <Check size={15} />
                     </button>
+
                   ) : (
+
                     <button
                       type="button"
                       className="admin-notification-read"
@@ -660,13 +795,15 @@ function AdminNotifications() {
                     >
                       <Check size={15} />
                     </button>
+
                   )}
 
                 </div>
-
               )
             )
+
           ) : (
+
             <div
               style={{
                 padding: "2rem",
@@ -678,6 +815,7 @@ function AdminNotifications() {
             >
               No notifications found.
             </div>
+
           )}
 
         </div>
@@ -723,6 +861,7 @@ function AdminNotifications() {
 
             {pageNumbers.map(
               (page) => (
+
                 <button
                   type="button"
                   key={page}
@@ -737,6 +876,7 @@ function AdminNotifications() {
                 >
                   {page}
                 </button>
+
               )
             )}
 
@@ -762,7 +902,6 @@ function AdminNotifications() {
         </div>
 
       </div>
-
     </section>
   );
 }

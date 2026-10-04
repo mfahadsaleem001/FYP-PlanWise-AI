@@ -606,27 +606,26 @@
   display: flex;
   align-items: center;
   gap: 5px;
-  min-width: 145px;
-  white-space: nowrap;
 }
 
 .request-action-btn {
-  display: grid;
-  width: 30px;
-  height: 30px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 29px;
+  height: 29px;
   padding: 0;
-  place-items: center;
-  color: #806f70;
-  background: var(--surface-muted, #faf7f1);
-  border: 1px solid rgba(44, 27, 27, 0.09);
+  border: 1px solid var(--color-border);
   border-radius: 7px;
+  background: var(--color-surface);
+  color: var(--color-text-muted);
   cursor: pointer;
   transition:
-    color 0.18s ease,
-    background 0.18s ease,
-    border-color 0.18s ease,
-    transform 0.18s ease,
-    box-shadow 0.18s ease;
+    transform 0.2s ease,
+    color 0.2s ease,
+    border-color 0.2s ease,
+    background 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
 .request-action-btn:hover {
@@ -761,50 +760,83 @@
 }
 
 /* =========================================================
-   MODAL
+   PREVENT MAIN PAGE SCROLL WHEN MODAL IS OPEN
+========================================================= */
+
+html:has(.project-request-modal-overlay),
+body:has(.project-request-modal-overlay) {
+  overflow: hidden;
+}
+
+/* =========================================================
+   PROJECT REQUEST MODAL
 ========================================================= */
 
 .project-request-modal-overlay {
   position: fixed;
-  z-index: 99999;
   inset: 0;
+  z-index: 99999;
   display: flex;
-  align-items: center;
+
+  /* UPDATED: modal opens slightly above center */
+  align-items: flex-start;
   justify-content: center;
+
+  width: 100%;
+  height: 100vh;
+  padding: 70px 20px 20px;
   overflow: hidden;
-  padding: 25px;
-  background: rgba(35, 23, 23, 0.57);
-  backdrop-filter: blur(5px);
+  overscroll-behavior: contain;
+  background: rgba(44, 27, 27, 0.42);
+  backdrop-filter: blur(2px);
   animation: projectRequestModalOverlayIn 0.2s ease both;
 }
 
+/* =========================================================
+   MODAL
+========================================================= */
+
 .project-request-modal {
   display: flex;
-  width: min(760px, 100%);
-  height: calc(100vh - 50px);
-  max-height: calc(100vh - 50px);
-  min-height: 0;
   flex-direction: column;
+  width: 760px;
+  height: 620px;
+  max-width: calc(100vw - 40px);
+  max-height: calc(100vh - 40px);
+  min-width: 0;
+  min-height: 0;
   overflow: hidden;
-  background: var(--surface, #ffffff);
-  border: 1px solid rgba(44, 27, 27, 0.1);
+  border: 1px solid var(--color-border);
   border-radius: 10px;
-  box-shadow: 0 25px 65px rgba(31, 20, 20, 0.22);
-  animation: projectRequestModalIn 0.3s ease both;
+  background: var(--color-surface);
+  box-shadow: 0 22px 60px rgba(44, 27, 27, 0.2);
+  animation: projectRequestModalIn 0.25s ease both;
 }
 
+/* =========================================================
+   FULL MODAL
+========================================================= */
+
 .project-request-full-modal {
-  width: min(900px, 100%);
+  width: 850px;
+  height: 620px;
+  max-width: calc(100vw - 40px);
+  max-height: calc(100vh - 40px);
 }
+
+/* =========================================================
+   MODAL HEADER
+========================================================= */
 
 .project-request-modal-header {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  gap: 20px;
   flex: 0 0 auto;
-  padding: 17px 19px;
-  border-bottom: 1px solid rgba(44, 27, 27, 0.08);
+  gap: 18px;
+  padding: 18px 20px;
+  border-bottom: 1px solid var(--color-border);
+  background: var(--color-surface);
 }
 
 .project-request-modal-header > div {
@@ -813,54 +845,66 @@
 
 .project-request-modal-header span {
   display: block;
-  margin-bottom: 5px;
-  color: var(--accent-gold, #b18a52);
-  font-size: 8px;
+  margin-bottom: 6px;
+  color: var(--color-accent);
+  font-size: 9px;
   font-weight: 800;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.13em;
+  line-height: 1;
 }
 
 .project-request-modal-header h2 {
   margin: 0;
   overflow: hidden;
-  color: var(--text-primary, #2c1b1b);
-  font-family: var(--font-heading, inherit);
-  font-size: 19px;
+  color: var(--color-dark);
+  font-family: var(--font-heading);
+  font-size: 23px;
   font-weight: 700;
+  line-height: 1.2;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
 .project-request-modal-header > button {
-  display: grid;
-  width: 31px;
-  height: 31px;
-  flex: 0 0 31px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 30px;
+  width: 30px;
+  height: 30px;
   padding: 0;
-  place-items: center;
-  color: #806f70;
-  background: var(--surface-muted, #faf7f1);
-  border: 1px solid rgba(44, 27, 27, 0.08);
+  border: 1px solid var(--color-border);
   border-radius: 7px;
+  background: var(--color-surface);
+  color: var(--color-text-muted);
   cursor: pointer;
   transition:
-    color 0.18s ease,
-    background 0.18s ease,
-    transform 0.18s ease;
+    transform 0.2s ease,
+    color 0.2s ease,
+    border-color 0.2s ease,
+    background 0.2s ease;
 }
 
 .project-request-modal-header > button:hover {
-  color: #ffffff;
-  background: var(--primary-burgundy, #711d3c);
-  transform: rotate(2deg);
+  transform: translateY(-1px);
+  border-color: var(--color-primary);
+  background: rgba(113, 29, 60, 0.05);
+  color: var(--color-primary);
 }
+
+/* =========================================================
+   MODAL BODY
+========================================================= */
 
 .project-request-modal-body {
   flex: 1 1 auto;
   min-height: 0;
+  padding: 20px;
+  overflow-x: hidden;
   overflow-y: auto;
-  max-height: none;
-  padding: 14px 19px;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-border) transparent;
 }
 
 /* =========================================================
@@ -1180,9 +1224,10 @@
 ========================================================= */
 
 .request-chat-modal {
-  width: min(650px, 100%);
-  height: calc(100vh - 50px);
-  max-height: calc(100vh - 50px);
+  width: 650px;
+  height: 620px;
+  max-width: calc(100vw - 40px);
+  max-height: calc(100vh - 40px);
 }
 
 .request-chat-project {
@@ -1218,6 +1263,7 @@
   max-height: none;
   flex: 1 1 auto;
   overflow-y: auto;
+  overscroll-behavior: contain;
   padding: 15px 18px;
   background: #fcfaf6;
 }
@@ -1363,7 +1409,8 @@
 ========================================================= */
 
 .assign-resource-modal {
-  width: min(700px, 100%);
+  width: 700px;
+  max-width: calc(100vw - 40px);
 }
 
 .assign-project-context {
@@ -1697,17 +1744,20 @@
     flex-direction: column;
   }
 
+  /* Modal opens slightly below the top on mobile */
   .project-request-modal-overlay {
-    align-items: flex-end;
-    overflow: hidden;
-    padding: 0;
+    align-items: flex-start;
+    padding: 70px 8px 8px;
   }
 
-  .project-request-modal {
+  .project-request-modal,
+  .project-request-full-modal,
+  .request-chat-modal {
     width: 100%;
-    height: calc(100vh - 45px);
-    max-height: calc(100vh - 45px);
-    border-radius: 10px 10px 0 0;
+    height: calc(100vh - 78px);
+    max-width: 100%;
+    max-height: calc(100vh - 78px);
+    border-radius: 10px;
   }
 
   .request-detail-grid,

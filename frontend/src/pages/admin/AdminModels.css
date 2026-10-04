@@ -47,6 +47,12 @@
   line-height: 1.6;
 }
 
+.admin-models-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
 .admin-models-refresh-btn {
   display: inline-flex;
   align-items: center;
@@ -61,13 +67,18 @@
   font-size: 12px;
   font-weight: 700;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition:
+    border-color 0.2s ease,
+    background 0.2s ease,
+    color 0.2s ease,
+    transform 0.2s ease;
 }
 
 .admin-models-refresh-btn:hover {
   border-color: #711d3c;
   background: #711d3c;
   color: #ffffff;
+  transform: translateY(-1px);
 }
 
 /* ============================================================
@@ -82,15 +93,46 @@
 }
 
 .admin-models-summary-card {
+  position: relative;
   display: flex;
   align-items: center;
   gap: 13px;
   min-height: 94px;
   padding: 17px;
+  overflow: hidden;
   border: 1px solid #e2d7ca;
   border-radius: 9px;
   background: #ffffff;
   box-shadow: 0 3px 12px rgba(44, 27, 27, 0.035);
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease,
+    border-color 0.25s ease;
+}
+
+/* Hover line — hidden normally */
+.admin-models-summary-card::before {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  content: "";
+  background: #711d3c;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.35s ease;
+}
+
+/* Full Burgundy line on hover */
+.admin-models-summary-card:hover::before {
+  transform: scaleX(1);
+}
+
+.admin-models-summary-card:hover {
+  transform: translateY(-2px);
+  border-color: #d8c4c9;
+  box-shadow: 0 8px 24px rgba(44, 27, 27, 0.07);
 }
 
 .admin-models-summary-icon {
@@ -101,6 +143,11 @@
   height: 43px;
   flex-shrink: 0;
   border-radius: 8px;
+  transition: transform 0.25s ease;
+}
+
+.admin-models-summary-card:hover .admin-models-summary-icon {
+  transform: translateY(-1px);
 }
 
 .admin-models-summary-icon.total {
@@ -204,11 +251,41 @@
 }
 
 .admin-model-health-card {
+  position: relative;
   padding: 17px;
+  overflow: hidden;
   border: 1px solid #e2d7ca;
   border-radius: 9px;
   background: #ffffff;
   box-shadow: 0 3px 12px rgba(44, 27, 27, 0.03);
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease,
+    border-color 0.25s ease;
+}
+
+/* Same hover line language as summary cards */
+.admin-model-health-card::before {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  content: "";
+  background: #711d3c;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.35s ease;
+}
+
+.admin-model-health-card:hover::before {
+  transform: scaleX(1);
+}
+
+.admin-model-health-card:hover {
+  transform: translateY(-2px);
+  border-color: #d8c4c9;
+  box-shadow: 0 8px 24px rgba(44, 27, 27, 0.07);
 }
 
 .admin-model-health-top {
@@ -227,6 +304,11 @@
 
 .admin-model-health-top svg {
   color: #b18a52;
+  transition: transform 0.25s ease;
+}
+
+.admin-model-health-card:hover .admin-model-health-top svg {
+  transform: translateY(-1px);
 }
 
 .admin-model-health-card > strong {
@@ -253,6 +335,7 @@
   height: 100%;
   border-radius: inherit;
   background: #711d3c;
+  transition: width 0.6s ease;
 }
 
 .admin-model-health-progress.neutral span {
@@ -311,6 +394,7 @@
 }
 
 .admin-models-table td {
+  position: relative;
   height: 66px;
   padding: 10px 14px;
   border-bottom: 1px solid #eee6dd;
@@ -325,6 +409,26 @@
 
 .admin-models-table tbody tr {
   transition: background 0.15s ease;
+}
+
+/* ============================================================
+   TABLE ROW HOVER LINE
+   ============================================================ */
+
+.admin-models-table tbody tr td:first-child::before {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 3px;
+  height: 0;
+  content: "";
+  border-radius: 0 3px 3px 0;
+  background: #711d3c;
+  transition: height 0.35s ease;
+}
+
+.admin-models-table tbody tr:hover td:first-child::before {
+  height: 100%;
 }
 
 .admin-models-table tbody tr:hover {
@@ -353,6 +457,14 @@
   border-radius: 7px;
   background: #f5ecef;
   color: #711d3c;
+  transition:
+    transform 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.admin-models-table tbody tr:hover .admin-model-name-icon {
+  transform: translateX(2px);
+  border-color: #d8bdc7;
 }
 
 .admin-model-name div:last-child {
@@ -453,6 +565,11 @@
   color: #a14c40;
 }
 
+.admin-model-status.retraining {
+  background: #f0e5e9;
+  color: #711d3c;
+}
+
 .admin-model-view-btn {
   display: inline-flex;
   align-items: center;
@@ -465,13 +582,18 @@
   font-size: 10px;
   font-weight: 700;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition:
+    border-color 0.2s ease,
+    background 0.2s ease,
+    color 0.2s ease,
+    transform 0.2s ease;
 }
 
 .admin-model-view-btn:hover {
   border-color: #711d3c;
   background: #711d3c;
   color: #ffffff;
+  transform: translateY(-1px);
 }
 
 /* ============================================================
@@ -528,6 +650,7 @@
   justify-content: center;
   padding: 25px;
   background: rgba(44, 27, 27, 0.48);
+  animation: adminModelsOverlayIn 0.2s ease both;
 }
 
 .admin-models-modal {
@@ -538,6 +661,7 @@
   border-radius: 11px;
   background: #ffffff;
   box-shadow: 0 20px 60px rgba(44, 27, 27, 0.2);
+  animation: adminModelsModalIn 0.25s ease both;
 }
 
 .admin-models-modal-header {
@@ -574,13 +698,18 @@
   background: #ffffff;
   color: #6f5e5e;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition:
+    border-color 0.2s ease,
+    background 0.2s ease,
+    color 0.2s ease,
+    transform 0.2s ease;
 }
 
 .admin-models-modal-close:hover {
   border-color: #711d3c;
   background: #711d3c;
   color: #ffffff;
+  transform: rotate(3deg);
 }
 
 .admin-models-modal-body {
@@ -628,6 +757,11 @@
   min-height: 72px;
   padding: 13px;
   background: #ffffff;
+  transition: background 0.2s ease;
+}
+
+.admin-model-detail-grid > div:hover {
+  background: #fdfaf7;
 }
 
 .admin-model-detail-grid span,
@@ -694,6 +828,20 @@
   line-height: 1.5;
 }
 
+.admin-model-retraining-message {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  margin-top: 1.25rem;
+  padding: 0.85rem 1rem;
+  color: var(--color-success, #3f7658);
+  background: rgba(63, 118, 88, 0.08);
+  border: 1px solid rgba(63, 118, 88, 0.2);
+  border-radius: 7px;
+  font-size: 0.7rem;
+  font-weight: 600;
+}
+
 .admin-models-modal-footer {
   display: flex;
   align-items: center;
@@ -716,7 +864,11 @@
   font-size: 10px;
   font-weight: 750;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition:
+    border-color 0.2s ease,
+    background 0.2s ease,
+    color 0.2s ease,
+    transform 0.2s ease;
 }
 
 .admin-models-modal-secondary {
@@ -728,6 +880,7 @@
 .admin-models-modal-secondary:hover {
   border-color: #711d3c;
   color: #711d3c;
+  transform: translateY(-1px);
 }
 
 .admin-models-modal-primary {
@@ -738,6 +891,29 @@
 
 .admin-models-modal-primary:hover {
   background: #5e1732;
+  transform: translateY(-1px);
+}
+
+/* ============================================================
+   ACTION FEEDBACK
+   ============================================================ */
+
+.admin-models-refresh-btn:disabled,
+.admin-models-modal-primary:disabled,
+.admin-models-modal-secondary:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.admin-models-refresh-spin {
+  animation: adminModelsSpin 0.8s linear infinite;
+}
+
+.admin-models-refresh-message {
+  color: var(--color-success, #3f7658);
+  font-size: 0.68rem;
+  font-weight: 600;
 }
 
 /* ============================================================
@@ -770,7 +946,7 @@
 :root[data-theme="dark"] .admin-model-health-card,
 :root[data-theme="dark"] .admin-models-table-wrapper,
 :root[data-theme="dark"] .admin-models-modal,
-:root[data-theme="dark"] .admin-models-detail-grid > div {
+:root[data-theme="dark"] .admin-model-detail-grid > div {
   border-color: #493839;
   background: #2d2222;
 }
@@ -904,6 +1080,42 @@
 }
 
 /* ============================================================
+   ANIMATIONS
+   ============================================================ */
+
+@keyframes adminModelsSpin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes adminModelsOverlayIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes adminModelsModalIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.985);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* ============================================================
    RESPONSIVE
    ============================================================ */
 
@@ -918,6 +1130,10 @@
   .admin-models-header {
     align-items: flex-start;
     flex-direction: column;
+  }
+
+  .admin-models-header-actions {
+    width: 100%;
   }
 
   .admin-models-refresh-btn {
@@ -974,58 +1190,30 @@
 }
 
 /* ============================================================
-   MODEL ACTION FEEDBACK
+   REDUCED MOTION
    ============================================================ */
 
-.admin-models-header-actions {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-}
-
-.admin-models-refresh-btn:disabled,
-.admin-models-modal-primary:disabled,
-.admin-models-modal-secondary:disabled {
-  opacity: 0.65;
-  cursor: not-allowed;
-}
-
-.admin-models-refresh-spin {
-  animation: adminModelsSpin 0.8s linear infinite;
-}
-
-.admin-models-refresh-message {
-  color: var(--color-success, #3f7658);
-  font-size: 0.68rem;
-  font-weight: 600;
-}
-
-.admin-model-retraining-message {
-  margin-top: 1.25rem;
-  padding: 0.85rem 1rem;
-
-  display: flex;
-  align-items: center;
-  gap: 0.65rem;
-
-  color: var(--color-success, #3f7658);
-
-  background: rgba(63, 118, 88, 0.08);
-
-  border: 1px solid rgba(63, 118, 88, 0.2);
-
-  border-radius: var(--radius-md);
-
-  font-size: 0.7rem;
-  font-weight: 600;
-}
-
-@keyframes adminModelsSpin {
-  from {
-    transform: rotate(0deg);
+@media (prefers-reduced-motion: reduce) {
+  .admin-models-summary-card,
+  .admin-model-health-card,
+  .admin-model-view-btn,
+  .admin-models-refresh-btn,
+  .admin-models-modal-close,
+  .admin-models-modal-secondary,
+  .admin-models-modal-primary,
+  .admin-model-name-icon {
+    transition: none;
   }
 
-  to {
-    transform: rotate(360deg);
+  .admin-models-summary-card::before,
+  .admin-model-health-card::before,
+  .admin-models-table tbody tr td:first-child::before {
+    transition: none;
+  }
+
+  .admin-models-modal-overlay,
+  .admin-models-modal,
+  .admin-models-refresh-spin {
+    animation: none;
   }
 }

@@ -116,6 +116,30 @@ function AdminActivity() {
       date: "Sep 13, 2026",
       category: "system",
     },
+
+    {
+      id: 9,
+      type: "estimate_generated",
+      title: "Project estimate updated",
+      description:
+        "The estimation results for SaaS Analytics Platform were updated.",
+      user: "Hina Malik",
+      time: "6 hours ago",
+      date: "Sep 13, 2026",
+      category: "project",
+    },
+
+    {
+      id: 10,
+      type: "risk_detected",
+      title: "Risk assessment completed",
+      description:
+        "Risk analysis was completed for Customer Mobile App.",
+      user: "PlanWise System",
+      time: "7 hours ago",
+      date: "Sep 13, 2026",
+      category: "system",
+    },
   ];
 
   // ============================================================
@@ -123,16 +147,12 @@ function AdminActivity() {
   // ============================================================
 
   const [searchTerm, setSearchTerm] = useState("");
-
-  const [activityFilter, setActivityFilter] =
-    useState("all");
-
-  const [timeFilter, setTimeFilter] =
-    useState("today");
-
+  const [activityFilter, setActivityFilter] = useState("all");
+  const [timeFilter, setTimeFilter] = useState("today");
   const [currentPage, setCurrentPage] = useState(1);
 
-  const activitiesPerPage = 5;
+  // 10 ACTIVITIES PER PAGE
+  const activitiesPerPage = 10;
 
   // ============================================================
   // ACTIVITY ICON
@@ -209,8 +229,7 @@ function AdminActivity() {
   // ============================================================
 
   const filteredActivities = useMemo(() => {
-    const normalizedSearch =
-      searchTerm.trim().toLowerCase();
+    const normalizedSearch = searchTerm.trim().toLowerCase();
 
     return activities.filter((activity) => {
       // --------------------------------------------------------
@@ -239,11 +258,6 @@ function AdminActivity() {
 
       // --------------------------------------------------------
       // TIME FILTER
-      // --------------------------------------------------------
-      // Current demo records are dated Sep 13, 2026.
-      // The demo reference date is also Sep 13, 2026.
-      // This keeps the demo filters meaningful until backend
-      // timestamps are connected.
       // --------------------------------------------------------
 
       const demoToday = new Date(
@@ -356,10 +370,7 @@ function AdminActivity() {
   // ============================================================
 
   const handleSearchChange = (event) => {
-    setSearchTerm(
-      event.target.value
-    );
-
+    setSearchTerm(event.target.value);
     setCurrentPage(1);
   };
 
@@ -370,10 +381,7 @@ function AdminActivity() {
   const handleActivityFilterChange = (
     event
   ) => {
-    setActivityFilter(
-      event.target.value
-    );
-
+    setActivityFilter(event.target.value);
     setCurrentPage(1);
   };
 
@@ -384,10 +392,7 @@ function AdminActivity() {
   const handleTimeFilterChange = (
     event
   ) => {
-    setTimeFilter(
-      event.target.value
-    );
-
+    setTimeFilter(event.target.value);
     setCurrentPage(1);
   };
 
@@ -423,9 +428,7 @@ function AdminActivity() {
       ====================================================== */}
 
       <div className="admin-page-header">
-
         <div className="admin-page-header-content">
-
           <span className="admin-page-eyebrow">
             SYSTEM
           </span>
@@ -439,9 +442,7 @@ function AdminActivity() {
             resource, estimation, and system
             activities across PlanWise.
           </p>
-
         </div>
-
       </div>
 
       {/* ======================================================
@@ -451,7 +452,6 @@ function AdminActivity() {
       <div className="admin-activity-summary">
 
         <div className="admin-activity-summary-card">
-
           <div className="admin-activity-summary-icon">
             <Activity size={18} />
           </div>
@@ -465,11 +465,9 @@ function AdminActivity() {
               1,842
             </strong>
           </div>
-
         </div>
 
         <div className="admin-activity-summary-card">
-
           <div className="admin-activity-summary-icon">
             <Clock3 size={18} />
           </div>
@@ -483,11 +481,9 @@ function AdminActivity() {
               126
             </strong>
           </div>
-
         </div>
 
         <div className="admin-activity-summary-card">
-
           <div className="admin-activity-summary-icon">
             <UserPlus size={18} />
           </div>
@@ -501,11 +497,9 @@ function AdminActivity() {
               74
             </strong>
           </div>
-
         </div>
 
         <div className="admin-activity-summary-card">
-
           <div className="admin-activity-summary-icon">
             <ShieldAlert size={18} />
           </div>
@@ -519,7 +513,6 @@ function AdminActivity() {
               18
             </strong>
           </div>
-
         </div>
 
       </div>
@@ -539,7 +532,6 @@ function AdminActivity() {
           {/* SEARCH */}
 
           <div className="admin-activity-search">
-
             <Search size={16} />
 
             <input
@@ -550,7 +542,6 @@ function AdminActivity() {
                 handleSearchChange
               }
             />
-
           </div>
 
           {/* FILTERS */}
@@ -614,7 +605,6 @@ function AdminActivity() {
             </select>
 
           </div>
-
         </div>
 
         {/* ====================================================
@@ -624,9 +614,9 @@ function AdminActivity() {
         <div className="admin-activity-list">
 
           {paginatedActivities.length > 0 ? (
+
             paginatedActivities.map(
               (activity) => (
-
                 <div
                   className="admin-activity-item"
                   key={activity.id}
@@ -685,10 +675,11 @@ function AdminActivity() {
                   </div>
 
                 </div>
-
               )
             )
+
           ) : (
+
             <div
               className="admin-activity-empty"
               style={{
@@ -701,6 +692,7 @@ function AdminActivity() {
             >
               No activities found.
             </div>
+
           )}
 
         </div>
@@ -785,7 +777,6 @@ function AdminActivity() {
         </div>
 
       </div>
-
     </section>
   );
 }

@@ -8,7 +8,6 @@
   margin: 0 auto;
 }
 
-
 /* ============================================================
    PAGE HEADER
    ============================================================ */
@@ -51,7 +50,6 @@
   line-height: 1.6;
 }
 
-
 /* ============================================================
    SETTINGS LAYOUT
    ============================================================ */
@@ -62,7 +60,6 @@
   align-items: start;
   gap: 1.25rem;
 }
-
 
 /* ============================================================
    SETTINGS NAVIGATION
@@ -96,6 +93,14 @@
   border-radius: 7px;
   background: var(--color-primary);
   color: #ffffff;
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.admin-settings-nav-header:hover .admin-settings-nav-icon {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-sm);
 }
 
 .admin-settings-nav-header div:last-child {
@@ -121,6 +126,7 @@
 }
 
 .admin-settings-menu a {
+  position: relative;
   display: flex;
   align-items: center;
   gap: 0.65rem;
@@ -133,13 +139,32 @@
   font-size: 0.67rem;
   font-weight: 500;
   transition:
-    background 0.2s ease,
-    color 0.2s ease;
+    background 0.25s ease,
+    color 0.25s ease,
+    transform 0.25s ease;
+}
+
+.admin-settings-menu a::before {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 2px;
+  height: 0;
+  content: "";
+  background: var(--color-primary);
+  border-radius: 0 2px 2px 0;
+  transform: translateY(-50%);
+  transition: height 0.25s ease;
 }
 
 .admin-settings-menu a:hover {
   background: var(--color-surface-muted);
   color: var(--color-dark);
+  transform: translateX(2px);
+}
+
+.admin-settings-menu a:hover::before {
+  height: 55%;
 }
 
 .admin-settings-menu a.active {
@@ -148,6 +173,9 @@
   font-weight: 600;
 }
 
+.admin-settings-menu a.active::before {
+  height: 70%;
+}
 
 /* ============================================================
    CONTENT
@@ -160,18 +188,46 @@
   gap: 1rem;
 }
 
-
 /* ============================================================
    SETTINGS CARD
    ============================================================ */
 
 .admin-settings-card {
+  position: relative;
+  overflow: hidden;
   scroll-margin-top: 90px;
   padding: 1.25rem;
   background: var(--color-surface);
   border: 1px solid var(--color-border);
   border-radius: 11px;
   box-shadow: var(--shadow-sm);
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease,
+    border-color 0.3s ease;
+}
+
+.admin-settings-card::before {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  content: "";
+  background: var(--color-primary);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.35s ease;
+}
+
+.admin-settings-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(113, 29, 60, 0.18);
+  box-shadow: var(--shadow-md, var(--shadow-sm));
+}
+
+.admin-settings-card:hover::before {
+  transform: scaleX(1);
 }
 
 .admin-settings-card-header {
@@ -192,6 +248,14 @@
   border-radius: 7px;
   background: var(--color-surface-muted);
   color: var(--color-primary);
+  transition:
+    transform 0.25s ease,
+    background 0.25s ease;
+}
+
+.admin-settings-card:hover .admin-settings-card-icon {
+  transform: translateY(-1px);
+  background: rgba(113, 29, 60, 0.08);
 }
 
 .admin-settings-card-header h2 {
@@ -208,7 +272,6 @@
   font-size: 0.66rem;
   line-height: 1.5;
 }
-
 
 /* ============================================================
    FORM
@@ -245,17 +308,26 @@
   color: var(--color-text);
   font-family: var(--font-body);
   font-size: 0.68rem;
-  transition: border-color 0.2s ease;
+  transition:
+    border-color 0.25s ease,
+    background 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.admin-settings-field input:hover,
+.admin-settings-field select:hover {
+  border-color: rgba(113, 29, 60, 0.35);
 }
 
 .admin-settings-field input:focus,
 .admin-settings-field select:focus {
   border-color: var(--color-primary);
+  background: var(--color-surface);
+  box-shadow: 0 0 0 3px rgba(113, 29, 60, 0.07);
 }
 
-
 /* ============================================================
-   NOTIFICATION OPTIONS
+   NOTIFICATION / AI OPTIONS
    ============================================================ */
 
 .admin-settings-options {
@@ -270,6 +342,13 @@
   padding: 0.9rem 0;
   border-bottom: 1px solid var(--color-border);
   cursor: pointer;
+  transition:
+    padding-left 0.25s ease,
+    background 0.25s ease;
+}
+
+.admin-settings-option:hover {
+  padding-left: 0.35rem;
 }
 
 .admin-settings-option:last-child {
@@ -287,6 +366,11 @@
   color: var(--color-dark);
   font-size: 0.7rem;
   font-weight: 600;
+  transition: color 0.2s ease;
+}
+
+.admin-settings-option:hover strong {
+  color: var(--color-primary);
 }
 
 .admin-settings-option span {
@@ -305,7 +389,6 @@
   cursor: pointer;
 }
 
-
 /* ============================================================
    RESOURCE ROLES
    ============================================================ */
@@ -318,14 +401,41 @@
 }
 
 .admin-settings-role {
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 0.75rem;
+  overflow: hidden;
   padding: 0.7rem 0.8rem;
   background: var(--color-surface-muted);
   border: 1px solid var(--color-border);
   border-radius: 7px;
+  transition:
+    transform 0.25s ease,
+    border-color 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.admin-settings-role::before {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 2px;
+  height: 0;
+  content: "";
+  background: var(--color-primary);
+  transition: height 0.25s ease;
+}
+
+.admin-settings-role:hover {
+  transform: translateY(-2px);
+  border-color: rgba(113, 29, 60, 0.2);
+  box-shadow: var(--shadow-sm);
+}
+
+.admin-settings-role:hover::before {
+  height: 100%;
 }
 
 .admin-settings-role span {
@@ -339,7 +449,6 @@
   font-weight: 600;
 }
 
-
 /* ============================================================
    PROJECT TYPES
    ============================================================ */
@@ -351,28 +460,182 @@
   padding-top: 1rem;
 }
 
-.admin-settings-project-types div {
+.admin-settings-project-types > div {
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 0.75rem;
+  overflow: hidden;
   padding: 0.75rem 0.8rem;
   background: var(--color-surface-muted);
   border: 1px solid var(--color-border);
   border-radius: 7px;
+  transition:
+    transform 0.25s ease,
+    border-color 0.25s ease,
+    box-shadow 0.25s ease;
 }
 
-.admin-settings-project-types span {
+.admin-settings-project-types > div::before {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 2px;
+  height: 0;
+  content: "";
+  background: var(--color-primary);
+  transition: height 0.25s ease;
+}
+
+.admin-settings-project-types > div:hover {
+  transform: translateY(-2px);
+  border-color: rgba(113, 29, 60, 0.2);
+  box-shadow: var(--shadow-sm);
+}
+
+.admin-settings-project-types > div:hover::before {
+  height: 100%;
+}
+
+.admin-settings-project-types > div > span {
+  min-width: 0;
   color: var(--color-text);
   font-size: 0.65rem;
 }
 
-.admin-settings-project-types strong {
+.admin-project-type-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  flex-shrink: 0;
+}
+
+.admin-project-type-actions strong {
   color: var(--color-success);
   font-size: 0.6rem;
   font-weight: 600;
 }
 
+.admin-project-type-delete {
+  width: 27px;
+  height: 27px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: 1px solid transparent;
+  border-radius: 5px;
+  background: transparent;
+  color: var(--color-text-muted);
+  cursor: pointer;
+  opacity: 0;
+  transform: translateX(4px);
+  transition:
+    opacity 0.2s ease,
+    transform 0.2s ease,
+    color 0.2s ease,
+    background 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.admin-settings-project-types > div:hover
+  .admin-project-type-delete {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.admin-project-type-delete:hover {
+  color: var(--color-danger);
+  background: rgba(163, 59, 59, 0.08);
+  border-color: rgba(163, 59, 59, 0.18);
+}
+
+.admin-project-type-delete:active {
+  transform: scale(0.95);
+}
+
+/* ============================================================
+   ADD PROJECT TYPE
+   ============================================================ */
+
+.admin-project-type-add {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--color-border);
+}
+
+.admin-project-type-input {
+  min-width: 0;
+  flex: 1;
+}
+
+.admin-project-type-input input {
+  width: 100%;
+  height: 38px;
+  padding: 0 0.75rem;
+  border: 1px solid var(--color-border);
+  border-radius: 7px;
+  outline: none;
+  background: var(--color-surface);
+  color: var(--color-text);
+  font-family: var(--font-body);
+  font-size: 0.68rem;
+  transition:
+    border-color 0.25s ease,
+    box-shadow 0.25s ease,
+    background 0.25s ease;
+}
+
+.admin-project-type-input input::placeholder {
+  color: var(--color-text-muted);
+}
+
+.admin-project-type-input input:hover {
+  border-color: rgba(113, 29, 60, 0.35);
+}
+
+.admin-project-type-input input:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(113, 29, 60, 0.07);
+}
+
+.admin-project-type-add-button {
+  min-height: 38px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  flex-shrink: 0;
+  padding: 0.65rem 0.9rem;
+  border: 1px solid var(--color-primary);
+  border-radius: 7px;
+  background: var(--color-primary);
+  color: #ffffff;
+  font-family: var(--font-body);
+  font-size: 0.67rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    background 0.25s ease,
+    border-color 0.25s ease,
+    transform 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.admin-project-type-add-button:hover {
+  background: var(--color-primary-dark);
+  border-color: var(--color-primary-dark);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-sm);
+}
+
+.admin-project-type-add-button:active {
+  transform: translateY(0);
+}
 
 /* ============================================================
    MODEL CONFIGURATION
@@ -393,6 +656,16 @@
   background: var(--color-surface-muted);
   border: 1px solid var(--color-border);
   border-radius: 7px;
+  transition:
+    transform 0.25s ease,
+    border-color 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.admin-model-config-item:hover {
+  transform: translateY(-2px);
+  border-color: rgba(113, 29, 60, 0.2);
+  box-shadow: var(--shadow-sm);
 }
 
 .admin-model-config-item span {
@@ -409,6 +682,10 @@
 .admin-model-config-item strong.status-active {
   color: var(--color-success);
 }
+
+/* ============================================================
+   INFO BOX
+   ============================================================ */
 
 .admin-settings-info-box {
   display: flex;
@@ -433,7 +710,6 @@
   font-size: 0.62rem;
   line-height: 1.55;
 }
-
 
 /* ============================================================
    SECURITY
@@ -465,6 +741,14 @@
   border-radius: 7px;
   background: var(--color-surface-muted);
   color: var(--color-primary);
+  transition:
+    transform 0.25s ease,
+    background 0.25s ease;
+}
+
+.admin-security-row:hover .admin-security-row-icon {
+  transform: translateY(-1px);
+  background: rgba(113, 29, 60, 0.08);
 }
 
 .admin-security-row > div:nth-child(2) {
@@ -494,6 +778,10 @@
 
 .admin-security-row select {
   height: 34px;
+  width: 125px;
+  min-width: 125px;
+  max-width: 125px;
+  flex: 0 0 125px;
   padding: 0 0.65rem;
   border: 1px solid var(--color-border);
   border-radius: 6px;
@@ -502,12 +790,230 @@
   color: var(--color-text);
   font-family: var(--font-body);
   font-size: 0.62rem;
+  transition:
+    border-color 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.admin-security-row select:hover {
+  border-color: rgba(113, 29, 60, 0.35);
 }
 
 .admin-security-row select:focus {
   border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(113, 29, 60, 0.07);
 }
 
+/* ============================================================
+   APPEARANCE / THEME
+   ============================================================ */
+
+.admin-settings .admin-theme-options {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-top: 4px;
+}
+
+.admin-settings .admin-theme-option {
+  position: relative;
+  width: 100%;
+  min-height: 92px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  overflow: hidden;
+  padding: 16px;
+  background: #fbf8f2;
+  color: #2c1b1b;
+  border: 1px solid #e3d9cd;
+  border-radius: 8px;
+  text-align: left;
+  cursor: pointer;
+  transition:
+    border-color 0.25s ease,
+    background 0.25s ease,
+    box-shadow 0.25s ease,
+    transform 0.25s ease;
+}
+
+.admin-settings .admin-theme-option::before {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  content: "";
+  background: #711d3c;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.3s ease;
+}
+
+.admin-settings .admin-theme-option:hover {
+  border-color: #b18a52;
+  box-shadow: 0 4px 14px rgba(44, 27, 27, 0.06);
+  transform: translateY(-2px);
+}
+
+.admin-settings .admin-theme-option:hover::before {
+  transform: scaleX(1);
+}
+
+.admin-settings .admin-theme-option.active {
+  border-color: #711d3c;
+  background: #fffaf4;
+  box-shadow: 0 0 0 1px rgba(113, 29, 60, 0.08);
+}
+
+.admin-settings .admin-theme-option.active::before {
+  transform: scaleX(1);
+}
+
+.admin-settings .admin-theme-option-icon {
+  width: 36px;
+  height: 36px;
+  min-width: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f1e7da;
+  color: #711d3c;
+  border-radius: 6px;
+  transition:
+    transform 0.25s ease,
+    background 0.25s ease;
+}
+
+.admin-settings .admin-theme-option:hover
+  .admin-theme-option-icon {
+  transform: translateY(-1px);
+}
+
+.admin-settings .admin-theme-option-content {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.admin-settings .admin-theme-option-content strong {
+  color: #2c1b1b;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.admin-settings .admin-theme-option-content span {
+  color: #766966;
+  font-size: 10px;
+  line-height: 1.5;
+}
+
+.admin-settings .admin-theme-radio {
+  width: 16px;
+  height: 16px;
+  min-width: 16px;
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1.5px solid #b9aaa0;
+  border-radius: 50%;
+}
+
+.admin-settings .admin-theme-option.active
+  .admin-theme-radio {
+  border-color: #711d3c;
+}
+
+.admin-settings .admin-theme-radio span {
+  width: 8px;
+  height: 8px;
+  background: #711d3c;
+  border-radius: 50%;
+}
+
+.admin-settings .admin-theme-status {
+  margin-top: 14px;
+  padding: 11px 13px;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  background: #f7f0e5;
+  border: 1px solid #e4d9cc;
+  border-radius: 6px;
+}
+
+.admin-settings .admin-theme-status-icon {
+  display: flex;
+  align-items: center;
+  color: #b18a52;
+}
+
+.admin-settings .admin-theme-status p {
+  margin: 0;
+  color: #665957;
+  font-size: 10px;
+  line-height: 1.5;
+}
+
+.admin-settings .admin-theme-status strong {
+  color: #711d3c;
+}
+
+/* ============================================================
+   SAVE STATUS
+   ============================================================ */
+
+.admin-settings-save-message {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  min-height: 42px;
+  padding: 0.7rem 0.8rem;
+  background: rgba(63, 115, 85, 0.08);
+  border: 1px solid rgba(63, 115, 85, 0.2);
+  border-radius: 7px;
+  color: var(--color-success);
+  animation: adminSettingsMessageIn 0.25s ease;
+}
+
+.admin-settings-save-message span {
+  color: var(--color-text);
+  font-size: 0.65rem;
+  font-weight: 600;
+}
+
+.admin-settings-save-message > svg {
+  flex-shrink: 0;
+}
+
+.admin-settings-save-message button {
+  width: 25px;
+  height: 25px;
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  padding: 0;
+  border: 1px solid transparent;
+  border-radius: 5px;
+  background: transparent;
+  color: var(--color-text-muted);
+  cursor: pointer;
+  transition:
+    background 0.2s ease,
+    color 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.admin-settings-save-message button:hover {
+  color: var(--color-danger);
+  background: rgba(163, 59, 59, 0.08);
+  border-color: rgba(163, 59, 59, 0.15);
+}
 
 /* ============================================================
    ACTIONS
@@ -535,9 +1041,12 @@
   font-weight: 600;
   cursor: pointer;
   transition:
-    background 0.2s ease,
-    color 0.2s ease,
-    border-color 0.2s ease;
+    background 0.25s ease,
+    color 0.25s ease,
+    border-color 0.25s ease,
+    transform 0.25s ease,
+    box-shadow 0.25s ease,
+    opacity 0.25s ease;
 }
 
 .admin-settings-reset {
@@ -549,6 +1058,13 @@
 .admin-settings-reset:hover {
   border-color: var(--color-primary);
   color: var(--color-primary);
+  background: var(--color-surface-muted);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-sm);
+}
+
+.admin-settings-reset:active {
+  transform: translateY(0);
 }
 
 .admin-settings-save {
@@ -557,11 +1073,23 @@
   color: #ffffff;
 }
 
-.admin-settings-save:hover {
+.admin-settings-save:hover:not(:disabled) {
   background: var(--color-primary-dark);
   border-color: var(--color-primary-dark);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-sm);
 }
 
+.admin-settings-save:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.admin-settings-save:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
 
 /* ============================================================
    DARK THEME
@@ -571,18 +1099,150 @@
   background: rgba(154, 61, 95, 0.16);
 }
 
+:root[data-theme="dark"] .admin-settings-card:hover {
+  border-color: rgba(201, 166, 107, 0.18);
+}
+
+:root[data-theme="dark"]
+  .admin-settings-card:hover
+  .admin-settings-card-icon {
+  background: rgba(154, 61, 95, 0.14);
+}
+
 :root[data-theme="dark"] .admin-settings-info-box {
   background: rgba(201, 166, 107, 0.08);
   border-color: rgba(201, 166, 107, 0.22);
 }
 
+:root[data-theme="dark"]
+  .admin-settings-role:hover,
+:root[data-theme="dark"]
+  .admin-settings-project-types > div:hover,
+:root[data-theme="dark"]
+  .admin-model-config-item:hover {
+  border-color: rgba(201, 166, 107, 0.22);
+}
+
+:root[data-theme="dark"]
+  .admin-project-type-delete:hover {
+  background: rgba(213, 106, 106, 0.12);
+  border-color: rgba(213, 106, 106, 0.2);
+}
+
+:root[data-theme="dark"]
+  .admin-security-row:hover
+  .admin-security-row-icon {
+  background: rgba(154, 61, 95, 0.14);
+}
+
+:root[data-theme="dark"] .admin-settings-save-message {
+  background: rgba(114, 169, 130, 0.1);
+  border-color: rgba(114, 169, 130, 0.2);
+}
+
+:root[data-theme="dark"] .admin-settings {
+  color: #eee5dc;
+}
 
 /* ============================================================
-   RESPONSIVE
+   DARK MODE — THEME OPTIONS
+   ============================================================ */
+
+:root[data-theme="dark"]
+  .admin-settings
+  .admin-theme-option {
+  background: #2b2020;
+  color: #eee5dc;
+  border-color: #493939;
+}
+
+:root[data-theme="dark"]
+  .admin-settings
+  .admin-theme-option:hover {
+  border-color: #b18a52;
+  background: #302424;
+}
+
+:root[data-theme="dark"]
+  .admin-settings
+  .admin-theme-option.active {
+  background: #342626;
+  border-color: #b18a52;
+}
+
+:root[data-theme="dark"]
+  .admin-settings
+  .admin-theme-option::before {
+  background: #d1a86b;
+}
+
+:root[data-theme="dark"]
+  .admin-settings
+  .admin-theme-option-icon {
+  background: #413131;
+  color: #d1a86b;
+}
+
+:root[data-theme="dark"]
+  .admin-settings
+  .admin-theme-option-content
+  strong {
+  color: #f1e9e1;
+}
+
+:root[data-theme="dark"]
+  .admin-settings
+  .admin-theme-option-content
+  span {
+  color: #b8aaa2;
+}
+
+:root[data-theme="dark"]
+  .admin-settings
+  .admin-theme-radio {
+  border-color: #74645e;
+}
+
+:root[data-theme="dark"]
+  .admin-settings
+  .admin-theme-option.active
+  .admin-theme-radio {
+  border-color: #d1a86b;
+}
+
+:root[data-theme="dark"]
+  .admin-settings
+  .admin-theme-radio
+  span {
+  background: #d1a86b;
+}
+
+:root[data-theme="dark"]
+  .admin-settings
+  .admin-theme-status {
+  background: #302424;
+  border-color: #493939;
+}
+
+:root[data-theme="dark"]
+  .admin-settings
+  .admin-theme-status
+  p {
+  color: #b8aaa2;
+}
+
+:root[data-theme="dark"]
+  .admin-settings
+  .admin-theme-status
+  strong {
+  color: #d1a86b;
+}
+
+/* ============================================================
+   RESPONSIVE — TABLET
    ============================================================ */
 
 @media (max-width: 1000px) {
-
   .admin-settings-layout {
     grid-template-columns: 190px minmax(0, 1fr);
   }
@@ -591,12 +1251,23 @@
   .admin-settings-project-types {
     grid-template-columns: 1fr;
   }
-
 }
 
+/* ============================================================
+   RESPONSIVE — THEME
+   ============================================================ */
+
+@media (max-width: 900px) {
+  .admin-settings .admin-theme-options {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ============================================================
+   RESPONSIVE — SMALL TABLET
+   ============================================================ */
 
 @media (max-width: 800px) {
-
   .admin-settings-layout {
     grid-template-columns: 1fr;
   }
@@ -615,17 +1286,24 @@
     margin-bottom: 0;
   }
 
+  .admin-project-type-delete {
+    opacity: 1;
+    transform: none;
+  }
 }
 
+/* ============================================================
+   RESPONSIVE — MOBILE
+   ============================================================ */
 
 @media (max-width: 600px) {
-
   .admin-page-header h1 {
     font-size: 1.4rem;
   }
 
   .admin-settings-card {
     padding: 1rem;
+    border-radius: 9px;
   }
 
   .admin-settings-form-grid,
@@ -658,221 +1336,23 @@
     width: 100%;
   }
 
-}
+  .admin-project-type-add {
+    align-items: stretch;
+    flex-direction: column;
+  }
 
-/* ============================================================
-   APPEARANCE / THEME
-   ============================================================ */
+  .admin-project-type-add-button {
+    width: 100%;
+  }
 
-.admin-settings .admin-theme-options {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 12px;
-  margin-top: 4px;
-}
-
-.admin-settings .admin-theme-option {
-  width: 100%;
-  min-height: 92px;
-
-  display: flex;
-  align-items: center;
-  gap: 12px;
-
-  padding: 16px;
-
-  background: #fbf8f2;
-  color: #2c1b1b;
-
-  border: 1px solid #e3d9cd;
-  border-radius: 8px;
-
-  text-align: left;
-  cursor: pointer;
-
-  transition:
-    border-color 0.2s ease,
-    background 0.2s ease,
-    box-shadow 0.2s ease;
-}
-
-.admin-settings .admin-theme-option:hover {
-  border-color: #b18a52;
-  box-shadow: 0 4px 14px rgba(44, 27, 27, 0.06);
-}
-
-.admin-settings .admin-theme-option.active {
-  border-color: #711d3c;
-  background: #fffaf4;
-  box-shadow: 0 0 0 1px rgba(113, 29, 60, 0.08);
-}
-
-.admin-settings .admin-theme-option-icon {
-  width: 36px;
-  height: 36px;
-  min-width: 36px;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  background: #f1e7da;
-  color: #711d3c;
-
-  border-radius: 6px;
-}
-
-.admin-settings .admin-theme-option-content {
-  min-width: 0;
-
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
-.admin-settings .admin-theme-option-content strong {
-  color: #2c1b1b;
-  font-size: 12px;
-  font-weight: 700;
-}
-
-.admin-settings .admin-theme-option-content span {
-  color: #766966;
-  font-size: 10px;
-  line-height: 1.5;
-}
-
-.admin-settings .admin-theme-radio {
-  width: 16px;
-  height: 16px;
-  min-width: 16px;
-
-  margin-left: auto;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  border: 1.5px solid #b9aaa0;
-  border-radius: 50%;
-}
-
-.admin-settings .admin-theme-option.active .admin-theme-radio {
-  border-color: #711d3c;
-}
-
-.admin-settings .admin-theme-radio span {
-  width: 8px;
-  height: 8px;
-
-  background: #711d3c;
-  border-radius: 50%;
-}
-
-.admin-settings .admin-theme-status {
-  margin-top: 14px;
-  padding: 11px 13px;
-
-  display: flex;
-  align-items: center;
-  gap: 9px;
-
-  background: #f7f0e5;
-  border: 1px solid #e4d9cc;
-  border-radius: 6px;
-}
-
-.admin-settings .admin-theme-status-icon {
-  display: flex;
-  align-items: center;
-  color: #b18a52;
-}
-
-.admin-settings .admin-theme-status p {
-  margin: 0;
-
-  color: #665957;
-  font-size: 10px;
-  line-height: 1.5;
-}
-
-.admin-settings .admin-theme-status strong {
-  color: #711d3c;
-}
-
-
-/* ============================================================
-   DARK MODE
-   ============================================================ */
-
-:root[data-theme="dark"] .admin-settings {
-  color: #eee5dc;
-}
-
-:root[data-theme="dark"] .admin-settings .admin-theme-option {
-  background: #2b2020;
-  color: #eee5dc;
-  border-color: #493939;
-}
-
-:root[data-theme="dark"] .admin-settings .admin-theme-option:hover {
-  border-color: #b18a52;
-  background: #302424;
-}
-
-:root[data-theme="dark"] .admin-settings .admin-theme-option.active {
-  background: #342626;
-  border-color: #b18a52;
-}
-
-:root[data-theme="dark"] .admin-settings .admin-theme-option-icon {
-  background: #413131;
-  color: #d1a86b;
-}
-
-:root[data-theme="dark"] .admin-settings .admin-theme-option-content strong {
-  color: #f1e9e1;
-}
-
-:root[data-theme="dark"] .admin-settings .admin-theme-option-content span {
-  color: #b8aaa2;
-}
-
-:root[data-theme="dark"] .admin-settings .admin-theme-radio {
-  border-color: #74645e;
-}
-
-:root[data-theme="dark"] .admin-settings .admin-theme-option.active .admin-theme-radio {
-  border-color: #d1a86b;
-}
-
-:root[data-theme="dark"] .admin-settings .admin-theme-radio span {
-  background: #d1a86b;
-}
-
-:root[data-theme="dark"] .admin-settings .admin-theme-status {
-  background: #302424;
-  border-color: #493939;
-}
-
-:root[data-theme="dark"] .admin-settings .admin-theme-status p {
-  color: #b8aaa2;
-}
-
-:root[data-theme="dark"] .admin-settings .admin-theme-status strong {
-  color: #d1a86b;
-}
-
-
-/* ============================================================
-   RESPONSIVE
-   ============================================================ */
-
-@media (max-width: 900px) {
-  .admin-settings .admin-theme-options {
-    grid-template-columns: 1fr;
+  .admin-settings-save-message {
+    align-items: flex-start;
   }
 }
+
+/* ============================================================
+   RESPONSIVE — SMALL MOBILE
+   ============================================================ */
 
 @media (max-width: 520px) {
   .admin-settings .admin-theme-option {
@@ -887,13 +1367,87 @@
   .admin-settings .admin-theme-status {
     align-items: flex-start;
   }
+
+  .admin-settings-card-header {
+    gap: 0.65rem;
+  }
+
+  .admin-settings-card-header h2 {
+    font-size: 0.92rem;
+  }
+
+  .admin-settings-card-header p {
+    font-size: 0.62rem;
+  }
+
+  .admin-settings-role,
+  .admin-settings-project-types > div {
+    padding: 0.65rem 0.7rem;
+  }
+
+  .admin-project-type-actions {
+    gap: 0.3rem;
+  }
+
+  .admin-project-type-delete {
+    width: 25px;
+    height: 25px;
+  }
+
+  .admin-settings-save-message span {
+    font-size: 0.62rem;
+  }
 }
 
-.admin-security-row .admin-session-timeout-select {
-  width: 125px;
-  min-width: 125px;
-  max-width: 125px;
-  flex: 0 0 125px;
-  padding: 0.55rem 0.7rem;
-  font-size: 0.72rem;
+/* ============================================================
+   ANIMATION
+   ============================================================ */
+
+@keyframes adminSettingsMessageIn {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ============================================================
+   REDUCED MOTION
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  .admin-settings-card,
+  .admin-settings-card::before,
+  .admin-settings-card-icon,
+  .admin-settings-nav-icon,
+  .admin-settings-menu a,
+  .admin-settings-menu a::before,
+  .admin-settings-field input,
+  .admin-settings-field select,
+  .admin-settings-option,
+  .admin-settings-option strong,
+  .admin-settings-role,
+  .admin-settings-role::before,
+  .admin-settings-project-types > div,
+  .admin-settings-project-types > div::before,
+  .admin-project-type-delete,
+  .admin-project-type-input input,
+  .admin-project-type-add-button,
+  .admin-model-config-item,
+  .admin-security-row-icon,
+  .admin-security-row select,
+  .admin-theme-option,
+  .admin-theme-option::before,
+  .admin-theme-option-icon,
+  .admin-settings-reset,
+  .admin-settings-save,
+  .admin-settings-save-message,
+  .admin-settings-save-message button {
+    transition: none;
+    animation: none;
+  }
 }

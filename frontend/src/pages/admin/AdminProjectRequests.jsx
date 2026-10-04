@@ -1,4 +1,5 @@
 import React, { useMemo, useState } from "react";
+
 import {
   Search,
   Filter,
@@ -470,22 +471,18 @@ const getInitials = (name = "") =>
 
 function AdminProjectRequests() {
   const [requests, setRequests] = useState(INITIAL_REQUESTS);
-
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
-
   const [selectedRequest, setSelectedRequest] = useState(null);
   const [modalType, setModalType] = useState(null);
-
   const [currentPage, setCurrentPage] = useState(1);
-
   const [chatMessages, setChatMessages] = useState(DEMO_MESSAGES);
   const [chatMessage, setChatMessage] = useState("");
-
   const [employees] = useState(DEMO_EMPLOYEES);
   const [selectedEmployees, setSelectedEmployees] = useState([]);
 
-  const ITEMS_PER_PAGE = 6;
+  // Updated: 10 requests per page
+  const ITEMS_PER_PAGE = 10;
 
   /* =========================================================
      FILTER
@@ -694,7 +691,7 @@ function AdminProjectRequests() {
           title="View Request"
           onClick={() => openModal("view", request)}
         >
-          <Eye size={15} />
+          <Eye size={16} />
         </button>
 
         <button
@@ -703,7 +700,7 @@ function AdminProjectRequests() {
           title="Contact User"
           onClick={() => openModal("chat", request)}
         >
-          <MessageCircle size={15} />
+          <MessageCircle size={16} />
         </button>
 
         {isPending && (
@@ -714,7 +711,7 @@ function AdminProjectRequests() {
               title="Accept Project"
               onClick={() => handleAccept(request)}
             >
-              <Check size={15} />
+              <Check size={16} />
             </button>
 
             <button
@@ -723,7 +720,7 @@ function AdminProjectRequests() {
               title="Reject Project"
               onClick={() => handleReject(request)}
             >
-              <X size={15} />
+              <X size={16} />
             </button>
           </>
         )}
@@ -735,7 +732,7 @@ function AdminProjectRequests() {
             title="Accept Again"
             onClick={() => handleAcceptAgain(request)}
           >
-            <RotateCcw size={15} />
+            <RotateCcw size={16} />
           </button>
         )}
       </div>
@@ -872,14 +869,19 @@ function AdminProjectRequests() {
                 }}
               >
                 <option value="all">All Status</option>
+
                 <option value="pending">
                   Pending Review
                 </option>
+
                 <option value="under_review">
                   Under Review
                 </option>
+
                 <option value="accepted">Accepted</option>
+
                 <option value="rejected">Rejected</option>
+
                 <option value="in_development">
                   In Development
                 </option>
@@ -1021,7 +1023,7 @@ function AdminProjectRequests() {
         </div>
 
         {/* =====================================================
-            FOOTER
+            FOOTER / PAGINATION
         ===================================================== */}
 
         {filteredRequests.length > 0 && (
@@ -1051,8 +1053,10 @@ function AdminProjectRequests() {
                     Math.max(1, page - 1)
                   )
                 }
+                aria-label="Previous page"
               >
                 <ChevronLeft size={15} />
+                <span>Previous</span>
               </button>
 
               <span>
@@ -1067,7 +1071,9 @@ function AdminProjectRequests() {
                     Math.min(totalPages, page + 1)
                   )
                 }
+                aria-label="Next page"
               >
+                <span>Next</span>
                 <ChevronRight size={15} />
               </button>
             </div>
@@ -1109,6 +1115,7 @@ function AdminProjectRequests() {
 
             <div className="project-request-modal-body">
               {/* STATUS */}
+
               <div className="request-detail-status-row">
                 <div className="request-status-with-icon">
                   {renderStatusBadge(selectedRequest)}
@@ -1128,6 +1135,7 @@ function AdminProjectRequests() {
               </div>
 
               {/* DESCRIPTION */}
+
               <div className="request-detail-description">
                 <div className="request-detail-heading">
                   <span>PROJECT OVERVIEW</span>
@@ -1141,6 +1149,7 @@ function AdminProjectRequests() {
               </div>
 
               {/* DETAILS */}
+
               <div className="request-detail-grid">
                 <div className="request-detail-item">
                   <div className="request-detail-item-icon">
@@ -1149,6 +1158,7 @@ function AdminProjectRequests() {
 
                   <div>
                     <span>Project Owner</span>
+
                     <strong>
                       {selectedRequest.user_name}
                     </strong>
@@ -1162,6 +1172,7 @@ function AdminProjectRequests() {
 
                   <div>
                     <span>Project Type</span>
+
                     <strong>
                       {selectedRequest.project_type}
                     </strong>
@@ -1175,6 +1186,7 @@ function AdminProjectRequests() {
 
                   <div>
                     <span>Estimated Cost</span>
+
                     <strong>
                       {selectedRequest.estimated_cost}
                     </strong>
@@ -1188,6 +1200,7 @@ function AdminProjectRequests() {
 
                   <div>
                     <span>Estimated Duration</span>
+
                     <strong>
                       {selectedRequest.estimated_duration}
                     </strong>
@@ -1201,6 +1214,7 @@ function AdminProjectRequests() {
 
                   <div>
                     <span>Required Team</span>
+
                     <strong>
                       {selectedRequest.team_size} Members
                     </strong>
@@ -1214,6 +1228,7 @@ function AdminProjectRequests() {
 
                   <div>
                     <span>Complexity</span>
+
                     <strong>
                       {selectedRequest.complexity}
                     </strong>
@@ -1227,6 +1242,7 @@ function AdminProjectRequests() {
 
                   <div>
                     <span>Risk Level</span>
+
                     <strong>
                       {selectedRequest.risk_level}
                     </strong>
@@ -1240,6 +1256,7 @@ function AdminProjectRequests() {
 
                   <div>
                     <span>Requested On</span>
+
                     <strong>
                       {formatDate(
                         selectedRequest.requested_at
@@ -1250,6 +1267,7 @@ function AdminProjectRequests() {
               </div>
 
               {/* RESOURCES */}
+
               <div className="request-modal-section">
                 <div className="request-section-heading">
                   <div>
@@ -1293,6 +1311,7 @@ function AdminProjectRequests() {
             </div>
 
             {/* MODAL ACTIONS */}
+
             <div className="project-request-modal-footer">
               <button
                 type="button"
@@ -1578,6 +1597,7 @@ function AdminProjectRequests() {
                       }`}
                     >
                       {employee.active_projects_count} / 3
+
                       <span>Projects</span>
                     </div>
 
@@ -1608,6 +1628,7 @@ function AdminProjectRequests() {
                 onClick={closeModal}
               >
                 <Users size={15} />
+
                 Assign{" "}
                 {selectedEmployees.length > 0
                   ? selectedEmployees.length
