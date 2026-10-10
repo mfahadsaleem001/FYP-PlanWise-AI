@@ -1,4 +1,5 @@
 import { useRef, useState } from "react";
+import { useToast } from "../../components/common/ToastProvider";
 import {
   UserRound,
   Mail,
@@ -18,6 +19,7 @@ import "./Profile.css";
 
 function Profile() {
   const fileInputRef = useRef(null);
+  const { showToast } = useToast();
 
   const [profile, setProfile] = useState({
     name: "Fahad Saleem",
@@ -64,12 +66,11 @@ function Profile() {
   const handleProfileImageChange = (event) => {
     const file = event.target.files?.[0];
 
-    if (!file) {
-      return;
-    }
+    if (!file) return;
 
     if (!file.type.startsWith("image/")) {
-      setProfileMessage("Please select a valid image file.");
+      showToast("Please select a valid image file.", "error");
+      event.target.value = "";
       return;
     }
 
@@ -81,6 +82,29 @@ function Profile() {
     }));
 
     setProfileMessage("");
+    event.target.value = "";
+  };
+
+  const handleProfilePhotoUpload = (event) => {
+    const file = event.target.files?.[0];
+
+    if (!file) return;
+
+    if (!file.type.startsWith("image/")) {
+      showToast("Please select a valid image file.", "error");
+      event.target.value = "";
+      return;
+    }
+
+    const imageUrl = URL.createObjectURL(file);
+
+    setProfile((prev) => ({
+      ...prev,
+      profileImage: imageUrl,
+    }));
+
+    showToast("Profile photo updated successfully.", "success");
+    event.target.value = "";
   };
 
   // ============================================================
@@ -124,12 +148,10 @@ function Profile() {
       profileImage: editForm.profileImage,
     });
 
-    setProfileMessage("Profile updated successfully.");
+    setProfileMessage("");
+    setShowEditModal(false);
 
-    setTimeout(() => {
-      setShowEditModal(false);
-      setProfileMessage("");
-    }, 900);
+    showToast("Profile updated successfully.", "success");
   };
 
   // ============================================================
@@ -179,48 +201,31 @@ function Profile() {
     const currentPassword =
       passwordData.currentPassword.trim();
 
-    const newPassword =
-      passwordData.newPassword;
+    const newPassword = passwordData.newPassword;
+    const confirmPassword = passwordData.confirmPassword;
 
-    const confirmPassword =
-      passwordData.confirmPassword;
-
-    // Current password required
     if (!currentPassword) {
-      setPasswordError(
-        "Please enter your current password."
-      );
+      setPasswordError("Please enter your current password.");
       return;
     }
 
-    // New password required
     if (!newPassword) {
-      setPasswordError(
-        "Please enter a new password."
-      );
+      setPasswordError("Please enter a new password.");
       return;
     }
 
-    // Password must be 4–12 characters
-    if (
-      newPassword.length < 4 ||
-      newPassword.length > 12
-    ) {
+    if (newPassword.length < 4 || newPassword.length > 12) {
       setPasswordError(
         "Password must be between 4 and 12 characters."
       );
       return;
     }
 
-    // Confirm password required
     if (!confirmPassword) {
-      setPasswordError(
-        "Please confirm your new password."
-      );
+      setPasswordError("Please confirm your new password.");
       return;
     }
 
-    // Password match
     if (newPassword !== confirmPassword) {
       setPasswordError(
         "New password and confirm password do not match."
@@ -228,10 +233,10 @@ function Profile() {
       return;
     }
 
-    // Demo success
-    setPasswordMessage(
-      "Password changed successfully."
-    );
+    // Demo success only — no backend password update.
+    setPasswordMessage("Password changed successfully.");
+
+    showToast("Password changed successfully.", "success");
 
     setTimeout(() => {
       closePasswordModal();
@@ -262,18 +267,12 @@ function Profile() {
 
   return (
     <div className="profile-page">
-      {/* ========================================================
-          PAGE HEADER
-      ======================================================== */}
+      {/* PAGE HEADER */}
 
       <div className="profile-page-header">
         <div>
-          <span className="profile-eyebrow">
-            ACCOUNT
-          </span>
-
+          <span className="profile-eyebrow">ACCOUNT</span>
           <h1>Profile</h1>
-
           <p>
             Manage your personal information and account
             security.
@@ -290,9 +289,7 @@ function Profile() {
         </button>
       </div>
 
-      {/* ========================================================
-          PROFILE OVERVIEW
-      ======================================================== */}
+      {/* PROFILE OVERVIEW */}
 
       <section className="profile-overview-card">
         <div className="profile-overview-left">
@@ -303,16 +300,7 @@ function Profile() {
               type="button"
               className="profile-camera-btn"
               title="Change profile photo"
-              onClick={() => {
-                setEditForm({
-                  name: profile.name,
-                  email: profile.email,
-                  phone: profile.phone,
-                  profileImage: profile.profileImage,
-                });
-
-                fileInputRef.current?.click();
-              }}
+              onClick={() => fileInputRef.current?.click()}
             >
               <Camera size={15} />
             </button>
@@ -322,32 +310,7 @@ function Profile() {
               type="file"
               accept="image/*"
               className="profile-hidden-file-input"
-              onChange={(event) => {
-                const file = event.target.files?.[0];
-
-                if (!file) {
-                  return;
-                }
-
-                if (!file.type.startsWith("image/")) {
-                  setProfileMessage(
-                    "Please select a valid image file."
-                  );
-                  return;
-                }
-
-                const imageUrl =
-                  URL.createObjectURL(file);
-
-                setProfile((prev) => ({
-                  ...prev,
-                  profileImage: imageUrl,
-                }));
-
-                setProfileMessage(
-                  "Profile photo updated successfully."
-                );
-              }}
+              onChange={handleProfilePhotoUpload}
             />
           </div>
 
@@ -384,9 +347,7 @@ function Profile() {
         </div>
       </section>
 
-      {/* ========================================================
-          PROFILE INFORMATION
-      ======================================================== */}
+      {/* PROFILE INFORMATION */}
 
       <section className="profile-section">
         <div className="profile-section-header">
@@ -443,9 +404,7 @@ function Profile() {
 
             <div>
               <span>Phone Number</span>
-              <strong>
-                {profile.phone || "Not provided"}
-              </strong>
+              <strong>{profile.phone || "Not provided"}</strong>
             </div>
           </div>
 
@@ -462,9 +421,7 @@ function Profile() {
         </div>
       </section>
 
-      {/* ========================================================
-          ACCOUNT ACTIVITY
-      ======================================================== */}
+      {/* ACCOUNT ACTIVITY */}
 
       <section className="profile-section">
         <div className="profile-section-header">
@@ -508,9 +465,7 @@ function Profile() {
         </div>
       </section>
 
-      {/* ========================================================
-          SECURITY
-      ======================================================== */}
+      {/* SECURITY */}
 
       <section className="profile-section">
         <div className="profile-section-header">
@@ -568,28 +523,13 @@ function Profile() {
         </div>
       </section>
 
-      {/* ========================================================
-          PROFILE MESSAGE
-      ======================================================== */}
-
-      {profileMessage && (
-        <div className="profile-toast">
-          <CheckCircle2 size={17} />
-          <span>{profileMessage}</span>
-        </div>
-      )}
-
-      {/* ========================================================
-          EDIT PROFILE MODAL
-      ======================================================== */}
+      {/* EDIT PROFILE MODAL */}
 
       {showEditModal && (
         <div
           className="profile-modal-overlay"
           onMouseDown={(event) => {
-            if (
-              event.target === event.currentTarget
-            ) {
+            if (event.target === event.currentTarget) {
               closeEditProfile();
             }
           }}
@@ -631,9 +571,8 @@ function Profile() {
                     />
                   ) : (
                     <span>
-                      {editForm.name
-                        .charAt(0)
-                        .toUpperCase() || "F"}
+                      {editForm.name.charAt(0).toUpperCase() ||
+                        "F"}
                     </span>
                   )}
                 </div>
@@ -642,8 +581,7 @@ function Profile() {
                   <strong>Profile Photo</strong>
 
                   <p>
-                    Optional. JPG, PNG or other image
-                    formats.
+                    Optional. JPG, PNG or other image formats.
                   </p>
 
                   <button
@@ -673,10 +611,10 @@ function Profile() {
                       type="text"
                       value={editForm.name}
                       onChange={(event) =>
-                        setEditForm({
-                          ...editForm,
+                        setEditForm((prev) => ({
+                          ...prev,
                           name: event.target.value,
-                        })
+                        }))
                       }
                       placeholder="Enter your name"
                     />
@@ -696,10 +634,10 @@ function Profile() {
                       type="email"
                       value={editForm.email}
                       onChange={(event) =>
-                        setEditForm({
-                          ...editForm,
+                        setEditForm((prev) => ({
+                          ...prev,
                           email: event.target.value,
-                        })
+                        }))
                       }
                       placeholder="Enter your email"
                     />
@@ -719,10 +657,10 @@ function Profile() {
                       type="tel"
                       value={editForm.phone}
                       onChange={(event) =>
-                        setEditForm({
-                          ...editForm,
+                        setEditForm((prev) => ({
+                          ...prev,
                           phone: event.target.value,
-                        })
+                        }))
                       }
                       placeholder="Enter your phone number"
                     />
@@ -731,8 +669,8 @@ function Profile() {
               </div>
 
               {profileMessage && (
-                <div className="profile-form-message success">
-                  <CheckCircle2 size={16} />
+                <div className="profile-form-message error">
+                  <AlertCircle size={16} />
                   {profileMessage}
                 </div>
               )}
@@ -759,17 +697,13 @@ function Profile() {
         </div>
       )}
 
-      {/* ========================================================
-          CHANGE PASSWORD MODAL
-      ======================================================== */}
+      {/* CHANGE PASSWORD MODAL */}
 
       {showPasswordModal && (
         <div
           className="profile-modal-overlay"
           onMouseDown={(event) => {
-            if (
-              event.target === event.currentTarget
-            ) {
+            if (event.target === event.currentTarget) {
               closePasswordModal();
             }
           }}
@@ -823,20 +757,13 @@ function Profile() {
                 <div className="password-input-wrapper">
                   <input
                     id="current-password"
-                    type={
-                      showCurrentPassword
-                        ? "text"
-                        : "password"
-                    }
-                    value={
-                      passwordData.currentPassword
-                    }
+                    type={showCurrentPassword ? "text" : "password"}
+                    value={passwordData.currentPassword}
                     onChange={(event) =>
-                      setPasswordData({
-                        ...passwordData,
-                        currentPassword:
-                          event.target.value,
-                      })
+                      setPasswordData((prev) => ({
+                        ...prev,
+                        currentPassword: event.target.value,
+                      }))
                     }
                     autoComplete="current-password"
                     maxLength={12}
@@ -852,9 +779,7 @@ function Profile() {
                         : "Show password"
                     }
                     onClick={() =>
-                      setShowCurrentPassword(
-                        !showCurrentPassword
-                      )
+                      setShowCurrentPassword((prev) => !prev)
                     }
                   >
                     {showCurrentPassword ? (
@@ -876,18 +801,13 @@ function Profile() {
                 <div className="password-input-wrapper">
                   <input
                     id="new-password"
-                    type={
-                      showNewPassword
-                        ? "text"
-                        : "password"
-                    }
+                    type={showNewPassword ? "text" : "password"}
                     value={passwordData.newPassword}
                     onChange={(event) =>
-                      setPasswordData({
-                        ...passwordData,
-                        newPassword:
-                          event.target.value,
-                      })
+                      setPasswordData((prev) => ({
+                        ...prev,
+                        newPassword: event.target.value,
+                      }))
                     }
                     autoComplete="new-password"
                     minLength={4}
@@ -904,9 +824,7 @@ function Profile() {
                         : "Show password"
                     }
                     onClick={() =>
-                      setShowNewPassword(
-                        !showNewPassword
-                      )
+                      setShowNewPassword((prev) => !prev)
                     }
                   >
                     {showNewPassword ? (
@@ -933,19 +851,14 @@ function Profile() {
                   <input
                     id="confirm-password"
                     type={
-                      showConfirmPassword
-                        ? "text"
-                        : "password"
+                      showConfirmPassword ? "text" : "password"
                     }
-                    value={
-                      passwordData.confirmPassword
-                    }
+                    value={passwordData.confirmPassword}
                     onChange={(event) =>
-                      setPasswordData({
-                        ...passwordData,
-                        confirmPassword:
-                          event.target.value,
-                      })
+                      setPasswordData((prev) => ({
+                        ...prev,
+                        confirmPassword: event.target.value,
+                      }))
                     }
                     autoComplete="new-password"
                     minLength={4}
@@ -962,9 +875,7 @@ function Profile() {
                         : "Show password"
                     }
                     onClick={() =>
-                      setShowConfirmPassword(
-                        !showConfirmPassword
-                      )
+                      setShowConfirmPassword((prev) => !prev)
                     }
                   >
                     {showConfirmPassword ? (

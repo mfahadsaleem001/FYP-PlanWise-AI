@@ -1,31 +1,275 @@
-import { useState } from "react";
+
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 
 import {
   Search,
   Plus,
   Eye,
   Pencil,
+  Trash2,
   Users,
   UserCheck,
   UserX,
-  BriefcaseBusiness,
   X,
   Mail,
   Phone,
   MapPin,
-  CalendarDays,
+  BriefcaseBusiness,
   ShieldCheck,
+  Loader2,
+  AlertCircle,
+  RefreshCw,
 } from "lucide-react";
+
+import { useToast } from "../../components/common/ToastProvider";
+
+import {
+  getEmployees,
+  createEmployee,
+  updateEmployee,
+  deleteEmployee,
+} from "../../services/api";
 
 import "./AdminEmployees.css";
 
+const ROLE_OPTIONS = [
+  "Backend Developer",
+  "Frontend Developer",
+  "UI/UX Designer",
+  "QA Engineer",
+  "ML Engineer",
+  "Project Manager",
+  "DevOps Engineer",
+  "Data Analyst",
+  "Other",
+];
+
+// ============================================================
+// ERROR MESSAGE HELPER
+// ============================================================
+
+function getErrorMessage(
+  err,
+  fallback = "Something went wrong."
+) {
+  const candidates = [
+    err?.response?.data?.detail,
+    err?.response?.data?.message,
+    err?.response?.data?.error,
+    err?.data?.detail,
+    err?.data?.message,
+    err?.detail,
+    err?.message,
+  ];
+
+  const formatValue = (value, depth = 0) => {
+    if (depth > 4 || value == null) {
+      return "";
+    }
+
+    if (typeof value === "string") {
+      return value.trim();
+    }
+
+    if (
+      typeof value === "number" ||
+      typeof value === "boolean"
+    ) {
+      return String(value);
+    }
+
+    if (Array.isArray(value)) {
+      return value
+        .map((item) => formatValue(item, depth + 1))
+        .filter(Boolean)
+        .join(", ");
+    }
+
+    if (typeof value === "object") {
+      const preferredKeys = [
+        "message",
+        "msg",
+        "detail",
+        "error",
+        "description",
+      ];
+
+      for (const key of preferredKeys) {
+        if (value[key] != null) {
+          const result = formatValue(
+            value[key],
+            depth + 1
+          );
+
+          if (result) {
+            return result;
+          }
+        }
+      }
+
+      // Handle FastAPI validation errors.
+      // Example: { loc: ["body", "email"], msg: "Invalid email" }
+      if (Array.isArray(value.loc)) {
+        const field = value.loc
+          .filter((part) => part !== "body")
+          .join(".");
+
+        const description = value.msg || value.message;
+
+        if (field && description) {
+          return `${field}: ${formatValue(
+            description,
+            depth + 1
+          )}`;
+        }
+      }
+
+      const entries = Object.entries(value);
+
+      if (entries.length > 0) {
+        return entries
+          .map(([key, item]) => {
+            const result = formatValue(item, depth + 1);
+
+            return result ? `${key}: ${result}` : "";
+          })
+          .filter(Boolean)
+          .join(", ");
+      }
+    }
+
+    return "";
+  };
+
+  for (const candidate of candidates) {
+    const message = formatValue(candidate);
+
+    if (
+      message &&
+      message !== "[object Object]" &&
+      message !== "undefined" &&
+      message !== "null"
+    ) {
+      return message;
+    }
+  }
+
+  return fallback;
+}
+
+// ============================================================
+// NORMALIZATION HELPERS
+// ============================================================
+
+function normalizeSkills(skills) {
+  if (Array.isArray(skills)) {
+    return skills
+      .map((skill) => String(skill).trim())
+      .filter(Boolean);
+  }
+
+  if (typeof skills === "string") {
+    return skills
+      .split(",")
+      .map((skill) => skill.trim())
+      .filter(Boolean);
+  }
+
+  return [];
+}
+
+function normalizeAccountStatus(employee) {
+  const rawStatus =
+    employee.account_status ??
+    employee.status ??
+    "Unknown";
+
+  const status = String(rawStatus)
+    .trim()
+    .toLowerCase()
+    .replaceAll("-", "_")
+    .replaceAll(" ", "_");
+
+  const labels = {
+    active: "Active",
+    pending_setup: "Pending Setup",
+    inactive: "Inactive",
+    disabled: "Disabled",
+    suspended: "Suspended",
+    invited: "Invited",
+  };
+
+  return labels[status] || String(rawStatus);
+}
+
+function normalizeEmployee(employee) {
+  return {
+    id: employee.id ?? employee.employee_id,
+    userId: employee.user_id ?? null,
+    name: employee.name ?? "",
+    email: employee.email ?? "",
+    phone: employee.phone ?? "",
+    role: employee.job_title ?? employee.role ?? "Other",
+    experience: employee.experience ?? "",
+    skills: normalizeSkills(employee.skills),
+    location: employee.location ?? "",
+    accountStatus: normalizeAccountStatus(employee),
+  };
+}
+
+function getInitials(name = "") {
+  return (
+    name
+      .trim()
+      .split(/\s+/)
+      .filter(Boolean)
+      .map((part) => part[0])
+      .join("")
+      .slice(0, 2)
+      .toUpperCase() || "E"
+  );
+}
+
+function getAccountStatusClass(status = "") {
+  const normalized = status.toLowerCase();
+
+  if (normalized === "active") {
+    return "active";
+  }
+
+  if (
+    normalized === "pending setup" ||
+    normalized === "invited"
+  ) {
+    return "pending";
+  }
+
+  return "inactive";
+}
+
+// ============================================================
+// EMPLOYEES PAGE
+// ============================================================
+
 function Employees() {
+  const { showToast } = useToast();
+
+  const [employees, setEmployees] = useState([]);
+
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState("All");
   const [roleFilter, setRoleFilter] = useState("All");
 
-  const [selectedEmployee, setSelectedEmployee] = useState(null);
-  const [showEmployeeModal, setShowEmployeeModal] = useState(false);
+  const [selectedEmployee, setSelectedEmployee] =
+    useState(null);
+
+  const [showEmployeeModal, setShowEmployeeModal] =
+    useState(false);
 
   const [showAddEmployeeModal, setShowAddEmployeeModal] =
     useState(false);
@@ -33,10 +277,17 @@ function Employees() {
   const [showEditEmployeeModal, setShowEditEmployeeModal] =
     useState(false);
 
-  const [editingEmployee, setEditingEmployee] = useState(null);
+  const [editingEmployee, setEditingEmployee] =
+    useState(null);
 
-  // Separate text state for editing skills
-  const [editingSkillsInput, setEditingSkillsInput] = useState("");
+  const [editingSkillsInput, setEditingSkillsInput] =
+    useState("");
+
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+  const [deletingId, setDeletingId] = useState(null);
+
+  const [error, setError] = useState("");
 
   const [newEmployee, setNewEmployee] = useState({
     name: "",
@@ -45,170 +296,107 @@ function Employees() {
     role: "Backend Developer",
     experience: "",
     skills: "",
-    availability: "Available",
     location: "",
   });
 
-  const [employees, setEmployees] = useState([
-    {
-      id: 1,
-      name: "Ali Raza",
-      email: "ali.raza@planwise.com",
-      phone: "+92 300 1234567",
-      role: "Backend Developer",
-      experience: "5 Years",
-      skills: ["Python", "FastAPI", "PostgreSQL", "Docker"],
-      availability: "Available",
-      workload: 40,
-      currentProject: "E-Commerce Platform",
-      location: "Islamabad, Pakistan",
-      joined: "March 2023",
-      status: "Active",
-      accountStatus: "Active",
-      assignedProjects: 2,
-    },
-    {
-      id: 2,
-      name: "Hamza Khan",
-      email: "hamza.khan@planwise.com",
-      phone: "+92 301 2345678",
-      role: "Backend Developer",
-      experience: "4 Years",
-      skills: ["Django", "Python", "REST API", "MySQL"],
-      availability: "Assigned",
-      workload: 80,
-      currentProject: "Business Analytics Portal",
-      location: "Lahore, Pakistan",
-      joined: "August 2022",
-      status: "Active",
-      accountStatus: "Active",
-      assignedProjects: 3,
-    },
-    {
-      id: 3,
-      name: "Ahmed Ali",
-      email: "ahmed.ali@planwise.com",
-      phone: "+92 302 3456789",
-      role: "Frontend Developer",
-      experience: "3 Years",
-      skills: ["React", "JavaScript", "HTML", "CSS"],
-      availability: "Available",
-      workload: 30,
-      currentProject: "—",
-      location: "Islamabad, Pakistan",
-      joined: "January 2024",
-      status: "Active",
-      accountStatus: "Active",
-      assignedProjects: 1,
-    },
-    {
-      id: 4,
-      name: "Mariam Iqbal",
-      email: "mariam.iqbal@planwise.com",
-      phone: "+92 303 4567890",
-      role: "UI/UX Designer",
-      experience: "4 Years",
-      skills: ["Figma", "Wireframing", "Prototyping", "Design Systems"],
-      availability: "Available",
-      workload: 35,
-      currentProject: "Customer Mobile App",
-      location: "Rawalpindi, Pakistan",
-      joined: "June 2023",
-      status: "Active",
-      accountStatus: "Active",
-      assignedProjects: 2,
-    },
-    {
-      id: 5,
-      name: "Sara Ahmed",
-      email: "sara.ahmed@planwise.com",
-      phone: "+92 304 5678901",
-      role: "QA Engineer",
-      experience: "3 Years",
-      skills: ["Manual Testing", "Automation", "Postman", "Selenium"],
-      availability: "Available",
-      workload: 25,
-      currentProject: "Healthcare Management System",
-      location: "Islamabad, Pakistan",
-      joined: "September 2023",
-      status: "Active",
-      accountStatus: "Active",
-      assignedProjects: 1,
-    },
-    {
-      id: 6,
-      name: "Usman Tariq",
-      email: "usman.tariq@planwise.com",
-      phone: "+92 305 6789012",
-      role: "ML Engineer",
-      experience: "5 Years",
-      skills: ["Python", "Scikit-learn", "PyTorch", "Pandas"],
-      availability: "Assigned",
-      workload: 90,
-      currentProject: "AI Recommendation Engine",
-      location: "Karachi, Pakistan",
-      joined: "February 2022",
-      status: "Active",
-      accountStatus: "Active",
-      assignedProjects: 2,
-    },
-    {
-      id: 7,
-      name: "Ayesha Malik",
-      email: "ayesha.malik@planwise.com",
-      phone: "+92 306 7890123",
-      role: "Project Manager",
-      experience: "6 Years",
-      skills: ["Agile", "Scrum", "Planning", "Risk Management"],
-      availability: "Available",
-      workload: 45,
-      currentProject: "SaaS Project Management Tool",
-      location: "Islamabad, Pakistan",
-      joined: "November 2021",
-      status: "Active",
-      accountStatus: "Active",
-      assignedProjects: 3,
-    },
-    {
-      id: 8,
-      name: "Bilal Hassan",
-      email: "bilal.hassan@planwise.com",
-      phone: "+92 307 8901234",
-      role: "Frontend Developer",
-      experience: "2 Years",
-      skills: ["React", "TypeScript", "Tailwind CSS", "Next.js"],
-      availability: "Unavailable",
-      workload: 100,
-      currentProject: "Customer Mobile App",
-      location: "Peshawar, Pakistan",
-      joined: "May 2024",
-      status: "Active",
-      accountStatus: "Active",
-      assignedProjects: 2,
-    },
+  // ============================================================
+  // FETCH EMPLOYEES
+  // ============================================================
+
+  const fetchEmployees = useCallback(async () => {
+    setLoading(true);
+    setError("");
+
+    try {
+      const data = await getEmployees();
+
+      if (!Array.isArray(data)) {
+        throw new Error(
+          "Unexpected response from the employees API."
+        );
+      }
+
+      setEmployees(data.map(normalizeEmployee));
+    } catch (err) {
+      console.error("Fetch employees failed:", err);
+
+      setError(
+        getErrorMessage(
+          err,
+          "Unable to load employees."
+        )
+      );
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchEmployees();
+  }, [fetchEmployees]);
+
+  // ============================================================
+  // SEARCH AND FILTERS
+  // ============================================================
+
+  const filteredEmployees = useMemo(() => {
+    const normalizedSearch = searchTerm
+      .trim()
+      .toLowerCase();
+
+    return employees.filter((employee) => {
+      const searchableText = [
+        employee.name,
+        employee.email,
+        employee.role,
+        employee.phone,
+        employee.location,
+        ...employee.skills,
+      ]
+        .join(" ")
+        .toLowerCase();
+
+      const matchesSearch =
+        searchableText.includes(normalizedSearch);
+
+      const matchesStatus =
+        statusFilter === "All" ||
+        employee.accountStatus.toLowerCase() ===
+          statusFilter.toLowerCase();
+
+      const matchesRole =
+        roleFilter === "All" ||
+        employee.role === roleFilter;
+
+      return (
+        matchesSearch &&
+        matchesStatus &&
+        matchesRole
+      );
+    });
+  }, [
+    employees,
+    searchTerm,
+    statusFilter,
+    roleFilter,
   ]);
 
-  const filteredEmployees = employees.filter((employee) => {
-    const normalizedSearch = searchTerm.toLowerCase().trim();
+  const activeCount = employees.filter(
+    (employee) =>
+      employee.accountStatus === "Active"
+  ).length;
 
-    const matchesSearch =
-      employee.name.toLowerCase().includes(normalizedSearch) ||
-      employee.email.toLowerCase().includes(normalizedSearch) ||
-      employee.role.toLowerCase().includes(normalizedSearch) ||
-      employee.skills.some((skill) =>
-        skill.toLowerCase().includes(normalizedSearch)
-      );
+  const pendingCount = employees.filter(
+    (employee) =>
+      employee.accountStatus === "Pending Setup"
+  ).length;
 
-    const matchesStatus =
-      statusFilter === "All" ||
-      employee.availability === statusFilter;
+  const otherCount =
+    employees.length - activeCount - pendingCount;
 
-    const matchesRole =
-      roleFilter === "All" ||
-      employee.role === roleFilter;
-
-    return matchesSearch && matchesStatus && matchesRole;
-  });
+  // ============================================================
+  // VIEW EMPLOYEE
+  // ============================================================
 
   const openEmployee = (employee) => {
     setSelectedEmployee(employee);
@@ -220,7 +408,13 @@ function Employees() {
     setShowEmployeeModal(false);
   };
 
+  // ============================================================
+  // ADD EMPLOYEE
+  // ============================================================
+
   const openAddEmployee = () => {
+    setError("");
+
     setNewEmployee({
       name: "",
       email: "",
@@ -228,7 +422,6 @@ function Employees() {
       role: "Backend Developer",
       experience: "",
       skills: "",
-      availability: "Available",
       location: "",
     });
 
@@ -236,6 +429,8 @@ function Employees() {
   };
 
   const closeAddEmployee = () => {
+    if (saving) return;
+
     setShowAddEmployeeModal(false);
   };
 
@@ -248,49 +443,68 @@ function Employees() {
     }));
   };
 
-  const handleAddEmployee = (event) => {
+  const handleAddEmployee = async (event) => {
     event.preventDefault();
 
-    if (!newEmployee.name.trim() || !newEmployee.email.trim()) {
-      return;
+    if (saving) return;
+
+    setSaving(true);
+    setError("");
+
+    try {
+      const payload = {
+        name: newEmployee.name.trim(),
+        email: newEmployee.email
+          .trim()
+          .toLowerCase(),
+        job_title: newEmployee.role,
+        phone: newEmployee.phone.trim() || null,
+        experience:
+          newEmployee.experience.trim() || null,
+        skills: newEmployee.skills
+          .split(",")
+          .map((skill) => skill.trim())
+          .filter(Boolean),
+        location:
+          newEmployee.location.trim() || null,
+      };
+
+      await createEmployee(payload);
+
+      setShowAddEmployeeModal(false);
+
+      showToast(
+        "Employee created successfully.",
+        "success"
+      );
+
+      await fetchEmployees();
+    } catch (err) {
+      console.error("Create employee failed:", err);
+
+      showToast(
+        getErrorMessage(
+          err,
+          "Unable to create employee."
+        ),
+        "error"
+      );
+    } finally {
+      setSaving(false);
     }
-
-    const skillsArray = newEmployee.skills
-      .split(",")
-      .map((skill) => skill.trim())
-      .filter(Boolean);
-
-    const employee = {
-      id: Date.now(),
-      name: newEmployee.name.trim(),
-      email: newEmployee.email.trim().toLowerCase(),
-      phone: newEmployee.phone.trim(),
-      role: newEmployee.role,
-      experience: newEmployee.experience.trim(),
-      skills: skillsArray,
-      availability: newEmployee.availability,
-      workload:
-        newEmployee.availability === "Unavailable" ? 100 : 0,
-      currentProject: "—",
-      location: newEmployee.location.trim(),
-      joined: "September 2026",
-      status: "Active",
-      accountStatus: "Pending Setup",
-      assignedProjects: 0,
-    };
-
-    setEmployees((previous) => [employee, ...previous]);
-    setShowAddEmployeeModal(false);
   };
 
-  const openEditEmployee = (employee) => {
-    setEditingEmployee({
-      ...employee,
-      skills: [...employee.skills],
-    });
+  // ============================================================
+  // EDIT EMPLOYEE
+  // ============================================================
 
-    // Keep skills as normal text while editing
-    setEditingSkillsInput(employee.skills.join(", "));
+  const openEditEmployee = (employee) => {
+    setError("");
+
+    setEditingEmployee({ ...employee });
+    setEditingSkillsInput(
+      employee.skills.join(", ")
+    );
 
     setShowEmployeeModal(false);
     setSelectedEmployee(null);
@@ -298,6 +512,8 @@ function Employees() {
   };
 
   const closeEditEmployee = () => {
+    if (saving) return;
+
     setShowEditEmployeeModal(false);
     setEditingEmployee(null);
     setEditingSkillsInput("");
@@ -312,93 +528,126 @@ function Employees() {
     }));
   };
 
-  // Only update the text field while typing
-  const handleEditSkillsInput = (event) => {
-    setEditingSkillsInput(event.target.value);
-  };
-
-  const handleUpdateEmployee = (event) => {
+  const handleUpdateEmployee = async (event) => {
     event.preventDefault();
 
-    if (!editingEmployee) {
+    if (!editingEmployee || saving) return;
+
+    if (
+      editingEmployee.id === null ||
+      editingEmployee.id === undefined ||
+      editingEmployee.id === ""
+    ) {
+      showToast(
+        "Cannot update employee: employee ID is missing. Refresh the employee list and try again.",
+        "error"
+      );
       return;
     }
 
-    // Convert unlimited comma-separated skills into an array on save
-    const skillsArray = editingSkillsInput
-      .split(",")
-      .map((skill) => skill.trim())
-      .filter(Boolean);
+    setSaving(true);
+    setError("");
 
-    const updatedEmployee = {
-      ...editingEmployee,
-      name: editingEmployee.name.trim(),
-      email: editingEmployee.email.trim().toLowerCase(),
-      phone: editingEmployee.phone.trim(),
-      experience: editingEmployee.experience.trim(),
-      location: editingEmployee.location.trim(),
-      skills: skillsArray,
-      workload:
-        editingEmployee.availability === "Unavailable"
-          ? 100
-          : Number(editingEmployee.workload) || 0,
-    };
+    try {
+      const payload = {
+        name: editingEmployee.name.trim(),
+        email: editingEmployee.email
+          .trim()
+          .toLowerCase(),
+        job_title: editingEmployee.role,
+        phone:
+          editingEmployee.phone.trim() || null,
+        experience:
+          String(editingEmployee.experience ?? "").trim() ||
+          null,
+        skills: editingSkillsInput
+          .split(",")
+          .map((skill) => skill.trim())
+          .filter(Boolean),
+        location:
+          editingEmployee.location.trim() || null,
+      };
 
-    setEmployees((previous) =>
-      previous.map((employee) =>
-        employee.id === updatedEmployee.id
-          ? updatedEmployee
-          : employee
-      )
+      // Keep the employee ID separate from the update payload.
+      const employeeId = editingEmployee.id;
+
+      await updateEmployee(employeeId, payload);
+
+      setShowEditEmployeeModal(false);
+      setEditingEmployee(null);
+      setEditingSkillsInput("");
+
+      showToast(
+        "Employee updated successfully.",
+        "success"
+      );
+
+      await fetchEmployees();
+    } catch (err) {
+      // Helpful for diagnosing API errors in the browser console.
+      console.error("Update employee failed:", err);
+
+      showToast(
+        getErrorMessage(
+          err,
+          "Unable to update employee."
+        ),
+        "error"
+      );
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  // ============================================================
+  // DELETE EMPLOYEE
+  // ============================================================
+
+  const handleDeleteEmployee = async (employee) => {
+    const confirmed = window.confirm(
+      `Are you sure you want to delete ${employee.name}? This action cannot be undone.`
     );
 
-    closeEditEmployee();
-  };
+    if (!confirmed || deletingId !== null) return;
 
-  const getAvailabilityClass = (availability) => {
-    if (availability === "Available") {
-      return "available";
+    setDeletingId(employee.id);
+    setError("");
+
+    try {
+      await deleteEmployee(employee.id);
+
+      setEmployees((previous) =>
+        previous.filter(
+          (item) => item.id !== employee.id
+        )
+      );
+
+      setShowEmployeeModal(false);
+      setSelectedEmployee(null);
+
+      showToast(
+        "Employee deleted successfully.",
+        "success"
+      );
+    } catch (err) {
+      console.error("Delete employee failed:", err);
+
+      showToast(
+        getErrorMessage(
+          err,
+          "Unable to delete employee."
+        ),
+        "error"
+      );
+    } finally {
+      setDeletingId(null);
     }
-
-    if (availability === "Assigned") {
-      return "assigned";
-    }
-
-    return "unavailable";
-  };
-
-  const getWorkloadClass = (workload) => {
-    if (workload >= 90) {
-      return "critical";
-    }
-
-    if (workload >= 70) {
-      return "high";
-    }
-
-    if (workload >= 40) {
-      return "medium";
-    }
-
-    return "low";
-  };
-
-  const getAccountStatusClass = (accountStatus) => {
-    return accountStatus === "Active" ? "active" : "pending";
-  };
-
-  const getInitials = (name) => {
-    return name
-      .split(" ")
-      .map((part) => part[0])
-      .join("")
-      .slice(0, 2)
-      .toUpperCase();
   };
 
   return (
     <div className="admin-employees">
       {/* PAGE HEADER */}
+
       <div className="admin-employees-header">
         <div className="admin-employees-header-content">
           <span className="admin-employees-eyebrow">
@@ -408,101 +657,140 @@ function Employees() {
           <h1>Employees & Resources</h1>
 
           <p>
-            Manage employees, skills, availability, workload, and
-            project assignments.
+            Manage employee profiles, skills, and account status.
           </p>
         </div>
 
-        <button
-          className="admin-employees-primary"
-          onClick={openAddEmployee}
-        >
-          <Plus size={16} />
-          Add Employee
-        </button>
+        <div className="admin-employees-header-actions">
+          <button
+            type="button"
+            className="admin-employees-primary"
+            onClick={fetchEmployees}
+            disabled={loading}
+          >
+            <RefreshCw
+              size={15}
+              className={
+                loading ? "admin-employees-spin" : ""
+              }
+            />
+            Refresh
+          </button>
+
+          <button
+            type="button"
+            className="admin-employees-primary"
+            onClick={openAddEmployee}
+          >
+            <Plus size={16} />
+            Add Employee
+          </button>
+        </div>
       </div>
 
+      {/* INITIAL LOAD / REFRESH ERROR */}
+
+      {error && (
+        <div className="admin-employees-message admin-employees-error">
+          <AlertCircle size={18} />
+          <span>{error}</span>
+
+          <button
+            type="button"
+            onClick={() => setError("")}
+            aria-label="Dismiss error"
+          >
+            <X size={15} />
+          </button>
+        </div>
+      )}
+
       {/* SUMMARY CARDS */}
+
       <div className="admin-employees-stat-grid">
         <div className="admin-employees-stat-card">
           <div className="admin-employees-stat-top">
             <span>Total Employees</span>
-
             <div className="admin-employees-stat-icon">
               <Users size={17} />
             </div>
           </div>
 
-          <strong>{employees.length}</strong>
+          <strong>
+            {loading ? (
+              <Loader2 size={20} />
+            ) : (
+              employees.length
+            )}
+          </strong>
 
-          <small>Active resources</small>
+          <small>
+            Employee records in the database
+          </small>
         </div>
 
         <div className="admin-employees-stat-card">
           <div className="admin-employees-stat-top">
-            <span>Available</span>
-
+            <span>Active Accounts</span>
             <div className="admin-employees-stat-icon">
               <UserCheck size={17} />
             </div>
           </div>
 
           <strong>
-            {
-              employees.filter(
-                (employee) =>
-                  employee.availability === "Available"
-              ).length
-            }
+            {loading ? (
+              <Loader2 size={20} />
+            ) : (
+              activeCount
+            )}
           </strong>
 
-          <small>Ready for assignment</small>
+          <small>Accounts marked active</small>
         </div>
 
         <div className="admin-employees-stat-card">
           <div className="admin-employees-stat-top">
-            <span>Currently Assigned</span>
-
+            <span>Pending Setup</span>
             <div className="admin-employees-stat-icon">
-              <BriefcaseBusiness size={17} />
+              <ShieldCheck size={17} />
             </div>
           </div>
 
           <strong>
-            {
-              employees.filter(
-                (employee) =>
-                  employee.availability === "Assigned"
-              ).length
-            }
+            {loading ? (
+              <Loader2 size={20} />
+            ) : (
+              pendingCount
+            )}
           </strong>
 
-          <small>Working on projects</small>
+          <small>Awaiting password setup</small>
         </div>
 
         <div className="admin-employees-stat-card">
           <div className="admin-employees-stat-top">
-            <span>Unavailable</span>
-
+            <span>Other Statuses</span>
             <div className="admin-employees-stat-icon">
               <UserX size={17} />
             </div>
           </div>
 
           <strong>
-            {
-              employees.filter(
-                (employee) =>
-                  employee.availability === "Unavailable"
-              ).length
-            }
+            {loading ? (
+              <Loader2 size={20} />
+            ) : (
+              otherCount
+            )}
           </strong>
 
-          <small>At full capacity</small>
+          <small>
+            Inactive or other account statuses
+          </small>
         </div>
       </div>
 
-      {/* MAIN PANEL */}
+      {/* RESOURCE DIRECTORY */}
+
       <section className="admin-employees-panel">
         <div className="admin-employees-toolbar">
           <div className="admin-employees-toolbar-left">
@@ -510,7 +798,9 @@ function Employees() {
               <span>Resource Directory</span>
 
               <small>
-                {filteredEmployees.length} employees
+                {loading
+                  ? "Loading..."
+                  : `${filteredEmployees.length} employees`}
               </small>
             </div>
           </div>
@@ -536,10 +826,17 @@ function Employees() {
                 setStatusFilter(event.target.value)
               }
             >
-              <option value="All">All Availability</option>
-              <option value="Available">Available</option>
-              <option value="Assigned">Assigned</option>
-              <option value="Unavailable">Unavailable</option>
+              <option value="All">
+                All Account Statuses
+              </option>
+              <option value="Active">Active</option>
+              <option value="Pending Setup">
+                Pending Setup
+              </option>
+              <option value="Inactive">Inactive</option>
+              <option value="Disabled">Disabled</option>
+              <option value="Suspended">Suspended</option>
+              <option value="Invited">Invited</option>
             </select>
 
             <select
@@ -551,34 +848,24 @@ function Employees() {
             >
               <option value="All">All Roles</option>
 
-              <option value="Backend Developer">
-                Backend Developer
-              </option>
-
-              <option value="Frontend Developer">
-                Frontend Developer
-              </option>
-
-              <option value="UI/UX Designer">
-                UI/UX Designer
-              </option>
-
-              <option value="QA Engineer">
-                QA Engineer
-              </option>
-
-              <option value="ML Engineer">
-                ML Engineer
-              </option>
-
-              <option value="Project Manager">
-                Project Manager
-              </option>
+              {[
+                ...new Set([
+                  ...ROLE_OPTIONS,
+                  ...employees.map(
+                    (employee) => employee.role
+                  ),
+                ]),
+              ].map((role) => (
+                <option key={role} value={role}>
+                  {role}
+                </option>
+              ))}
             </select>
           </div>
         </div>
 
-        {/* TABLE */}
+        {/* EMPLOYEES TABLE */}
+
         <div className="admin-employees-table-wrapper">
           <table className="admin-employees-table">
             <thead>
@@ -587,150 +874,180 @@ function Employees() {
                 <th>Role</th>
                 <th>Experience</th>
                 <th>Skills</th>
-                <th>Availability</th>
-                <th>Workload</th>
+                <th>Phone</th>
+                <th>Location</th>
                 <th>Account</th>
-                <th>Current Project</th>
                 <th>Actions</th>
               </tr>
             </thead>
 
             <tbody>
-              {filteredEmployees.length === 0 ? (
+              {loading ? (
                 <tr>
                   <td
-                    colSpan="9"
+                    colSpan="8"
+                    className="admin-employees-empty"
+                  >
+                    <Loader2
+                      size={24}
+                      className="admin-employees-spin"
+                    />
+                    <strong>
+                      Loading employees...
+                    </strong>
+                  </td>
+                </tr>
+              ) : filteredEmployees.length === 0 ? (
+                <tr>
+                  <td
+                    colSpan="8"
                     className="admin-employees-empty"
                   >
                     <Users size={25} />
 
-                    <strong>No employees found</strong>
+                    <strong>
+                      {error
+                        ? "Employee records could not be loaded"
+                        : "No employees found"}
+                    </strong>
 
                     <span>
-                      Try changing your search or filters.
+                      {error
+                        ? "Check your connection and try refreshing."
+                        : "Try changing your search or filters."}
                     </span>
+
+                    {error && (
+                      <button
+                        type="button"
+                        className="admin-employees-primary"
+                        onClick={fetchEmployees}
+                      >
+                        Try Again
+                      </button>
+                    )}
                   </td>
                 </tr>
               ) : (
-                filteredEmployees.map((employee, index) => (
-                  <tr
-                    key={employee.id}
-                    className="admin-employee-row"
-                    style={{
-                      "--row-index": index,
-                    }}
-                  >
-                    <td>
-                      <div className="admin-employee-cell">
-                        <div className="admin-employee-avatar">
-                          {getInitials(employee.name)}
+                filteredEmployees.map(
+                  (employee, index) => (
+                    <tr
+                      key={employee.id ?? employee.email}
+                      className="admin-employee-row"
+                      style={{
+                        "--row-index": index,
+                      }}
+                    >
+                      <td>
+                        <div className="admin-employee-cell">
+                          <div className="admin-employee-avatar">
+                            {getInitials(employee.name)}
+                          </div>
+
+                          <div className="admin-employee-info">
+                            <strong>
+                              {employee.name}
+                            </strong>
+                            <span>
+                              {employee.email}
+                            </span>
+                          </div>
                         </div>
+                      </td>
 
-                        <div className="admin-employee-info">
-                          <strong>{employee.name}</strong>
-                          <span>{employee.email}</span>
+                      <td>
+                        <span className="admin-employee-role">
+                          {employee.role}
+                        </span>
+                      </td>
+
+                      <td>
+                        <span className="admin-employee-experience">
+                          {employee.experience || "—"}
+                        </span>
+                      </td>
+
+                      <td>
+                        <div className="admin-employee-skills">
+                          {employee.skills.length > 0 ? (
+                            employee.skills.map(
+                              (skill, skillIndex) => (
+                                <span
+                                  key={`${skill}-${skillIndex}`}
+                                >
+                                  {skill}
+                                </span>
+                              )
+                            )
+                          ) : (
+                            <span>Not provided</span>
+                          )}
                         </div>
-                      </div>
-                    </td>
+                      </td>
 
-                    <td>
-                      <span className="admin-employee-role">
-                        {employee.role}
-                      </span>
-                    </td>
+                      <td>{employee.phone || "—"}</td>
+                      <td>{employee.location || "—"}</td>
 
-                    <td>
-                      <span className="admin-employee-experience">
-                        {employee.experience}
-                      </span>
-                    </td>
+                      <td>
+                        <span
+                          className={`admin-account-status ${getAccountStatusClass(
+                            employee.accountStatus
+                          )}`}
+                        >
+                          <span className="admin-account-status-dot" />
+                          {employee.accountStatus}
+                        </span>
+                      </td>
 
-                    <td>
-                      <div className="admin-employee-skills">
-                        {employee.skills.map((skill, skillIndex) => (
-                          <span key={`${skill}-${skillIndex}`}>
-                            {skill}
-                          </span>
-                        ))}
-                      </div>
-                    </td>
+                      <td>
+                        <div className="admin-employee-actions">
+                          <button
+                            type="button"
+                            className="admin-table-action"
+                            title="View employee"
+                            onClick={() =>
+                              openEmployee(employee)
+                            }
+                          >
+                            <Eye size={15} />
+                          </button>
 
-                    <td>
-                      <span
-                        className={`admin-availability-badge ${getAvailabilityClass(
-                          employee.availability
-                        )}`}
-                      >
-                        <span className="admin-availability-dot" />
+                          <button
+                            type="button"
+                            className="admin-table-action"
+                            title="Edit employee"
+                            onClick={() =>
+                              openEditEmployee(employee)
+                            }
+                          >
+                            <Pencil size={15} />
+                          </button>
 
-                        {employee.availability}
-                      </span>
-                    </td>
-
-                    <td>
-                      <div className="admin-workload">
-                        <div className="admin-workload-top">
-                          <span>
-                            {employee.workload}%
-                          </span>
-                        </div>
-
-                        <div className="admin-workload-track">
-                          <span
-                            className={getWorkloadClass(
-                              employee.workload
+                          <button
+                            type="button"
+                            className="admin-table-action"
+                            title="Delete employee"
+                            disabled={
+                              deletingId === employee.id
+                            }
+                            onClick={() =>
+                              handleDeleteEmployee(employee)
+                            }
+                          >
+                            {deletingId === employee.id ? (
+                              <Loader2
+                                size={15}
+                                className="admin-employees-spin"
+                              />
+                            ) : (
+                              <Trash2 size={15} />
                             )}
-                            style={{
-                              width: `${employee.workload}%`,
-                            }}
-                          />
+                          </button>
                         </div>
-                      </div>
-                    </td>
-
-                    <td>
-                      <span
-                        className={`admin-account-status ${getAccountStatusClass(
-                          employee.accountStatus
-                        )}`}
-                      >
-                        <span className="admin-account-status-dot" />
-
-                        {employee.accountStatus}
-                      </span>
-                    </td>
-
-                    <td>
-                      <span className="admin-current-project">
-                        {employee.currentProject}
-                      </span>
-                    </td>
-
-                    <td>
-                      <div className="admin-employee-actions">
-                        <button
-                          className="admin-table-action"
-                          title="View employee"
-                          onClick={() =>
-                            openEmployee(employee)
-                          }
-                        >
-                          <Eye size={15} />
-                        </button>
-
-                        <button
-                          className="admin-table-action"
-                          title="Edit employee"
-                          onClick={() =>
-                            openEditEmployee(employee)
-                          }
-                        >
-                          <Pencil size={15} />
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                ))
+                      </td>
+                    </tr>
+                  )
+                )
               )}
             </tbody>
           </table>
@@ -740,31 +1057,13 @@ function Employees() {
           <span>
             Showing{" "}
             <strong>{filteredEmployees.length}</strong>{" "}
-            of{" "}
-            <strong>{employees.length}</strong>{" "}
-            employees
+            of <strong>{employees.length}</strong> employees
           </span>
-
-          <div className="admin-employees-pagination">
-            <button
-              className="admin-pagination-button"
-              disabled
-            >
-              Previous
-            </button>
-
-            <button className="admin-pagination-current">
-              1
-            </button>
-
-            <button className="admin-pagination-button">
-              Next
-            </button>
-          </div>
         </div>
       </section>
 
       {/* VIEW EMPLOYEE MODAL */}
+
       {showEmployeeModal && selectedEmployee && (
         <div
           className="admin-employee-modal-overlay"
@@ -772,22 +1071,21 @@ function Employees() {
         >
           <div
             className="admin-employee-modal"
-            onClick={(event) =>
-              event.stopPropagation()
-            }
+            onClick={(event) => event.stopPropagation()}
           >
             <div className="admin-employee-modal-header">
               <div>
                 <span className="admin-employee-modal-eyebrow">
                   EMPLOYEE PROFILE
                 </span>
-
                 <h2>Employee Details</h2>
               </div>
 
               <button
+                type="button"
                 className="admin-employee-modal-close"
                 onClick={closeEmployee}
+                aria-label="Close employee details"
               >
                 <X size={15} />
               </button>
@@ -803,18 +1101,16 @@ function Employees() {
 
                 <span className="admin-employee-modal-email">
                   <Mail size={12} />
-
                   {selectedEmployee.email}
                 </span>
 
                 <span
-                  className={`admin-availability-badge ${getAvailabilityClass(
-                    selectedEmployee.availability
+                  className={`admin-account-status ${getAccountStatusClass(
+                    selectedEmployee.accountStatus
                   )}`}
                 >
-                  <span className="admin-availability-dot" />
-
-                  {selectedEmployee.availability}
+                  <span className="admin-account-status-dot" />
+                  {selectedEmployee.accountStatus}
                 </span>
               </div>
             </div>
@@ -827,7 +1123,6 @@ function Employees() {
 
                 <div>
                   <span>Role</span>
-
                   <strong>
                     {selectedEmployee.role}
                   </strong>
@@ -836,14 +1131,14 @@ function Employees() {
 
               <div className="admin-employee-detail-card">
                 <div className="admin-employee-detail-icon">
-                  <CalendarDays size={14} />
+                  <BriefcaseBusiness size={14} />
                 </div>
 
                 <div>
                   <span>Experience</span>
-
                   <strong>
-                    {selectedEmployee.experience}
+                    {selectedEmployee.experience ||
+                      "Not provided"}
                   </strong>
                 </div>
               </div>
@@ -855,7 +1150,6 @@ function Employees() {
 
                 <div>
                   <span>Phone</span>
-
                   <strong>
                     {selectedEmployee.phone ||
                       "Not provided"}
@@ -870,37 +1164,9 @@ function Employees() {
 
                 <div>
                   <span>Location</span>
-
                   <strong>
-                    {selectedEmployee.location}
-                  </strong>
-                </div>
-              </div>
-
-              <div className="admin-employee-detail-card">
-                <div className="admin-employee-detail-icon">
-                  <BriefcaseBusiness size={14} />
-                </div>
-
-                <div>
-                  <span>Assigned Projects</span>
-
-                  <strong>
-                    {selectedEmployee.assignedProjects}
-                  </strong>
-                </div>
-              </div>
-
-              <div className="admin-employee-detail-card">
-                <div className="admin-employee-detail-icon">
-                  <CalendarDays size={14} />
-                </div>
-
-                <div>
-                  <span>Joined</span>
-
-                  <strong>
-                    {selectedEmployee.joined}
+                    {selectedEmployee.location ||
+                      "Not provided"}
                   </strong>
                 </div>
               </div>
@@ -910,14 +1176,16 @@ function Employees() {
               <span>Skills</span>
 
               <div className="admin-employee-modal-skills">
-                {selectedEmployee.skills.map(
-                  (skill, skillIndex) => (
-                    <span
-                      key={`${skill}-${skillIndex}`}
-                    >
-                      {skill}
-                    </span>
+                {selectedEmployee.skills.length > 0 ? (
+                  selectedEmployee.skills.map(
+                    (skill, index) => (
+                      <span key={`${skill}-${index}`}>
+                        {skill}
+                      </span>
+                    )
                   )
+                ) : (
+                  <span>No skills recorded</span>
                 )}
               </div>
             </div>
@@ -937,6 +1205,7 @@ function Employees() {
 
             <div className="admin-employee-modal-actions">
               <button
+                type="button"
                 className="admin-employee-modal-secondary"
                 onClick={closeEmployee}
               >
@@ -944,13 +1213,13 @@ function Employees() {
               </button>
 
               <button
+                type="button"
                 className="admin-employee-modal-primary"
                 onClick={() =>
                   openEditEmployee(selectedEmployee)
                 }
               >
                 <Pencil size={13} />
-
                 Edit Employee
               </button>
             </div>
@@ -959,6 +1228,7 @@ function Employees() {
       )}
 
       {/* ADD EMPLOYEE MODAL */}
+
       {showAddEmployeeModal && (
         <div
           className="admin-employee-modal-overlay"
@@ -966,22 +1236,22 @@ function Employees() {
         >
           <div
             className="admin-employee-form-modal"
-            onClick={(event) =>
-              event.stopPropagation()
-            }
+            onClick={(event) => event.stopPropagation()}
           >
             <div className="admin-employee-modal-header">
               <div>
                 <span className="admin-employee-modal-eyebrow">
                   RESOURCE MANAGEMENT
                 </span>
-
                 <h2>Add Employee</h2>
               </div>
 
               <button
+                type="button"
                 className="admin-employee-modal-close"
                 onClick={closeAddEmployee}
+                disabled={saving}
+                aria-label="Close add employee form"
               >
                 <X size={15} />
               </button>
@@ -994,7 +1264,6 @@ function Employees() {
               <div className="admin-employee-form-grid">
                 <label>
                   <span>Full Name</span>
-
                   <input
                     name="name"
                     type="text"
@@ -1007,11 +1276,10 @@ function Employees() {
 
                 <label>
                   <span>Email Address</span>
-
                   <input
                     name="email"
                     type="email"
-                    placeholder="employee@planwise.com"
+                    placeholder="employee@example.com"
                     value={newEmployee.email}
                     onChange={handleEmployeeInput}
                     required
@@ -1020,7 +1288,6 @@ function Employees() {
 
                 <label>
                   <span>Phone</span>
-
                   <input
                     name="phone"
                     type="text"
@@ -1032,24 +1299,21 @@ function Employees() {
 
                 <label>
                   <span>Role</span>
-
                   <select
                     name="role"
                     value={newEmployee.role}
                     onChange={handleEmployeeInput}
                   >
-                    <option>Backend Developer</option>
-                    <option>Frontend Developer</option>
-                    <option>UI/UX Designer</option>
-                    <option>QA Engineer</option>
-                    <option>ML Engineer</option>
-                    <option>Project Manager</option>
+                    {ROLE_OPTIONS.map((role) => (
+                      <option key={role} value={role}>
+                        {role}
+                      </option>
+                    ))}
                   </select>
                 </label>
 
                 <label>
                   <span>Experience</span>
-
                   <input
                     name="experience"
                     type="text"
@@ -1060,60 +1324,40 @@ function Employees() {
                 </label>
 
                 <label>
-                  <span>Availability</span>
-
-                  <select
-                    name="availability"
-                    value={newEmployee.availability}
+                  <span>Location</span>
+                  <input
+                    name="location"
+                    type="text"
+                    placeholder="City, Country"
+                    value={newEmployee.location}
                     onChange={handleEmployeeInput}
-                  >
-                    <option>Available</option>
-                    <option>Assigned</option>
-                    <option>Unavailable</option>
-                  </select>
+                  />
                 </label>
 
                 <label className="admin-employee-form-full">
                   <span>Skills</span>
-
                   <input
                     name="skills"
                     type="text"
-                    placeholder="Python, FastAPI, PostgreSQL, Docker"
+                    placeholder="Python, FastAPI, PostgreSQL"
                     value={newEmployee.skills}
                     onChange={handleEmployeeInput}
                   />
-
                   <small>
                     Separate multiple skills with commas.
                   </small>
-                </label>
-
-                <label className="admin-employee-form-full">
-                  <span>Location</span>
-
-                  <input
-                    name="location"
-                    type="text"
-                    placeholder="Islamabad, Pakistan"
-                    value={newEmployee.location}
-                    onChange={handleEmployeeInput}
-                  />
                 </label>
               </div>
 
               <div className="admin-employee-secure-note">
                 <ShieldCheck size={16} />
-
                 <div>
                   <strong>
                     Secure employee account setup
                   </strong>
-
                   <span>
-                    New employees start with Pending Setup.
-                    The employee creates their password through
-                    the secure account setup flow.
+                    The backend controls account creation
+                    and the employee password setup process.
                   </span>
                 </div>
               </div>
@@ -1123,6 +1367,7 @@ function Employees() {
                   type="button"
                   className="admin-employee-modal-secondary"
                   onClick={closeAddEmployee}
+                  disabled={saving}
                 >
                   Cancel
                 </button>
@@ -1130,10 +1375,22 @@ function Employees() {
                 <button
                   type="submit"
                   className="admin-employee-modal-primary"
+                  disabled={saving}
                 >
-                  <Plus size={13} />
-
-                  Add Employee
+                  {saving ? (
+                    <>
+                      <Loader2
+                        size={14}
+                        className="admin-employees-spin"
+                      />
+                      Creating...
+                    </>
+                  ) : (
+                    <>
+                      <Plus size={13} />
+                      Add Employee
+                    </>
+                  )}
                 </button>
               </div>
             </form>
@@ -1142,6 +1399,7 @@ function Employees() {
       )}
 
       {/* EDIT EMPLOYEE MODAL */}
+
       {showEditEmployeeModal && editingEmployee && (
         <div
           className="admin-employee-modal-overlay"
@@ -1149,22 +1407,22 @@ function Employees() {
         >
           <div
             className="admin-employee-form-modal"
-            onClick={(event) =>
-              event.stopPropagation()
-            }
+            onClick={(event) => event.stopPropagation()}
           >
             <div className="admin-employee-modal-header">
               <div>
                 <span className="admin-employee-modal-eyebrow">
                   RESOURCE MANAGEMENT
                 </span>
-
                 <h2>Edit Employee</h2>
               </div>
 
               <button
+                type="button"
                 className="admin-employee-modal-close"
                 onClick={closeEditEmployee}
+                disabled={saving}
+                aria-label="Close edit employee form"
               >
                 <X size={15} />
               </button>
@@ -1177,7 +1435,6 @@ function Employees() {
               <div className="admin-employee-form-grid">
                 <label>
                   <span>Full Name</span>
-
                   <input
                     name="name"
                     value={editingEmployee.name}
@@ -1188,7 +1445,6 @@ function Employees() {
 
                 <label>
                   <span>Email Address</span>
-
                   <input
                     name="email"
                     type="email"
@@ -1200,7 +1456,6 @@ function Employees() {
 
                 <label>
                   <span>Phone</span>
-
                   <input
                     name="phone"
                     value={editingEmployee.phone}
@@ -1210,24 +1465,31 @@ function Employees() {
 
                 <label>
                   <span>Role</span>
-
                   <select
                     name="role"
                     value={editingEmployee.role}
                     onChange={handleEditEmployeeInput}
                   >
-                    <option>Backend Developer</option>
-                    <option>Frontend Developer</option>
-                    <option>UI/UX Designer</option>
-                    <option>QA Engineer</option>
-                    <option>ML Engineer</option>
-                    <option>Project Manager</option>
+                    {!ROLE_OPTIONS.includes(
+                      editingEmployee.role
+                    ) && (
+                      <option
+                        value={editingEmployee.role}
+                      >
+                        {editingEmployee.role}
+                      </option>
+                    )}
+
+                    {ROLE_OPTIONS.map((role) => (
+                      <option key={role} value={role}>
+                        {role}
+                      </option>
+                    ))}
                   </select>
                 </label>
 
                 <label>
                   <span>Experience</span>
-
                   <input
                     name="experience"
                     value={editingEmployee.experience}
@@ -1236,42 +1498,29 @@ function Employees() {
                 </label>
 
                 <label>
-                  <span>Availability</span>
-
-                  <select
-                    name="availability"
-                    value={editingEmployee.availability}
-                    onChange={handleEditEmployeeInput}
-                  >
-                    <option>Available</option>
-                    <option>Assigned</option>
-                    <option>Unavailable</option>
-                  </select>
-                </label>
-
-                <label className="admin-employee-form-full">
-                  <span>Skills</span>
-
-                  <input
-                    type="text"
-                    value={editingSkillsInput}
-                    onChange={handleEditSkillsInput}
-                    placeholder="Python, FastAPI, PostgreSQL, Docker"
-                  />
-
-                  <small>
-                    Separate multiple skills with commas.
-                  </small>
-                </label>
-
-                <label className="admin-employee-form-full">
                   <span>Location</span>
-
                   <input
                     name="location"
                     value={editingEmployee.location}
                     onChange={handleEditEmployeeInput}
                   />
+                </label>
+
+                <label className="admin-employee-form-full">
+                  <span>Skills</span>
+                  <input
+                    type="text"
+                    value={editingSkillsInput}
+                    onChange={(event) =>
+                      setEditingSkillsInput(
+                        event.target.value
+                      )
+                    }
+                    placeholder="Python, FastAPI, PostgreSQL"
+                  />
+                  <small>
+                    Separate multiple skills with commas.
+                  </small>
                 </label>
               </div>
 
@@ -1280,6 +1529,7 @@ function Employees() {
                   type="button"
                   className="admin-employee-modal-secondary"
                   onClick={closeEditEmployee}
+                  disabled={saving}
                 >
                   Cancel
                 </button>
@@ -1287,10 +1537,22 @@ function Employees() {
                 <button
                   type="submit"
                   className="admin-employee-modal-primary"
+                  disabled={saving}
                 >
-                  <Pencil size={13} />
-
-                  Save Changes
+                  {saving ? (
+                    <>
+                      <Loader2
+                        size={14}
+                        className="admin-employees-spin"
+                      />
+                      Saving...
+                    </>
+                  ) : (
+                    <>
+                      <Pencil size={13} />
+                      Save Changes
+                    </>
+                  )}
                 </button>
               </div>
             </form>

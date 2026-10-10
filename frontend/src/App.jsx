@@ -12,6 +12,7 @@ import WhyPlanwise from "./components/common/WhyPlanwise";
 import FAQ from "./components/common/FAQ";
 import FinalCTA from "./components/common/FinalCTA";
 import Footer from "./components/common/Footer";
+import ToastProvider from "./components/common/ToastProvider";
 
 // ============================================================
 // AUTHENTICATION
@@ -66,10 +67,10 @@ import Settings from "./pages/app/Settings";
 
 
 // ============================================================
-// APP
+// APP Content
 // ============================================================
 
-function App() {
+function AppContent() {
   const path = window.location.pathname;
 
 
@@ -379,6 +380,14 @@ if (path === "/employee/reset-password") {
 
       <Footer />
     </div>
+  );
+}
+
+function App() {
+  return (
+    <ToastProvider>
+      <AppContent />
+    </ToastProvider>
   );
 }
 
