@@ -1511,3 +1511,430 @@
     transition: none !important;
   }
 }
+
+/* =========================================
+   PROFESSIONAL PROJECT CONNECTION ERROR
+========================================= */
+
+.projects-error-state {
+  display: flex;
+  align-items: flex-start;
+  gap: 18px;
+  margin: 0 0 24px;
+  padding: 24px;
+  background: #fffaf5;
+  border: 1px solid #ead9c7;
+  border-left: 4px solid #711d3c;
+  border-radius: 8px;
+  box-shadow: 0 5px 18px rgba(44, 27, 27, 0.04);
+}
+
+.projects-error-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 46px;
+  width: 46px;
+  height: 46px;
+  color: #711d3c;
+  background: #f3e5e8;
+  border-radius: 8px;
+}
+
+.projects-error-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.projects-error-eyebrow {
+  display: block;
+  margin-bottom: 6px;
+  color: #9b7548;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1.4px;
+}
+
+.projects-error-content h3 {
+  margin: 0 0 8px;
+  color: #2c1b1b;
+  font-size: 17px;
+  font-weight: 700;
+  line-height: 1.5;
+}
+
+.projects-error-content > p {
+  margin: 0;
+  color: #746564;
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+.projects-error-retry {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 17px;
+  padding: 10px 15px;
+  color: #ffffff;
+  background: #711d3c;
+  border: 1px solid #711d3c;
+  border-radius: 5px;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.projects-error-retry:hover:not(:disabled) {
+  background: #57152e;
+  border-color: #57152e;
+  transform: translateY(-1px);
+}
+
+.projects-error-retry:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+.projects-error-details {
+  margin-top: 12px;
+  color: #746564;
+  font-size: 12px;
+}
+
+.projects-error-details summary {
+  width: fit-content;
+  color: #711d3c;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.projects-error-details p {
+  margin: 8px 0 0;
+  overflow-wrap: anywhere;
+}
+
+.admin-projects-spin {
+  animation: projects-spin 1s linear infinite;
+}
+
+@keyframes projects-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (max-width: 600px) {
+  .projects-error-state {
+    gap: 12px;
+    padding: 17px;
+  }
+
+  .projects-error-icon {
+    flex-basis: 38px;
+    width: 38px;
+    height: 38px;
+  }
+
+  .projects-error-content h3 {
+    font-size: 15px;
+  }
+}
+
+/* ============================================================
+   ASSIGNED RESOURCES — PROJECT DETAILS MODAL
+============================================================ */
+
+.project-modal-section {
+  min-width: 0;
+}
+
+/* Resource section heading */
+.project-modal-section .project-section-heading {
+  margin-bottom: 14px;
+  padding-bottom: 11px;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.project-modal-section .project-section-heading h3 {
+  color: var(--color-dark);
+  font-family: var(--font-heading);
+  font-size: 13px;
+  font-weight: 800;
+  line-height: 1.5;
+}
+
+.project-modal-section .project-section-heading svg {
+  width: 17px;
+  height: 17px;
+  color: var(--color-primary);
+}
+
+/* Empty-state message inside resource section */
+.project-modal-section > p,
+.project-modal-section > div > p {
+  box-sizing: border-box;
+  width: 100%;
+  margin: 0;
+  padding: 20px 16px;
+  border: 1px dashed var(--color-border);
+  border-radius: 8px;
+  background: var(--color-background);
+  color: var(--color-text-muted);
+  font-family: var(--font-body);
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 1.8;
+  text-align: center;
+  overflow-wrap: anywhere;
+}
+
+/* Resource cards, if records exist */
+.project-modal-section .project-detail-item,
+.project-modal-section .project-team-member {
+  box-sizing: border-box;
+  min-width: 0;
+  border-color: var(--color-border);
+  border-radius: 8px;
+  background: var(--color-background);
+  transition:
+    border-color 0.2s ease,
+    background 0.2s ease,
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.project-modal-section .project-detail-item:hover,
+.project-modal-section .project-team-member:hover {
+  border-color: rgba(113, 29, 60, 0.3);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-sm);
+}
+
+.project-modal-section .project-detail-item > span {
+  color: var(--color-text-muted);
+  font-size: 9px;
+  font-weight: 750;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.project-modal-section .project-detail-item > strong {
+  color: var(--color-dark);
+  font-size: 11px;
+  font-weight: 750;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+/* Any buttons rendered inside the resource section */
+.project-modal-section button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  min-height: 32px;
+  padding: 7px 12px;
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  background: var(--color-surface);
+  color: var(--color-primary);
+  font-family: var(--font-body);
+  font-size: 10px;
+  font-weight: 750;
+  cursor: pointer;
+  transition:
+    background 0.2s ease,
+    color 0.2s ease,
+    border-color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.project-modal-section button:hover:not(:disabled) {
+  transform: translateY(-1px);
+  border-color: var(--color-primary);
+  background: var(--color-primary);
+  color: #ffffff;
+}
+
+.project-modal-section button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.project-modal-section button:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 3px;
+}
+
+/* Dark mode */
+:root[data-theme="dark"] .project-modal-section > p,
+:root[data-theme="dark"] .project-modal-section > div > p {
+  border-color: var(--color-border);
+  background: var(--color-background);
+  color: var(--color-text-muted);
+}
+
+:root[data-theme="dark"] .project-modal-section .project-detail-item:hover,
+:root[data-theme="dark"] .project-modal-section .project-team-member:hover {
+  border-color: rgba(201, 166, 107, 0.35);
+  background: var(--color-surface);
+}
+
+/* Responsive */
+@media (max-width: 650px) {
+  .project-modal-section .project-section-heading {
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+
+  .project-modal-section > p,
+  .project-modal-section > div > p {
+    padding: 16px 12px;
+    font-size: 10px;
+  }
+
+  .project-modal-section button {
+    max-width: 100%;
+    white-space: normal;
+  }
+}
+
+
+/* Modal footer buttons only */
+.project-modal-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 20px;
+}
+
+/* Both Close buttons: same color */
+.project-modal-actions .project-primary-btn {
+  background: #711d3c;
+  border: 1px solid #711d3c;
+  color: #ffffff;
+}
+
+.project-modal-actions .project-primary-btn:hover {
+  background: #57152e;
+  border-color: #57152e;
+  color: #ffffff;
+}
+
+/* Back to Details: same color as View Full Project inside the modal */
+.project-modal-actions .project-secondary-btn {
+  background: #f7f0e5;
+  border: 1px solid #b18a52;
+  color: #711d3c;
+}
+
+.project-modal-actions .project-secondary-btn:hover {
+  background: #711d3c;
+  border-color: #711d3c;
+  color: #ffffff;
+}
+
+/* Mobile spacing */
+@media (max-width: 430px) {
+  .project-modal-actions {
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 10px;
+  }
+
+  .project-modal-actions .project-primary-btn,
+  .project-modal-actions .project-secondary-btn {
+    flex: 1;
+    width: auto;
+    min-width: 0;
+  }
+}
+
+
+/* Both Close buttons — same burgundy color */
+.project-modal-actions .project-primary-btn {
+  background: #711d3c;
+  border: 1px solid #711d3c;
+  color: #ffffff;
+}
+
+.project-modal-actions .project-primary-btn:hover {
+  background: #57152e;
+  border-color: #57152e;
+  color: #ffffff;
+}
+
+/* Back to Details and View Full Project — same color */
+.project-modal-actions .project-secondary-btn {
+  background: #f7f0e5;
+  border: 1px solid #b18a52;
+  color: #711d3c;
+}
+
+.project-modal-actions .project-secondary-btn:hover {
+  background: #711d3c;
+  border-color: #711d3c;
+  color: #ffffff;
+}
+
+/* Space between modal buttons */
+.project-modal-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+
+/* ===== FIX MODAL BUTTON COLORS ===== */
+
+/* Dono modals ka first button: CLOSE — Burgundy */
+.admin-projects .project-modal .project-modal-actions button:first-child {
+  background-color: #711d3c !important;
+  border: 1px solid #711d3c !important;
+  color: #ffffff !important;
+}
+
+/* Dono modals ka second button:
+   View Full Project / Back to Details — Ivory + Gold */
+.admin-projects .project-modal .project-modal-actions button:last-child {
+  background-color: #f7f0e5 !important;
+  border: 1px solid #b18a52 !important;
+  color: #711d3c !important;
+}
+
+/* Close button hover */
+.admin-projects .project-modal .project-modal-actions button:first-child:hover {
+  background-color: #57152e !important;
+  border-color: #57152e !important;
+  color: #ffffff !important;
+}
+
+/* View Full Project / Back to Details hover */
+.admin-projects .project-modal .project-modal-actions button:last-child:hover {
+  background-color: #711d3c !important;
+  border-color: #711d3c !important;
+  color: #ffffff !important;
+}
+
+/* Button spacing */
+.admin-projects .project-modal .project-modal-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+}
+
+.admin-projects .project-modal .project-modal-actions button {
+  transition: background-color 0.2s ease,
+              border-color 0.2s ease,
+              color 0.2s ease;
+}

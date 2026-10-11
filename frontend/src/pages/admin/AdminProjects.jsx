@@ -1,4 +1,5 @@
-import { useState } from "react";
+
+import { useCallback, useEffect, useMemo, useState } from "react";
 
 import {
   Search,
@@ -14,18 +15,236 @@ import {
   UserRound,
   DollarSign,
   ShieldAlert,
-  ExternalLink,
   ClipboardList,
   ChevronLeft,
   ChevronRight,
+  RefreshCw,
 } from "lucide-react";
 
+import { getAdminProjects } from "../../services/api";
 import "./AdminProjects.css";
 
+// ============================================================
+// HELPERS
+// ============================================================
+
+function formatDate(value) {
+  if (!value) return "Not available";
+
+  const date = new Date(value);
+
+  if (Number.isNaN(date.getTime())) {
+    return String(value);
+  }
+
+  return date.toLocaleDateString("en-GB", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+  });
+}
+
+function formatStatus(status) {
+  if (!status) return "Unknown";
+
+  return String(status)
+    .trim()
+    .toLowerCase()
+    .replace(/[_-]+/g, " ")
+    .replace(/\b\w/g, (char) => char.toUpperCase());
+}
+
+function formatProjectType(type) {
+  if (!type) return "Not available";
+
+  return String(type)
+    .trim()
+    .toLowerCase()
+    .replace(/[_-]+/g, " ")
+    .replace(/\b\w/g, (char) => char.toUpperCase());
+}
+
+function getProjectOwner(project) {
+  return (
+    project.owner ||
+    project.owner_name ||
+    project.owner_email ||
+    (project.owner_id ? `User #${project.owner_id}` : "Not available")
+  );
+}
+
+function getCost(project) {
+  const value =
+    project.estimated_cost ??
+    project.estimatedCost ??
+    project.total_cost ??
+    project.cost;
+
+  if (value === null || value === undefined || value === "") {
+    return "Not available";
+  }
+
+  if (typeof value === "string") return value;
+
+  return new Intl.NumberFormat("en-US", {
+    maximumFractionDigits: 2,
+  }).format(value);
+}
+
+function getDuration(project) {
+  const value =
+    project.estimated_duration ??
+    project.estimatedDuration ??
+    project.duration_weeks ??
+    project.duration;
+
+  if (value === null || value === undefined || value === "") {
+    return "Not available";
+  }
+
+  if (typeof value === "number") {
+    return `${value} ${value === 1 ? "Week" : "Weeks"}`;
+  }
+
+  return String(value);
+}
+
+function getProgress(project) {
+  const value =
+    project.progress ??
+    project.progress_percentage ??
+    project.progressPercentage;
+
+  if (value === null || value === undefined || value === "") {
+    return null;
+  }
+
+  const number = Number(value);
+
+  if (!Number.isFinite(number)) return null;
+
+  return Math.min(100, Math.max(0, number));
+}
+
+function getRisk(project) {
+  const risk =
+    project.risk_level ??
+    project.riskLevel ??
+    project.risk;
+
+  if (!risk) return null;
+
+  if (typeof risk === "object") {
+    return risk.severity || risk.level || risk.status || null;
+  }
+
+  return String(risk);
+}
+
+function getTeam(project) {
+  const team =
+    project.team ??
+    project.assigned_resources ??
+    project.assignedResources ??
+    project.members;
+
+  return Array.isArray(team) ? team : [];
+}
+
+function getTeamSize(project) {
+  const explicitSize =
+    project.team_size ??
+    project.teamSize ??
+    project.required_team_size;
+
+  if (
+    explicitSize !== null &&
+    explicitSize !== undefined &&
+    explicitSize !== ""
+  ) {
+    const number = Number(explicitSize);
+    return Number.isFinite(number) ? number : null;
+  }
+
+  const team = getTeam(project);
+
+  return team.length > 0 ? team.length : null;
+}
+
+function normalizeProject(project) {
+  return {
+    ...project,
+    id: project.id,
+    name: project.name || "Untitled Project",
+    owner: getProjectOwner(project),
+    type: formatProjectType(project.type || project.project_type),
+    status: formatStatus(project.status),
+    cost: getCost(project),
+    duration: getDuration(project),
+    progress: getProgress(project),
+    team: getTeam(project),
+    teamSize: getTeamSize(project),
+    risk: getRisk(project),
+    created: formatDate(
+      project.created_at || project.createdAt || project.created
+    ),
+    deadline: formatDate(
+      project.deadline || project.due_date || project.dueDate
+    ),
+    description:
+      project.description || "No project description available.",
+  };
+}
+
+function getStatusClass(status) {
+  const normalized = String(status || "").toLowerCase();
+
+  if (normalized === "completed") return "completed";
+
+  if (
+    normalized === "in development" ||
+    normalized === "in progress" ||
+    normalized === "active"
+  ) {
+    return "in-development";
+  }
+
+  if (normalized === "planning" || normalized === "draft") {
+    return "planning";
+  }
+
+  if (normalized === "on hold" || normalized === "paused") {
+    return "on-hold";
+  }
+
+  return "";
+}
+
+function getRiskClass(risk) {
+  const normalized = String(risk || "").toLowerCase();
+
+  if (normalized.includes("critical")) return "high";
+  if (normalized.includes("high")) return "high";
+  if (normalized.includes("medium")) return "medium";
+  if (normalized.includes("low")) return "low";
+
+  return "";
+}
+
+function displayValue(value) {
+  return value === null || value === undefined || value === ""
+    ? "Not available"
+    : value;
+}
+
+// ============================================================
+// COMPONENT
+// ============================================================
+
 function AdminProjects() {
-  // ============================================================
-  // STATE
-  // ============================================================
+  const [projects, setProjects] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState("All");
@@ -33,442 +252,68 @@ function AdminProjects() {
 
   const [selectedProject, setSelectedProject] = useState(null);
   const [showProjectModal, setShowProjectModal] = useState(false);
-  const [showFullProjectModal, setShowFullProjectModal] =
-    useState(false);
+  const [showFullProjectModal, setShowFullProjectModal] = useState(false);
 
-  // Pagination
   const [currentPage, setCurrentPage] = useState(1);
+
   const projectsPerPage = 10;
 
   // ============================================================
-  // DEMO PROJECT DATA
+  // LOAD PROJECTS
   // ============================================================
 
-  const projects = [
-    {
-      id: 1,
-      name: "E-Commerce Platform",
-      owner: "Ali Raza",
-      type: "Web Application",
-      status: "In Development",
-      cost: "$18,500",
-      duration: "14 Weeks",
-      progress: 62,
-      teamSize: 5,
-      risk: "Medium",
-      created: "12 Aug 2026",
-      deadline: "18 Nov 2026",
-      description:
-        "A scalable e-commerce platform with product management, customer accounts, shopping cart, order management, payments, and an administrative dashboard.",
-      team: [
-        {
-          name: "Ali Raza",
-          role: "Backend Developer",
-        },
-        {
-          name: "Ahmed Ali",
-          role: "Frontend Developer",
-        },
-        {
-          name: "Mariam Iqbal",
-          role: "UI/UX Designer",
-        },
-        {
-          name: "Sara Ahmed",
-          role: "QA Engineer",
-        },
-        {
-          name: "Ayesha Malik",
-          role: "Project Manager",
-        },
-      ],
-    },
+  const fetchProjects = useCallback(async () => {
+    setLoading(true);
+    setError("");
 
-    {
-      id: 2,
-      name: "AI Recommendation Engine",
-      owner: "Sara Khan",
-      type: "AI / Machine Learning",
-      status: "Planning",
-      cost: "$32,000",
-      duration: "20 Weeks",
-      progress: 18,
-      teamSize: 6,
-      risk: "High",
-      created: "28 Aug 2026",
-      deadline: "15 Jan 2027",
-      description:
-        "An intelligent recommendation engine designed to analyze user behavior and generate personalized product recommendations using machine learning.",
-      team: [
-        {
-          name: "Usman Tariq",
-          role: "ML Engineer",
-        },
-        {
-          name: "Ali Raza",
-          role: "Backend Developer",
-        },
-        {
-          name: "Ahmed Ali",
-          role: "Frontend Developer",
-        },
-        {
-          name: "Sara Ahmed",
-          role: "QA Engineer",
-        },
-      ],
-    },
+    try {
+      const response = await getAdminProjects();
 
-    {
-      id: 3,
-      name: "Customer Mobile App",
-      owner: "Ahmed Hassan",
-      type: "Mobile Application",
-      status: "In Development",
-      cost: "$14,800",
-      duration: "12 Weeks",
-      progress: 47,
-      teamSize: 4,
-      risk: "Low",
-      created: "04 Sep 2026",
-      deadline: "27 Nov 2026",
-      description:
-        "A customer-facing mobile application providing account management, product browsing, notifications, support, and order tracking.",
-      team: [
-        {
-          name: "Mariam Iqbal",
-          role: "UI/UX Designer",
-        },
-        {
-          name: "Ahmed Ali",
-          role: "Frontend Developer",
-        },
-        {
-          name: "Ali Raza",
-          role: "Backend Developer",
-        },
-        {
-          name: "Sara Ahmed",
-          role: "QA Engineer",
-        },
-      ],
-    },
+      const projectList = Array.isArray(response)
+        ? response
+        : Array.isArray(response?.projects)
+          ? response.projects
+          : Array.isArray(response?.items)
+            ? response.items
+            : null;
 
-    {
-      id: 4,
-      name: "Business Analytics Portal",
-      owner: "Mariam Iqbal",
-      type: "Web Application",
-      status: "Completed",
-      cost: "$16,400",
-      duration: "13 Weeks",
-      progress: 100,
-      teamSize: 4,
-      risk: "Low",
-      created: "18 May 2026",
-      deadline: "19 Aug 2026",
-      description:
-        "A business analytics portal providing interactive dashboards, reporting, KPI monitoring, data visualization, and business performance insights.",
-      team: [
-        {
-          name: "Hamza Khan",
-          role: "Backend Developer",
-        },
-        {
-          name: "Ahmed Ali",
-          role: "Frontend Developer",
-        },
-        {
-          name: "Mariam Iqbal",
-          role: "UI/UX Designer",
-        },
-        {
-          name: "Ayesha Malik",
-          role: "Project Manager",
-        },
-      ],
-    },
+      if (!projectList) {
+        throw new Error(
+          "The projects API returned an unexpected response format."
+        );
+      }
 
-    {
-      id: 5,
-      name: "Healthcare Management System",
-      owner: "Usman Ahmed",
-      type: "Desktop Software",
-      status: "In Development",
-      cost: "$21,700",
-      duration: "16 Weeks",
-      progress: 71,
-      teamSize: 5,
-      risk: "Medium",
-      created: "10 Jul 2026",
-      deadline: "30 Oct 2026",
-      description:
-        "A healthcare management solution for patient records, appointments, staff management, reporting, and operational workflows.",
-      team: [
-        {
-          name: "Ali Raza",
-          role: "Backend Developer",
-        },
-        {
-          name: "Ahmed Ali",
-          role: "Frontend Developer",
-        },
-        {
-          name: "Sara Ahmed",
-          role: "QA Engineer",
-        },
-        {
-          name: "Mariam Iqbal",
-          role: "UI/UX Designer",
-        },
-        {
-          name: "Ayesha Malik",
-          role: "Project Manager",
-        },
-      ],
-    },
+      setProjects(projectList.map(normalizeProject));
+    } catch (err) {
+      setError(err?.message || "Unable to load projects.");
+    } finally {
+      setLoading(false);
+    }
+  }, []);
 
-    {
-      id: 6,
-      name: "SaaS Project Management Tool",
-      owner: "Ayesha Malik",
-      type: "SaaS",
-      status: "On Hold",
-      cost: "$28,500",
-      duration: "18 Weeks",
-      progress: 34,
-      teamSize: 6,
-      risk: "High",
-      created: "21 Jun 2026",
-      deadline: "20 Dec 2026",
-      description:
-        "A SaaS project management platform for managing projects, tasks, resources, team collaboration, milestones, reporting, and project performance.",
-      team: [
-        {
-          name: "Hamza Khan",
-          role: "Backend Developer",
-        },
-        {
-          name: "Ahmed Ali",
-          role: "Frontend Developer",
-        },
-        {
-          name: "Mariam Iqbal",
-          role: "UI/UX Designer",
-        },
-        {
-          name: "Sara Ahmed",
-          role: "QA Engineer",
-        },
-      ],
-    },
+  useEffect(() => {
+    fetchProjects();
+  }, [fetchProjects]);
 
-    {
-      id: 7,
-      name: "AI Document Intelligence",
-      owner: "Hamza Khan",
-      type: "AI / Machine Learning",
-      status: "Planning",
-      cost: "$26,800",
-      duration: "17 Weeks",
-      progress: 12,
-      teamSize: 5,
-      risk: "High",
-      created: "02 Sep 2026",
-      deadline: "01 Jan 2027",
-      description:
-        "An AI-powered document intelligence system for extracting, classifying, summarizing, and analyzing structured information from business documents.",
-      team: [
-        {
-          name: "Usman Tariq",
-          role: "ML Engineer",
-        },
-        {
-          name: "Ali Raza",
-          role: "Backend Developer",
-        },
-        {
-          name: "Sara Ahmed",
-          role: "QA Engineer",
-        },
-      ],
-    },
+  // ============================================================
+  // MODAL ESCAPE KEY
+  // ============================================================
 
-    {
-      id: 8,
-      name: "Inventory Management System",
-      owner: "Ahmed Hassan",
-      type: "Web Application",
-      status: "In Development",
-      cost: "$15,900",
-      duration: "11 Weeks",
-      progress: 76,
-      teamSize: 4,
-      risk: "Low",
-      created: "15 Jul 2026",
-      deadline: "30 Sep 2026",
-      description:
-        "An inventory management platform for stock tracking, product management, suppliers, purchase orders, warehouse operations, and reporting.",
-      team: [
-        {
-          name: "Ali Raza",
-          role: "Backend Developer",
-        },
-        {
-          name: "Ahmed Ali",
-          role: "Frontend Developer",
-        },
-        {
-          name: "Sara Ahmed",
-          role: "QA Engineer",
-        },
-        {
-          name: "Ayesha Malik",
-          role: "Project Manager",
-        },
-      ],
-    },
+  useEffect(() => {
+    const handleKeyDown = (event) => {
+      if (event.key === "Escape") {
+        setSelectedProject(null);
+        setShowProjectModal(false);
+        setShowFullProjectModal(false);
+      }
+    };
 
-    {
-      id: 9,
-      name: "Learning Management Platform",
-      owner: "Sara Khan",
-      type: "SaaS",
-      status: "In Development",
-      cost: "$24,600",
-      duration: "19 Weeks",
-      progress: 55,
-      teamSize: 6,
-      risk: "Medium",
-      created: "08 Jul 2026",
-      deadline: "20 Nov 2026",
-      description:
-        "A SaaS-based learning management platform supporting courses, instructors, students, assessments, progress tracking, certificates, and reporting.",
-      team: [
-        {
-          name: "Hamza Khan",
-          role: "Backend Developer",
-        },
-        {
-          name: "Ahmed Ali",
-          role: "Frontend Developer",
-        },
-        {
-          name: "Mariam Iqbal",
-          role: "UI/UX Designer",
-        },
-        {
-          name: "Sara Ahmed",
-          role: "QA Engineer",
-        },
-        {
-          name: "Ayesha Malik",
-          role: "Project Manager",
-        },
-      ],
-    },
+    window.addEventListener("keydown", handleKeyDown);
 
-    {
-      id: 10,
-      name: "Financial Reporting Desktop App",
-      owner: "Usman Ahmed",
-      type: "Desktop Software",
-      status: "Completed",
-      cost: "$12,900",
-      duration: "10 Weeks",
-      progress: 100,
-      teamSize: 3,
-      risk: "Low",
-      created: "04 Apr 2026",
-      deadline: "13 Jun 2026",
-      description:
-        "A desktop financial reporting application for generating financial statements, reports, summaries, and business performance analysis.",
-      team: [
-        {
-          name: "Hamza Khan",
-          role: "Backend Developer",
-        },
-        {
-          name: "Ayesha Malik",
-          role: "Project Manager",
-        },
-        {
-          name: "Sara Ahmed",
-          role: "QA Engineer",
-        },
-      ],
-    },
-
-    {
-      id: 11,
-      name: "Customer Support Automation",
-      owner: "Mariam Iqbal",
-      type: "AI / Machine Learning",
-      status: "Planning",
-      cost: "$19,700",
-      duration: "15 Weeks",
-      progress: 9,
-      teamSize: 4,
-      risk: "Medium",
-      created: "10 Sep 2026",
-      deadline: "25 Dec 2026",
-      description:
-        "An intelligent customer support automation platform for ticket classification, response assistance, issue prioritization, and support analytics.",
-      team: [
-        {
-          name: "Usman Tariq",
-          role: "ML Engineer",
-        },
-        {
-          name: "Ali Raza",
-          role: "Backend Developer",
-        },
-        {
-          name: "Sara Ahmed",
-          role: "QA Engineer",
-        },
-      ],
-    },
-
-    {
-      id: 12,
-      name: "Restaurant Ordering Platform",
-      owner: "Ali Raza",
-      type: "E-Commerce",
-      status: "In Development",
-      cost: "$17,200",
-      duration: "13 Weeks",
-      progress: 43,
-      teamSize: 5,
-      risk: "Medium",
-      created: "19 Aug 2026",
-      deadline: "18 Nov 2026",
-      description:
-        "An online restaurant ordering platform supporting menus, customer accounts, cart management, order processing, payments, delivery tracking, and reporting.",
-      team: [
-        {
-          name: "Ali Raza",
-          role: "Backend Developer",
-        },
-        {
-          name: "Ahmed Ali",
-          role: "Frontend Developer",
-        },
-        {
-          name: "Mariam Iqbal",
-          role: "UI/UX Designer",
-        },
-        {
-          name: "Sara Ahmed",
-          role: "QA Engineer",
-        },
-        {
-          name: "Ayesha Malik",
-          role: "Project Manager",
-        },
-      ],
-    },
-  ];
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, []);
 
   // ============================================================
   // SUMMARY COUNTS
@@ -476,42 +321,76 @@ function AdminProjects() {
 
   const totalProjects = projects.length;
 
-  const activeProjects = projects.filter(
-    (project) =>
-      project.status === "In Development" ||
-      project.status === "Planning"
+  const activeProjects = projects.filter((project) =>
+    [
+      "in development",
+      "in progress",
+      "planning",
+      "active",
+    ].includes(project.status.toLowerCase())
   ).length;
 
   const completedProjects = projects.filter(
-    (project) => project.status === "Completed"
+    (project) => project.status.toLowerCase() === "completed"
   ).length;
 
-  const highRiskProjects = projects.filter(
-    (project) => project.risk === "High"
-  ).length;
+  const highRiskProjects = projects.filter((project) => {
+    const risk = String(project.risk || "").toLowerCase();
+
+    return risk.includes("high") || risk.includes("critical");
+  }).length;
+
+  // ============================================================
+  // FILTER OPTIONS
+  // ============================================================
+
+  const projectTypes = useMemo(
+    () =>
+      [
+        ...new Set(
+          projects
+            .map((project) => project.type)
+            .filter((type) => type && type !== "Not available")
+        ),
+      ].sort(),
+    [projects]
+  );
+
+  const projectStatuses = useMemo(
+    () =>
+      [
+        ...new Set(
+          projects
+            .map((project) => project.status)
+            .filter((status) => status && status !== "Unknown")
+        ),
+      ].sort(),
+    [projects]
+  );
 
   // ============================================================
   // FILTER PROJECTS
   // ============================================================
 
-  const filteredProjects = projects.filter((project) => {
-    const normalizedSearch = searchTerm.toLowerCase();
+  const filteredProjects = useMemo(() => {
+    const normalizedSearch = searchTerm.trim().toLowerCase();
 
-    const matchesSearch =
-      project.name.toLowerCase().includes(normalizedSearch) ||
-      project.owner.toLowerCase().includes(normalizedSearch) ||
-      project.type.toLowerCase().includes(normalizedSearch);
+    return projects.filter((project) => {
+      const matchesSearch =
+        project.name.toLowerCase().includes(normalizedSearch) ||
+        project.owner.toLowerCase().includes(normalizedSearch) ||
+        project.type.toLowerCase().includes(normalizedSearch) ||
+        project.description.toLowerCase().includes(normalizedSearch);
 
-    const matchesStatus =
-      statusFilter === "All" ||
-      project.status === statusFilter;
+      const matchesStatus =
+        statusFilter === "All" || project.status === statusFilter;
 
-    const matchesType =
-      typeFilter === "All" ||
-      project.type === typeFilter;
+      const matchesType =
+        typeFilter === "All" || project.type === typeFilter;
 
-    return matchesSearch && matchesStatus && matchesType;
-  });
+      return matchesSearch && matchesStatus && matchesType;
+    });
+  }, [projects, searchTerm, statusFilter, typeFilter]);
 
   // ============================================================
   // PAGINATION
@@ -522,12 +401,9 @@ function AdminProjects() {
   );
 
   const safeCurrentPage =
-    totalPages > 0
-      ? Math.min(currentPage, totalPages)
-      : 1;
+    totalPages > 0 ? Math.min(currentPage, totalPages) : 1;
 
-  const startIndex =
-    (safeCurrentPage - 1) * projectsPerPage;
+  const startIndex = (safeCurrentPage - 1) * projectsPerPage;
 
   const currentProjects = filteredProjects.slice(
     startIndex,
@@ -535,19 +411,7 @@ function AdminProjects() {
   );
 
   // ============================================================
-  // PAGE CHANGE
-  // ============================================================
-
-  const changePage = (page) => {
-    if (page < 1 || page > totalPages) {
-      return;
-    }
-
-    setCurrentPage(page);
-  };
-
-  // ============================================================
-  // SEARCH
+  // FILTER HANDLERS
   // ============================================================
 
   const handleSearchChange = (event) => {
@@ -555,26 +419,23 @@ function AdminProjects() {
     setCurrentPage(1);
   };
 
-  // ============================================================
-  // STATUS FILTER
-  // ============================================================
-
   const handleStatusChange = (event) => {
     setStatusFilter(event.target.value);
     setCurrentPage(1);
   };
-
-  // ============================================================
-  // TYPE FILTER
-  // ============================================================
 
   const handleTypeChange = (event) => {
     setTypeFilter(event.target.value);
     setCurrentPage(1);
   };
 
+  const changePage = (page) => {
+    if (page < 1 || page > totalPages) return;
+    setCurrentPage(page);
+  };
+
   // ============================================================
-  // PROJECT DETAILS
+  // PROJECT MODALS
   // ============================================================
 
   const openProject = (project) => {
@@ -586,11 +447,8 @@ function AdminProjects() {
   const closeProject = () => {
     setSelectedProject(null);
     setShowProjectModal(false);
+    setShowFullProjectModal(false);
   };
-
-  // ============================================================
-  // FULL PROJECT
-  // ============================================================
 
   const openFullProject = (project) => {
     setSelectedProject(project);
@@ -601,49 +459,12 @@ function AdminProjects() {
   const closeFullProject = () => {
     setSelectedProject(null);
     setShowFullProjectModal(false);
+    setShowProjectModal(false);
   };
 
-  // ============================================================
-  // STATUS CLASS
-  // ============================================================
-
-  const getStatusClass = (status) => {
-    switch (status) {
-      case "Completed":
-        return "completed";
-
-      case "In Development":
-        return "in-development";
-
-      case "Planning":
-        return "planning";
-
-      case "On Hold":
-        return "on-hold";
-
-      default:
-        return "";
-    }
-  };
-
-  // ============================================================
-  // RISK CLASS
-  // ============================================================
-
-  const getRiskClass = (risk) => {
-    switch (risk) {
-      case "High":
-        return "high";
-
-      case "Medium":
-        return "medium";
-
-      case "Low":
-        return "low";
-
-      default:
-        return "";
-    }
+  const backToProjectDetails = () => {
+    setShowFullProjectModal(false);
+    setShowProjectModal(true);
   };
 
   // ============================================================
@@ -652,9 +473,7 @@ function AdminProjects() {
 
   return (
     <div className="admin-projects">
-      {/* ======================================================
-          PAGE HEADER
-      ====================================================== */}
+      {/* PAGE HEADER */}
 
       <div className="admin-projects-header">
         <div className="admin-projects-header-content">
@@ -665,25 +484,22 @@ function AdminProjects() {
           <h1>Projects</h1>
 
           <p>
-            Monitor projects, estimations, resources,
-            progress, and project risks.
+            Monitor projects, estimations, resources, progress, and
+            project risks.
           </p>
         </div>
       </div>
 
-      {/* ======================================================
-          SUMMARY CARDS
-      ====================================================== */}
+      {/* SUMMARY CARDS */}
 
       <div className="admin-project-summary">
         <div className="project-summary-card">
           <div className="project-summary-icon">
             <FolderKanban size={19} />
           </div>
-
           <div>
             <span>Total Projects</span>
-            <strong>{totalProjects}</strong>
+            <strong>{loading ? "—" : totalProjects}</strong>
           </div>
         </div>
 
@@ -691,10 +507,9 @@ function AdminProjects() {
           <div className="project-summary-icon">
             <Activity size={19} />
           </div>
-
           <div>
             <span>Active Projects</span>
-            <strong>{activeProjects}</strong>
+            <strong>{loading ? "—" : activeProjects}</strong>
           </div>
         </div>
 
@@ -702,10 +517,9 @@ function AdminProjects() {
           <div className="project-summary-icon">
             <CheckCircle2 size={19} />
           </div>
-
           <div>
             <span>Completed</span>
-            <strong>{completedProjects}</strong>
+            <strong>{loading ? "—" : completedProjects}</strong>
           </div>
         </div>
 
@@ -713,29 +527,24 @@ function AdminProjects() {
           <div className="project-summary-icon">
             <AlertTriangle size={19} />
           </div>
-
           <div>
             <span>High Risk</span>
-            <strong>{highRiskProjects}</strong>
+            <strong>{loading ? "—" : highRiskProjects}</strong>
           </div>
         </div>
       </div>
 
-      {/* ======================================================
-          PROJECT PANEL
-      ====================================================== */}
+      {/* PROJECT PANEL */}
 
       <div className="admin-project-panel">
-        {/* ====================================================
-            TOOLBAR
-        ==================================================== */}
-
         <div className="admin-project-toolbar">
           <div className="admin-project-toolbar-left">
             <div className="admin-project-panel-title">
               <span>Project Directory</span>
               <small>
-                {filteredProjects.length} projects
+                {loading
+                  ? "Loading projects..."
+                  : `${filteredProjects.length} projects`}
               </small>
             </div>
           </div>
@@ -743,12 +552,12 @@ function AdminProjects() {
           <div className="admin-project-toolbar-right">
             <div className="project-search-box">
               <Search size={16} />
-
               <input
                 type="text"
                 placeholder="Search projects, owners or types..."
                 value={searchTerm}
                 onChange={handleSearchChange}
+                aria-label="Search projects"
               />
             </div>
 
@@ -756,43 +565,57 @@ function AdminProjects() {
               className="admin-project-filter"
               value={statusFilter}
               onChange={handleStatusChange}
+              aria-label="Filter by project status"
             >
               <option value="All">All Status</option>
-              <option value="Planning">Planning</option>
-              <option value="In Development">
-                In Development
-              </option>
-              <option value="Completed">Completed</option>
-              <option value="On Hold">On Hold</option>
+              {projectStatuses.map((status) => (
+                <option key={status} value={status}>
+                  {status}
+                </option>
+              ))}
             </select>
 
             <select
               className="admin-project-filter"
               value={typeFilter}
               onChange={handleTypeChange}
+              aria-label="Filter by project type"
             >
               <option value="All">All Types</option>
-              <option value="Web Application">
-                Web Application
-              </option>
-              <option value="Mobile Application">
-                Mobile Application
-              </option>
-              <option value="Desktop Software">
-                Desktop Software
-              </option>
-              <option value="AI / Machine Learning">
-                AI / Machine Learning
-              </option>
-              <option value="SaaS">SaaS</option>
-              <option value="E-Commerce">E-Commerce</option>
+              {projectTypes.map((type) => (
+                <option key={type} value={type}>
+                  {type}
+                </option>
+              ))}
             </select>
+
+            <button
+              type="button"
+              className="project-action-btn"
+              onClick={fetchProjects}
+              disabled={loading}
+              title="Refresh projects"
+              aria-label="Refresh projects"
+            >
+              <RefreshCw
+                size={16}
+                className={loading ? "admin-projects-spin" : ""}
+              />
+            </button>
           </div>
         </div>
 
-        {/* ====================================================
-            PROJECT TABLE
-        ==================================================== */}
+        {/* PROJECT TABLE */}
+
+        {error && (
+          <div className="admin-project-error" role="alert">
+            <AlertTriangle size={17} />
+            <span>{error}</span>
+            <button type="button" onClick={fetchProjects}>
+              Try Again
+            </button>
+          </div>
+        )}
 
         <div className="admin-project-table-wrapper">
           <table className="admin-project-table">
@@ -811,53 +634,52 @@ function AdminProjects() {
             </thead>
 
             <tbody>
-              {currentProjects.length > 0 ? (
+              {loading ? (
+                <tr>
+                  <td colSpan="9" className="project-empty-cell">
+                    <RefreshCw
+                      size={28}
+                      className="admin-projects-spin"
+                    />
+                    <strong>Loading projects</strong>
+                    <span>Fetching project records from the backend.</span>
+                  </td>
+                </tr>
+              ) : currentProjects.length > 0 ? (
                 currentProjects.map((project, index) => (
                   <tr
                     key={project.id}
                     className="admin-project-row"
-                    style={{
-                      "--row-index": index,
-                    }}
+                    style={{ "--row-index": index }}
                   >
-                    {/* PROJECT */}
                     <td>
                       <div className="project-name-cell">
                         <div className="project-name-icon">
                           <FolderKanban size={16} />
                         </div>
-
                         <div className="project-name-info">
                           <strong>{project.name}</strong>
-
-                          <span>
-                            Created {project.created}
-                          </span>
+                          <span>Created {project.created}</span>
                         </div>
                       </div>
                     </td>
 
-                    {/* OWNER */}
                     <td>
                       <div className="project-owner-cell">
                         <UserRound size={15} />
-
                         <span>{project.owner}</span>
                       </div>
                     </td>
 
-                    {/* TYPE */}
                     <td>
                       <span className="project-type-text">
                         {project.type}
                       </span>
                     </td>
 
-                    {/* ESTIMATION */}
                     <td>
                       <div className="project-estimation-cell">
                         <strong>{project.cost}</strong>
-
                         <span>
                           <Clock3 size={13} />
                           {project.duration}
@@ -865,44 +687,50 @@ function AdminProjects() {
                       </div>
                     </td>
 
-                    {/* PROGRESS */}
                     <td>
                       <div className="project-progress-cell">
                         <div className="project-progress-header">
-                          <span>{project.progress}%</span>
+                          <span>
+                            {project.progress === null
+                              ? "Not available"
+                              : `${project.progress}%`}
+                          </span>
                         </div>
-
                         <div className="project-progress-bar">
                           <div
                             className="project-progress-fill"
                             style={{
-                              width: `${project.progress}%`,
+                              width:
+                                project.progress === null
+                                  ? "0%"
+                                  : `${project.progress}%`,
                             }}
                           />
                         </div>
                       </div>
                     </td>
 
-                    {/* TEAM */}
                     <td>
                       <div className="project-team-cell">
                         <Users size={15} />
-                        <span>{project.teamSize}</span>
+                        <span>{project.teamSize ?? "—"}</span>
                       </div>
                     </td>
 
-                    {/* RISK */}
                     <td>
-                      <span
-                        className={`project-risk-badge ${getRiskClass(
-                          project.risk
-                        )}`}
-                      >
-                        {project.risk}
-                      </span>
+                      {project.risk ? (
+                        <span
+                          className={`project-risk-badge ${getRiskClass(
+                            project.risk
+                          )}`}
+                        >
+                          {project.risk}
+                        </span>
+                      ) : (
+                        <span>—</span>
+                      )}
                     </td>
 
-                    {/* STATUS */}
                     <td>
                       <span
                         className={`project-status-badge ${getStatusClass(
@@ -913,31 +741,24 @@ function AdminProjects() {
                       </span>
                     </td>
 
-                    {/* ACTIONS */}
                     <td>
                       <div className="project-actions">
-                        {/* VIEW DETAILS */}
                         <button
                           type="button"
                           className="project-action-btn"
-                          title="View Project Details"
-                          aria-label="View Project Details"
-                          onClick={() =>
-                            openProject(project)
-                          }
+                          title="Close"
+                          aria-label={`Open ${project.name} details`}
+                          onClick={() => openProject(project)}
                         >
                           <Eye size={16} />
                         </button>
 
-                        {/* FULL PROJECT */}
                         <button
                           type="button"
                           className="project-action-btn"
                           title="View Full Project"
-                          aria-label="View Full Project"
-                          onClick={() =>
-                            openFullProject(project)
-                          }
+                          aria-label={`View full ${project.name}`}
+                          onClick={() => openFullProject(project)}
                         >
                           <ClipboardList size={16} />
                         </button>
@@ -947,17 +768,10 @@ function AdminProjects() {
                 ))
               ) : (
                 <tr>
-                  <td
-                    colSpan="9"
-                    className="project-empty-cell"
-                  >
+                  <td colSpan="9" className="project-empty-cell">
                     <FolderKanban size={30} />
-
                     <strong>No projects found</strong>
-
-                    <span>
-                      Try changing your search or filters.
-                    </span>
+                    <span>Try changing your search or filters.</span>
                   </td>
                 </tr>
               )}
@@ -965,16 +779,12 @@ function AdminProjects() {
           </table>
         </div>
 
-        {/* ====================================================
-            FOOTER / PAGINATION
-        ==================================================== */}
+        {/* PAGINATION */}
 
         <div className="projects-footer">
           <div className="projects-footer-info">
             Showing{" "}
-            {filteredProjects.length === 0
-              ? 0
-              : startIndex + 1}
+            {filteredProjects.length === 0 ? 0 : startIndex + 1}
             {" - "}
             {Math.min(
               startIndex + projectsPerPage,
@@ -985,21 +795,16 @@ function AdminProjects() {
           </div>
 
           <div className="projects-pagination">
-            {/* PREVIOUS */}
             <button
               type="button"
               className="projects-page-btn"
-              disabled={safeCurrentPage === 1}
-              onClick={() =>
-                changePage(safeCurrentPage - 1)
-              }
+              disabled={loading || safeCurrentPage === 1}
+              onClick={() => changePage(safeCurrentPage - 1)}
             >
               <ChevronLeft size={15} />
-
               <span>Previous</span>
             </button>
 
-            {/* PAGE NUMBERS */}
             {Array.from(
               { length: totalPages },
               (_, index) => index + 1
@@ -1008,39 +813,35 @@ function AdminProjects() {
                 key={page}
                 type="button"
                 className={`projects-page-btn ${
-                  safeCurrentPage === page
-                    ? "active"
-                    : ""
+                  safeCurrentPage === page ? "active" : ""
                 }`}
+                disabled={loading}
                 onClick={() => changePage(page)}
               >
                 {page}
               </button>
             ))}
 
-            {/* NEXT */}
             <button
               type="button"
               className="projects-page-btn"
               disabled={
+                loading ||
                 totalPages === 0 ||
                 safeCurrentPage === totalPages
               }
-              onClick={() =>
-                changePage(safeCurrentPage + 1)
-              }
+              onClick={() => changePage(safeCurrentPage + 1)}
             >
               <span>Next</span>
-
               <ChevronRight size={15} />
             </button>
           </div>
         </div>
       </div>
 
-      {/* ======================================================
+      {/* ========================================================
           PROJECT DETAILS MODAL
-      ====================================================== */}
+      ======================================================== */}
 
       {showProjectModal && selectedProject && (
         <div
@@ -1049,17 +850,19 @@ function AdminProjects() {
         >
           <div
             className="project-modal"
-            onClick={(event) =>
-              event.stopPropagation()
-            }
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="project-details-title"
+            onClick={(event) => event.stopPropagation()}
           >
             <div className="project-modal-header">
               <div>
                 <span className="project-modal-label">
                   PROJECT DETAILS
                 </span>
-
-                <h2>{selectedProject.name}</h2>
+                <h2 id="project-details-title">
+                  {selectedProject.name}
+                </h2>
               </div>
 
               <button
@@ -1082,27 +885,25 @@ function AdminProjects() {
                   {selectedProject.status}
                 </span>
 
-                <span
-                  className={`project-risk-badge ${getRiskClass(
-                    selectedProject.risk
-                  )}`}
-                >
-                  {selectedProject.risk} Risk
-                </span>
+                {selectedProject.risk && (
+                  <span
+                    className={`project-risk-badge ${getRiskClass(
+                      selectedProject.risk
+                    )}`}
+                  >
+                    {selectedProject.risk} Risk
+                  </span>
+                )}
               </div>
 
               <div className="project-modal-description">
                 <h3>Project Overview</h3>
-
-                <p>
-                  {selectedProject.description}
-                </p>
+                <p>{selectedProject.description}</p>
               </div>
 
               <div className="project-detail-grid">
                 <div className="project-detail-item">
                   <span>Project Owner</span>
-
                   <strong>
                     <UserRound size={15} />
                     {selectedProject.owner}
@@ -1111,15 +912,11 @@ function AdminProjects() {
 
                 <div className="project-detail-item">
                   <span>Project Type</span>
-
-                  <strong>
-                    {selectedProject.type}
-                  </strong>
+                  <strong>{selectedProject.type}</strong>
                 </div>
 
                 <div className="project-detail-item">
                   <span>Estimated Cost</span>
-
                   <strong>
                     <DollarSign size={15} />
                     {selectedProject.cost}
@@ -1128,7 +925,6 @@ function AdminProjects() {
 
                 <div className="project-detail-item">
                   <span>Estimated Duration</span>
-
                   <strong>
                     <Clock3 size={15} />
                     {selectedProject.duration}
@@ -1137,7 +933,6 @@ function AdminProjects() {
 
                 <div className="project-detail-item">
                   <span>Created</span>
-
                   <strong>
                     <CalendarDays size={15} />
                     {selectedProject.created}
@@ -1146,7 +941,6 @@ function AdminProjects() {
 
                 <div className="project-detail-item">
                   <span>Deadline</span>
-
                   <strong>
                     <CalendarDays size={15} />
                     {selectedProject.deadline}
@@ -1158,12 +952,12 @@ function AdminProjects() {
                 <div className="project-section-heading">
                   <div>
                     <Activity size={17} />
-
                     <h3>Project Progress</h3>
                   </div>
-
                   <strong>
-                    {selectedProject.progress}%
+                    {selectedProject.progress === null
+                      ? "Not available"
+                      : `${selectedProject.progress}%`}
                   </strong>
                 </div>
 
@@ -1171,7 +965,10 @@ function AdminProjects() {
                   <div
                     className="project-progress-fill"
                     style={{
-                      width: `${selectedProject.progress}%`,
+                      width:
+                        selectedProject.progress === null
+                          ? "0%"
+                          : `${selectedProject.progress}%`,
                     }}
                   />
                 </div>
@@ -1181,43 +978,57 @@ function AdminProjects() {
                 <div className="project-section-heading">
                   <div>
                     <Users size={17} />
-
                     <h3>Assigned Resources</h3>
                   </div>
-
-                  <strong>
-                    {selectedProject.teamSize}
-                  </strong>
+                  <strong>{selectedProject.teamSize ?? "—"}</strong>
                 </div>
 
-                <div className="project-team-list">
-                  {selectedProject.team.map(
-                    (member, index) => (
-                      <div
-                        className="project-team-member"
-                        key={`${member.name}-${index}`}
-                      >
-                        <div className="project-team-avatar">
-                          {member.name
-                            .charAt(0)
-                            .toUpperCase()}
-                        </div>
+                {selectedProject.team.length > 0 ? (
+                  <div className="project-team-list">
+                    {selectedProject.team.map((member, index) => {
+                      const memberName =
+                        typeof member === "string"
+                          ? member
+                          : member.name ||
+                            member.full_name ||
+                            member.email ||
+                            `Team Member ${index + 1}`;
 
-                        <div>
-                          <strong>
-                            {member.name}
-                          </strong>
+                      const memberRole =
+                        typeof member === "string"
+                          ? "Assigned Resource"
+                          : member.role ||
+                            member.job_title ||
+                            member.position ||
+                            "Assigned Resource";
 
-                          <span>{member.role}</span>
+                      return (
+                        <div
+                          className="project-team-member"
+                          key={`${memberName}-${index}`}
+                        >
+                          <div className="project-team-avatar">
+                            {memberName.charAt(0).toUpperCase()}
+                          </div>
+                          <div>
+                            <strong>{memberName}</strong>
+                            <span>{memberRole}</span>
+                          </div>
                         </div>
-                      </div>
-                    )
-                  )}
-                </div>
+                      );
+                    })}
+                  </div>
+                ) : (
+                  <p>
+                    No assigned resource records are available for this
+                    project.
+                  </p>
+                )}
               </div>
             </div>
 
-            {/* MODAL ACTIONS */}
+            {/* LEFT: CLOSE | RIGHT: VIEW FULL PROJECT */}
+
             <div className="project-modal-actions">
               <button
                 type="button"
@@ -1230,9 +1041,7 @@ function AdminProjects() {
               <button
                 type="button"
                 className="project-primary-btn"
-                onClick={() =>
-                  openFullProject(selectedProject)
-                }
+                onClick={() => openFullProject(selectedProject)}
               >
                 <ClipboardList size={16} />
                 View Full Project
@@ -1242,9 +1051,9 @@ function AdminProjects() {
         </div>
       )}
 
-      {/* ======================================================
+      {/* ========================================================
           FULL PROJECT MODAL
-      ====================================================== */}
+      ======================================================== */}
 
       {showFullProjectModal && selectedProject && (
         <div
@@ -1253,17 +1062,19 @@ function AdminProjects() {
         >
           <div
             className="project-modal project-full-modal"
-            onClick={(event) =>
-              event.stopPropagation()
-            }
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="full-project-title"
+            onClick={(event) => event.stopPropagation()}
           >
             <div className="project-modal-header">
               <div>
                 <span className="project-modal-label">
                   FULL PROJECT
                 </span>
-
-                <h2>{selectedProject.name}</h2>
+                <h2 id="full-project-title">
+                  {selectedProject.name}
+                </h2>
               </div>
 
               <button
@@ -1277,82 +1088,61 @@ function AdminProjects() {
             </div>
 
             <div className="project-modal-body">
-              {/* OVERVIEW */}
               <div className="project-modal-description">
                 <h3>Project Overview</h3>
-
-                <p>
-                  {selectedProject.description}
-                </p>
+                <p>{selectedProject.description}</p>
               </div>
 
-              {/* PROJECT INFORMATION */}
               <div className="project-modal-section">
                 <div className="project-section-heading">
                   <div>
                     <FolderKanban size={17} />
-
                     <h3>Project Information</h3>
                   </div>
                 </div>
 
                 <div className="project-detail-grid">
                   <div className="project-detail-item">
-                    <span>Project Name</span>
+                    <span>Project ID</span>
+                    <strong>{displayValue(selectedProject.id)}</strong>
+                  </div>
 
-                    <strong>
-                      {selectedProject.name}
-                    </strong>
+                  <div className="project-detail-item">
+                    <span>Project Name</span>
+                    <strong>{selectedProject.name}</strong>
                   </div>
 
                   <div className="project-detail-item">
                     <span>Owner</span>
-
-                    <strong>
-                      {selectedProject.owner}
-                    </strong>
+                    <strong>{selectedProject.owner}</strong>
                   </div>
 
                   <div className="project-detail-item">
                     <span>Project Type</span>
-
-                    <strong>
-                      {selectedProject.type}
-                    </strong>
+                    <strong>{selectedProject.type}</strong>
                   </div>
 
                   <div className="project-detail-item">
                     <span>Status</span>
-
-                    <strong>
-                      {selectedProject.status}
-                    </strong>
+                    <strong>{selectedProject.status}</strong>
                   </div>
 
                   <div className="project-detail-item">
                     <span>Created</span>
-
-                    <strong>
-                      {selectedProject.created}
-                    </strong>
+                    <strong>{selectedProject.created}</strong>
                   </div>
 
                   <div className="project-detail-item">
                     <span>Deadline</span>
-
-                    <strong>
-                      {selectedProject.deadline}
-                    </strong>
+                    <strong>{selectedProject.deadline}</strong>
                   </div>
                 </div>
               </div>
 
-              {/* ESTIMATION */}
               <div className="project-modal-section">
                 <div className="project-section-heading">
                   <div>
                     <DollarSign size={17} />
-
                     <h3>Estimation & Progress</h3>
                   </div>
                 </div>
@@ -1360,34 +1150,26 @@ function AdminProjects() {
                 <div className="project-detail-grid">
                   <div className="project-detail-item">
                     <span>Estimated Cost</span>
-
-                    <strong>
-                      {selectedProject.cost}
-                    </strong>
+                    <strong>{selectedProject.cost}</strong>
                   </div>
 
                   <div className="project-detail-item">
                     <span>Estimated Duration</span>
-
-                    <strong>
-                      {selectedProject.duration}
-                    </strong>
+                    <strong>{selectedProject.duration}</strong>
                   </div>
 
                   <div className="project-detail-item">
                     <span>Current Progress</span>
-
                     <strong>
-                      {selectedProject.progress}%
+                      {selectedProject.progress === null
+                        ? "Not available"
+                        : `${selectedProject.progress}%`}
                     </strong>
                   </div>
 
                   <div className="project-detail-item">
                     <span>Project Risk</span>
-
-                    <strong>
-                      {selectedProject.risk}
-                    </strong>
+                    <strong>{displayValue(selectedProject.risk)}</strong>
                   </div>
                 </div>
 
@@ -1395,98 +1177,103 @@ function AdminProjects() {
                   <div
                     className="project-progress-fill"
                     style={{
-                      width: `${selectedProject.progress}%`,
+                      width:
+                        selectedProject.progress === null
+                          ? "0%"
+                          : `${selectedProject.progress}%`,
                     }}
                   />
                 </div>
               </div>
 
-              {/* RESOURCES */}
               <div className="project-modal-section">
                 <div className="project-section-heading">
                   <div>
                     <Users size={17} />
-
                     <h3>Assigned Resources</h3>
                   </div>
-
-                  <strong>
-                    {selectedProject.teamSize}
-                  </strong>
+                  <strong>{selectedProject.teamSize ?? "—"}</strong>
                 </div>
 
-                <div className="project-team-list">
-                  {selectedProject.team.map(
-                    (member, index) => (
-                      <div
-                        className="project-team-member"
-                        key={`${member.name}-${index}`}
-                      >
-                        <div className="project-team-avatar">
-                          {member.name
-                            .charAt(0)
-                            .toUpperCase()}
-                        </div>
+                {selectedProject.team.length > 0 ? (
+                  <div className="project-team-list">
+                    {selectedProject.team.map((member, index) => {
+                      const memberName =
+                        typeof member === "string"
+                          ? member
+                          : member.name ||
+                            member.full_name ||
+                            member.email ||
+                            `Team Member ${index + 1}`;
 
-                        <div>
-                          <strong>
-                            {member.name}
-                          </strong>
+                      const memberRole =
+                        typeof member === "string"
+                          ? "Assigned Resource"
+                          : member.role ||
+                            member.job_title ||
+                            member.position ||
+                            "Assigned Resource";
 
-                          <span>{member.role}</span>
+                      return (
+                        <div
+                          className="project-team-member"
+                          key={`${memberName}-${index}`}
+                        >
+                          <div className="project-team-avatar">
+                            {memberName.charAt(0).toUpperCase()}
+                          </div>
+                          <div>
+                            <strong>{memberName}</strong>
+                            <span>{memberRole}</span>
+                          </div>
                         </div>
-                      </div>
-                    )
-                  )}
-                </div>
+                      );
+                    })}
+                  </div>
+                ) : (
+                  <p>
+                    No assigned resource records are available for this
+                    project.
+                  </p>
+                )}
               </div>
 
-              {/* ADMIN MONITORING */}
               <div className="project-modal-section">
                 <div className="project-section-heading">
                   <div>
                     <ShieldAlert size={17} />
-
-                    <h3>
-                      Administrative Monitoring
-                    </h3>
+                    <h3>Project Record</h3>
                   </div>
                 </div>
 
                 <div className="project-admin-note">
                   <p>
-                    This project is currently being
-                    monitored through the PlanWise
-                    administrative panel. Resource
-                    allocation, project progress,
-                    estimated cost, timeline, and
-                    project risks can be reviewed
-                    and managed by authorized
-                    administrators.
+                    Project information is displayed when the backend
+                    provides it. Missing cost, duration, progress, risk,
+                    deadline, and resource information is not fabricated.
                   </p>
                 </div>
               </div>
             </div>
 
-            {/* FULL MODAL ACTIONS */}
-            <div className="project-modal-actions">
-              <button
-                type="button"
-                className="project-secondary-btn"
-                onClick={() => {
-                  setShowFullProjectModal(false);
-                  setShowProjectModal(true);
-                }}
-              >
-                Back to Details
-              </button>
+            {/* LEFT: CLOSE | RIGHT: BACK TO DETAILS */}
 
+            <div className="project-modal-actions">
               <button
                 type="button"
                 className="project-primary-btn"
                 onClick={closeFullProject}
               >
                 Close
+              </button>
+
+              <button
+                type="button"
+                className="project-secondary-btn"
+                onClick={backToProjectDetails}
+              >
+                <ChevronLeft size={16} />
+                Back to Details
               </button>
             </div>
           </div>

@@ -1,8 +1,11 @@
-
 const API_BASE_URL = "http://127.0.0.1:8000";
 
 // Common API response handler
 async function handleResponse(response, defaultMessage) {
+  if (response.status === 204) {
+    return null;
+  }
+
   const data = await response.json().catch(() => ({}));
 
   if (!response.ok) {
@@ -68,7 +71,7 @@ async function handleResponse(response, defaultMessage) {
   return data;
 }
 
-// Common JSON request helper
+// Common API request helper
 async function apiRequest(
   endpoint,
   {
@@ -218,12 +221,24 @@ export async function deleteEmployee(employeeId) {
     }
   );
 
-  if (response.status === 204) {
-    return null;
-  }
-
   return handleResponse(
     response,
     "Failed to delete employee."
+  );
+}
+
+// ========================================
+// ADMIN PROJECTS
+// ========================================
+
+// GET: Fetch all projects for the admin panel
+export async function getAdminProjects() {
+  const response = await apiRequest(
+    "/api/projects/admin/all"
+  );
+
+  return handleResponse(
+    response,
+    "Failed to load projects."
   );
 }
