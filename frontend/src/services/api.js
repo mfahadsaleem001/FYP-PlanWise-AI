@@ -242,3 +242,94 @@ export async function getAdminProjects() {
     "Failed to load projects."
   );
 }
+
+
+ 
+// PUT: Assign employees to a project
+export async function assignProjectEmployees(
+  projectId,
+  employeeIds
+) {
+  const response = await apiRequest(
+    `/api/projects/${projectId}/employees`,
+    {
+      method: "PUT",
+      body: {
+        employee_ids: employeeIds,
+      },
+    }
+  );
+
+  return handleResponse(
+    response,
+    "Failed to assign employees to the project."
+  );
+}
+
+
+/* ========================================
+   PROJECT REQUESTS
+======================================== */
+
+// GET: Fetch all project requests
+export async function getProjectRequests(statusFilter) {
+  const query = statusFilter
+    ? `?status=${encodeURIComponent(statusFilter)}`
+    : "";
+
+  const response = await apiRequest(
+    `/api/project-requests${query}`
+  );
+
+  return handleResponse(
+    response,
+    "Failed to load project requests."
+  );
+}
+
+// GET: Fetch requests submitted by current user
+export async function getMyProjectRequests() {
+  const response = await apiRequest(
+    "/api/project-requests/my"
+  );
+
+  return handleResponse(
+    response,
+    "Failed to load your project requests."
+  );
+}
+
+// POST: Submit a new project request
+export async function createProjectRequest(requestData) {
+  const response = await apiRequest(
+    "/api/project-requests",
+    {
+      method: "POST",
+      body: requestData,
+    }
+  );
+
+  return handleResponse(
+    response,
+    "Failed to submit project request."
+  );
+}
+
+// PATCH: Accept or reject a project request
+export async function reviewProjectRequest(
+  requestId,
+  status
+) {
+  const response = await apiRequest(
+    `/api/project-requests/${requestId}/review`,
+    {
+      method: "PATCH",
+      body: { status },
+    }
+  );
+
+  return handleResponse(
+    response,
+    `Failed to ${status} project request.`
+  );
+}

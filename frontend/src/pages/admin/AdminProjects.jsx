@@ -1,4 +1,3 @@
-
 import { useCallback, useEffect, useMemo, useState } from "react";
 
 import {
@@ -19,9 +18,17 @@ import {
   ChevronLeft,
   ChevronRight,
   RefreshCw,
+  UserPlus,
+  Save,
+  Check,
 } from "lucide-react";
 
-import { getAdminProjects } from "../../services/api";
+import {
+  getAdminProjects,
+  getEmployees,
+  assignProjectEmployees,
+} from "../../services/api";
+
 import "./AdminProjects.css";
 
 // ============================================================
@@ -33,9 +40,7 @@ function formatDate(value) {
 
   const date = new Date(value);
 
-  if (Number.isNaN(date.getTime())) {
-    return String(value);
-  }
+  if (Number.isNaN(date.getTime())) return String(value);
 
   return date.toLocaleDateString("en-GB", {
     day: "2-digit",
@@ -237,6 +242,37 @@ function displayValue(value) {
     : value;
 }
 
+function getMemberId(member) {
+  if (!member || typeof member !== "object") return null;
+
+  const id = member.id ?? member.employee_id ?? member.employeeId;
+
+  return id === null || id === undefined ? null : Number(id);
+}
+
+function getMemberName(member, index = 0) {
+  if (typeof member === "string") return member;
+
+  return (
+    member?.name ||
+    member?.full_name ||
+    member?.fullName ||
+    member?.email ||
+    `Team Member ${index + 1}`
+  );
+}
+
+function getMemberRole(member) {
+  if (typeof member === "string") return "Assigned Resource";
+
+  return (
+    member?.role ||
+    member?.job_title ||
+    member?.position ||
+    "Assigned Resource"
+  );
+}
+
 // ============================================================
 // COMPONENT
 // ============================================================
@@ -253,6 +289,16 @@ function AdminProjects() {
   const [selectedProject, setSelectedProject] = useState(null);
   const [showProjectModal, setShowProjectModal] = useState(false);
   const [showFullProjectModal, setShowFullProjectModal] = useState(false);
+
+  // Employee assignment state
+  const [showAssignmentModal, setShowAssignmentModal] = useState(false);
+  const [employees, setEmployees] = useState([]);
+  const [selectedEmployeeIds, setSelectedEmployeeIds] = useState([]);
+  const [loadingEmployees, setLoadingEmployees] = useState(false);
+  const [savingAssignment, setSavingAssignment] = useState(false);
+  const [assignmentError, setAssignmentError] = useState("");
+  const [assignmentSuccess, setAssignmentSuccess] = useState("");
+  const [assignmentReturnTo, setAssignmentReturnTo] = useState("details");
 
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -283,9 +329,14 @@ function AdminProjects() {
         );
       }
 
-      setProjects(projectList.map(normalizeProject));
+      const normalizedProjects = projectList.map(normalizeProject);
+
+      setProjects(normalizedProjects);
+
+      return normalizedProjects;
     } catch (err) {
       setError(err?.message || "Unable to load projects.");
+      return [];
     } finally {
       setLoading(false);
     }
@@ -296,12 +347,56 @@ function AdminProjects() {
   }, [fetchProjects]);
 
   // ============================================================
+  // LOAD EMPLOYEES
+  // ============================================================
+
+  const fetchEmployees = useCallback(async () => {
+    setLoadingEmployees(true);
+    setAssignmentError("");
+
+    try {
+      const response = await getEmployees();
+
+      const employeeList = Array.isArray(response)
+        ? response
+        : Array.isArray(response?.employees)
+          ? response.employees
+          : Array.isArray(response?.items)
+            ? response.items
+            : null;
+
+      if (!employeeList) {
+        throw new Error(
+          "The employees API returned an unexpected response format."
+        );
+      }
+
+      setEmployees(employeeList);
+      return employeeList;
+    } catch (err) {
+      setAssignmentError(
+        err?.message || "Unable to load employees."
+      );
+      return [];
+    } finally {
+      setLoadingEmployees(false);
+    }
+  }, []);
+
+  // ============================================================
   // MODAL ESCAPE KEY
   // ============================================================
 
   useEffect(() => {
     const handleKeyDown = (event) => {
       if (event.key === "Escape") {
+        if (savingAssignment) return;
+
+        if (showAssignmentModal) {
+          closeAssignmentModal();
+          return;
+        }
+
         setSelectedProject(null);
         setShowProjectModal(false);
         setShowFullProjectModal(false);
@@ -313,7 +408,7 @@ function AdminProjects() {
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
     };
-  }, []);
+  }, [showAssignmentModal, savingAssignment]);
 
   // ============================================================
   // SUMMARY COUNTS
@@ -434,9 +529,6 @@ function AdminProjects() {
     setCurrentPage(page);
   };
 
-  // ============================================================
-  // PROJECT MODALS
-  // ============================================================
 
   const openProject = (project) => {
     setSelectedProject(project);
@@ -444,27 +536,205 @@ function AdminProjects() {
     setShowFullProjectModal(false);
   };
 
+  // Close only the details modal; stay on this page.
   const closeProject = () => {
-    setSelectedProject(null);
+    if (savingAssignment) return;
+
     setShowProjectModal(false);
     setShowFullProjectModal(false);
+    setShowAssignmentModal(false);
+    setSelectedProject(null);
   };
 
+  // Open the full project modal without navigating away.
   const openFullProject = (project) => {
     setSelectedProject(project);
     setShowProjectModal(false);
     setShowFullProjectModal(true);
   };
 
+  // Close only the full project modal; stay on this page.
   const closeFullProject = () => {
-    setSelectedProject(null);
+    if (savingAssignment) return;
+
     setShowFullProjectModal(false);
     setShowProjectModal(false);
+    setShowAssignmentModal(false);
+    setSelectedProject(null);
   };
 
+  // Return from full project view to its details modal.
   const backToProjectDetails = () => {
+    if (savingAssignment) return;
+
     setShowFullProjectModal(false);
     setShowProjectModal(true);
+  };
+
+
+  // ============================================================
+  // EMPLOYEE ASSIGNMENT
+  // ============================================================
+
+  const openAssignmentModal = async (project, returnTo = "details") => {
+    setSelectedProject(project);
+    setAssignmentReturnTo(returnTo);
+    setAssignmentError("");
+    setAssignmentSuccess("");
+    setShowProjectModal(false);
+    setShowFullProjectModal(false);
+    setShowAssignmentModal(true);
+
+    const assignedIds = getTeam(project)
+      .map(getMemberId)
+      .filter((id) => id !== null && Number.isFinite(id));
+
+    setSelectedEmployeeIds(assignedIds);
+
+    await fetchEmployees();
+  };
+
+  const closeAssignmentModal = () => {
+    if (savingAssignment) return;
+
+    setShowAssignmentModal(false);
+    setAssignmentError("");
+    setAssignmentSuccess("");
+
+    if (selectedProject) {
+      if (assignmentReturnTo === "full") {
+        setShowFullProjectModal(true);
+      } else {
+        setShowProjectModal(true);
+      }
+    }
+  };
+
+  const toggleEmployee = (employeeId) => {
+    setAssignmentError("");
+    setAssignmentSuccess("");
+
+    setSelectedEmployeeIds((previousIds) =>
+      previousIds.includes(employeeId)
+        ? previousIds.filter((id) => id !== employeeId)
+        : [...previousIds, employeeId]
+    );
+  };
+
+  const handleSaveAssignment = async () => {
+    if (!selectedProject?.id) {
+      setAssignmentError("No project is selected.");
+      return;
+    }
+
+    setSavingAssignment(true);
+    setAssignmentError("");
+    setAssignmentSuccess("");
+
+    try {
+      await assignProjectEmployees(
+        selectedProject.id,
+        selectedEmployeeIds
+      );
+
+      const refreshedProjects = await fetchProjects();
+
+      const updatedProject = refreshedProjects.find(
+        (project) => String(project.id) === String(selectedProject.id)
+      );
+
+      if (updatedProject) {
+        setSelectedProject(updatedProject);
+      }
+
+      setAssignmentSuccess("Employee assignments saved successfully.");
+      setShowAssignmentModal(false);
+
+      if (updatedProject) {
+        if (assignmentReturnTo === "full") {
+          setShowFullProjectModal(true);
+          setShowProjectModal(false);
+        } else {
+          setShowProjectModal(true);
+          setShowFullProjectModal(false);
+        }
+      } else {
+        setShowProjectModal(false);
+        setShowFullProjectModal(false);
+        setSelectedProject(null);
+      }
+    } catch (err) {
+      setAssignmentError(
+        err?.message || "Failed to save employee assignments."
+      );
+    } finally {
+      setSavingAssignment(false);
+    }
+  };
+
+  // ============================================================
+  // SHARED ASSIGNED RESOURCE LIST
+  // ============================================================
+
+  const renderAssignedResources = (project) => {
+    const team = getTeam(project);
+
+    return (
+      <>
+        <div className="project-section-heading">
+          <div>
+            <Users size={17} />
+            <h3>Assigned Resources</h3>
+          </div>
+
+          <strong>{team.length}</strong>
+        </div>
+
+        {team.length > 0 ? (
+          <div className="project-team-list">
+            {team.map((member, index) => {
+              const memberName = getMemberName(member, index);
+              const memberRole = getMemberRole(member);
+
+              return (
+                <div
+                  className="project-team-member"
+                  key={`${getMemberId(member) ?? memberName}-${index}`}
+                >
+                  <div className="project-team-avatar">
+                    {memberName.charAt(0).toUpperCase()}
+                  </div>
+
+                  <div>
+                    <strong>{memberName}</strong>
+                    <span>{memberRole}</span>
+                    {member?.email && <span>{member.email}</span>}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        ) : (
+          <p>No employees are assigned to this project yet.</p>
+        )}
+
+        <div style={{ marginTop: 16 }}>
+          <button
+            type="button"
+            className="project-primary-btn"
+            onClick={() =>
+              openAssignmentModal(
+                project,
+                showFullProjectModal ? "full" : "details"
+              )
+            }
+          >
+            <UserPlus size={16} />
+            Assign Employees
+          </button>
+        </div>
+      </>
+    );
   };
 
   // ============================================================
@@ -642,7 +912,9 @@ function AdminProjects() {
                       className="admin-projects-spin"
                     />
                     <strong>Loading projects</strong>
-                    <span>Fetching project records from the backend.</span>
+                    <span>
+                      Fetching project records from the backend.
+                    </span>
                   </td>
                 </tr>
               ) : currentProjects.length > 0 ? (
@@ -657,6 +929,7 @@ function AdminProjects() {
                         <div className="project-name-icon">
                           <FolderKanban size={16} />
                         </div>
+
                         <div className="project-name-info">
                           <strong>{project.name}</strong>
                           <span>Created {project.created}</span>
@@ -696,6 +969,7 @@ function AdminProjects() {
                               : `${project.progress}%`}
                           </span>
                         </div>
+
                         <div className="project-progress-bar">
                           <div
                             className="project-progress-fill"
@@ -746,7 +1020,7 @@ function AdminProjects() {
                         <button
                           type="button"
                           className="project-action-btn"
-                          title="Close"
+                          title="Project Details"
                           aria-label={`Open ${project.name} details`}
                           onClick={() => openProject(project)}
                         >
@@ -771,7 +1045,9 @@ function AdminProjects() {
                   <td colSpan="9" className="project-empty-cell">
                     <FolderKanban size={30} />
                     <strong>No projects found</strong>
-                    <span>Try changing your search or filters.</span>
+                    <span>
+                      Try changing your search or filters.
+                    </span>
                   </td>
                 </tr>
               )}
@@ -839,9 +1115,7 @@ function AdminProjects() {
         </div>
       </div>
 
-      {/* ========================================================
-          PROJECT DETAILS MODAL
-      ======================================================== */}
+      {/* PROJECT DETAILS MODAL */}
 
       {showProjectModal && selectedProject && (
         <div
@@ -954,6 +1228,7 @@ function AdminProjects() {
                     <Activity size={17} />
                     <h3>Project Progress</h3>
                   </div>
+
                   <strong>
                     {selectedProject.progress === null
                       ? "Not available"
@@ -975,59 +1250,9 @@ function AdminProjects() {
               </div>
 
               <div className="project-modal-section">
-                <div className="project-section-heading">
-                  <div>
-                    <Users size={17} />
-                    <h3>Assigned Resources</h3>
-                  </div>
-                  <strong>{selectedProject.teamSize ?? "—"}</strong>
-                </div>
-
-                {selectedProject.team.length > 0 ? (
-                  <div className="project-team-list">
-                    {selectedProject.team.map((member, index) => {
-                      const memberName =
-                        typeof member === "string"
-                          ? member
-                          : member.name ||
-                            member.full_name ||
-                            member.email ||
-                            `Team Member ${index + 1}`;
-
-                      const memberRole =
-                        typeof member === "string"
-                          ? "Assigned Resource"
-                          : member.role ||
-                            member.job_title ||
-                            member.position ||
-                            "Assigned Resource";
-
-                      return (
-                        <div
-                          className="project-team-member"
-                          key={`${memberName}-${index}`}
-                        >
-                          <div className="project-team-avatar">
-                            {memberName.charAt(0).toUpperCase()}
-                          </div>
-                          <div>
-                            <strong>{memberName}</strong>
-                            <span>{memberRole}</span>
-                          </div>
-                        </div>
-                      );
-                    })}
-                  </div>
-                ) : (
-                  <p>
-                    No assigned resource records are available for this
-                    project.
-                  </p>
-                )}
+                {renderAssignedResources(selectedProject)}
               </div>
             </div>
-
-            {/* LEFT: CLOSE | RIGHT: VIEW FULL PROJECT */}
 
             <div className="project-modal-actions">
               <button
@@ -1051,9 +1276,7 @@ function AdminProjects() {
         </div>
       )}
 
-      {/* ========================================================
-          FULL PROJECT MODAL
-      ======================================================== */}
+      {/* FULL PROJECT MODAL */}
 
       {showFullProjectModal && selectedProject && (
         <div
@@ -1187,55 +1410,7 @@ function AdminProjects() {
               </div>
 
               <div className="project-modal-section">
-                <div className="project-section-heading">
-                  <div>
-                    <Users size={17} />
-                    <h3>Assigned Resources</h3>
-                  </div>
-                  <strong>{selectedProject.teamSize ?? "—"}</strong>
-                </div>
-
-                {selectedProject.team.length > 0 ? (
-                  <div className="project-team-list">
-                    {selectedProject.team.map((member, index) => {
-                      const memberName =
-                        typeof member === "string"
-                          ? member
-                          : member.name ||
-                            member.full_name ||
-                            member.email ||
-                            `Team Member ${index + 1}`;
-
-                      const memberRole =
-                        typeof member === "string"
-                          ? "Assigned Resource"
-                          : member.role ||
-                            member.job_title ||
-                            member.position ||
-                            "Assigned Resource";
-
-                      return (
-                        <div
-                          className="project-team-member"
-                          key={`${memberName}-${index}`}
-                        >
-                          <div className="project-team-avatar">
-                            {memberName.charAt(0).toUpperCase()}
-                          </div>
-                          <div>
-                            <strong>{memberName}</strong>
-                            <span>{memberRole}</span>
-                          </div>
-                        </div>
-                      );
-                    })}
-                  </div>
-                ) : (
-                  <p>
-                    No assigned resource records are available for this
-                    project.
-                  </p>
-                )}
+                {renderAssignedResources(selectedProject)}
               </div>
 
               <div className="project-modal-section">
@@ -1256,8 +1431,6 @@ function AdminProjects() {
               </div>
             </div>
 
-            {/* LEFT: CLOSE | RIGHT: BACK TO DETAILS */}
-
             <div className="project-modal-actions">
               <button
                 type="button"
@@ -1274,6 +1447,259 @@ function AdminProjects() {
               >
                 <ChevronLeft size={16} />
                 Back to Details
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ASSIGN EMPLOYEES MODAL */}
+
+      {showAssignmentModal && selectedProject && (
+        <div
+          className="project-modal-overlay project-assignment-overlay"
+          onClick={closeAssignmentModal}
+        >
+          <div
+            className="project-modal project-assignment-modal"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="assign-employees-title"
+            onClick={(event) => event.stopPropagation()}
+          >
+            {/* Modal header */}
+
+            <div className="project-modal-header">
+              <div>
+                <span className="project-modal-label">
+                  RESOURCE MANAGEMENT
+                </span>
+
+                <h2 id="assign-employees-title">
+                  Assign Employees
+                </h2>
+
+                <p className="assignment-project-name">
+                  {selectedProject.name}
+                </p>
+              </div>
+
+              <button
+                type="button"
+                className="project-modal-close"
+                onClick={closeAssignmentModal}
+                disabled={savingAssignment}
+                aria-label="Close employee assignment"
+              >
+                <X size={18} />
+              </button>
+            </div>
+
+            {/* Modal body */}
+
+            <div className="project-modal-body assignment-modal-body">
+              <p className="assignment-description">
+                Select the employees who should be assigned to this
+                project. Saving replaces the project's current team
+                with your selected employees.
+              </p>
+
+              {/* Selected employee summary */}
+
+              <div className="assignment-selection-summary">
+                <div className="assignment-summary-content">
+                  <span className="assignment-summary-label">
+                    Selected employees
+                  </span>
+
+                  <span className="assignment-summary-hint">
+                    Choose the team members for this project
+                  </span>
+                </div>
+
+                <strong className="assignment-selection-count">
+                  {selectedEmployeeIds.length}
+                </strong>
+              </div>
+
+              {/* Error message */}
+
+              {assignmentError && (
+                <div
+                  className="admin-project-error assignment-error"
+                  role="alert"
+                >
+                  <AlertTriangle size={17} />
+                  <span>{assignmentError}</span>
+                </div>
+              )}
+
+              {/* Success message */}
+
+              {assignmentSuccess && (
+                <p className="assignment-success" role="status">
+                  {assignmentSuccess}
+                </p>
+              )}
+
+              {/* Loading state */}
+
+              {loadingEmployees ? (
+                <div className="assignment-loading">
+                  <RefreshCw
+                    size={20}
+                    className="admin-projects-spin"
+                  />
+
+                  <div>
+                    <strong>Loading employees</strong>
+                    <span>
+                      Fetching available team members...
+                    </span>
+                  </div>
+                </div>
+              ) : employees.length > 0 ? (
+                /* Employee selection list */
+
+                <div className="project-assignment-list">
+                  {employees.map((employee) => {
+                    const employeeId = Number(employee.id);
+
+                    const employeeName =
+                      employee.name ||
+                      employee.full_name ||
+                      employee.email ||
+                      `Employee #${employee.id}`;
+
+                    const isSelected =
+                      selectedEmployeeIds.includes(employeeId);
+
+                    const isDisabled =
+                      savingAssignment ||
+                      !Number.isInteger(employeeId) ||
+                      employeeId <= 0 ||
+                      employee.account_status === "disabled";
+
+                    return (
+                      <label
+                        key={employee.id}
+                        className={[
+                          "project-assignment-option",
+                          isSelected ? "selected" : "",
+                          isDisabled ? "disabled" : "",
+                        ]
+                          .filter(Boolean)
+                          .join(" ")}
+                      >
+                        <input
+                          type="checkbox"
+                          className="assignment-checkbox"
+                          checked={isSelected}
+                          disabled={isDisabled}
+                          onChange={() => toggleEmployee(employeeId)}
+                        />
+
+                        <span className="assignment-employee-avatar">
+                          {employeeName.charAt(0).toUpperCase()}
+                        </span>
+
+                        <span className="project-assignment-employee-info">
+                          <strong className="assignment-employee-name">
+                            {employeeName}
+                          </strong>
+
+                          <span className="assignment-employee-role">
+                            {employee.job_title ||
+                              employee.position ||
+                              "Employee"}
+                          </span>
+
+                          {employee.email && (
+                            <span className="assignment-employee-email">
+                              {employee.email}
+                            </span>
+                          )}
+
+                          {employee.availability_status && (
+                            <span className="project-assignment-status">
+                              Availability:{" "}
+                              {formatStatus(
+                                employee.availability_status
+                              )}
+                            </span>
+                          )}
+                        </span>
+
+                        {isSelected && (
+                          <span className="assignment-selected-indicator">
+                            <Check size={15} />
+                            <span>Selected</span>
+                          </span>
+                        )}
+                      </label>
+                    );
+                  })}
+                </div>
+              ) : (
+                /* Empty state */
+
+                <div className="assignment-empty-state">
+                  <div className="assignment-empty-icon">
+                    <Users size={25} />
+                  </div>
+
+                  <h3>No employees available</h3>
+
+                  <p>
+                    No employee records were returned. Try refreshing
+                    the employee list.
+                  </p>
+
+                  <button
+                    type="button"
+                    className="project-secondary-btn"
+                    onClick={fetchEmployees}
+                    disabled={loadingEmployees || savingAssignment}
+                  >
+                    <RefreshCw size={15} />
+                    Retry
+                  </button>
+                </div>
+              )}
+            </div>
+
+            {/* Modal footer */}
+
+            <div className="project-modal-actions assignment-modal-footer">
+              <button
+                type="button"
+                className="project-secondary-btn"
+                onClick={closeAssignmentModal}
+                disabled={savingAssignment}
+              >
+                Cancel
+              </button>
+
+              <button
+                type="button"
+                className="project-primary-btn assignment-save-button"
+                onClick={handleSaveAssignment}
+                disabled={savingAssignment || loadingEmployees}
+              >
+                {savingAssignment ? (
+                  <>
+                    <RefreshCw
+                      size={16}
+                      className="admin-projects-spin"
+                    />
+                    Saving...
+                  </>
+                ) : (
+                  <>
+                    <Save size={16} />
+                    Save Assignments
+                  </>
+                )}
               </button>
             </div>
           </div>

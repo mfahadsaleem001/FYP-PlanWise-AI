@@ -1,10 +1,14 @@
+
 from fastapi import APIRouter, Depends, HTTPException, status
-from sqlalchemy import select
+from pydantic import BaseModel, Field
+from sqlalchemy import delete, select
 from sqlalchemy.orm import Session
 
 from app.core.dependencies import get_current_user, require_admin
 from app.database.connection import get_db
+from app.models.employee import Employee
 from app.models.project import Project
+from app.models.project_employee_assignment import ProjectEmployeeAssignment
 from app.models.user import User
 from app.schemas.project import ProjectCreate, ProjectResponse, ProjectUpdate
 from app.services.project_service import (
@@ -21,7 +25,11 @@ router = APIRouter(
 )
 
 
-# Admin: Get all projects
+class ProjectEmployeeAssignmentRequest(BaseModel):
+    employee_ids: list[int] = Field(default_factory=list)
+
+
+# Admin: Get all projects, including their assigned employees
 # Keep this route before /{project_id}
 @router.get("/admin/all")
 def get_all_admin_projects(
@@ -36,6 +44,40 @@ def get_all_admin_projects(
 
     results = db.execute(statement).all()
 
+    if not results:
+        return []
+
+    project_ids = [project.id for project, _ in results]
+
+    assignment_statement = (
+        select(ProjectEmployeeAssignment, Employee, User)
+        .join(
+            Employee,
+            ProjectEmployeeAssignment.employee_id == Employee.id,
+        )
+        .join(User, Employee.user_id == User.id)
+        .where(ProjectEmployeeAssignment.project_id.in_(project_ids))
+    )
+
+    assignment_results = db.execute(assignment_statement).all()
+
+    teams_by_project = {}
+
+    for assignment, employee, employee_user in assignment_results:
+        teams_by_project.setdefault(assignment.project_id, []).append(
+            {
+                "id": employee.id,
+                "user_id": employee.user_id,
+                "name": employee_user.name,
+                "email": employee_user.email,
+                "role": employee.job_title,
+                "job_title": employee.job_title,
+                "availability_status": employee.availability_status,
+                "capacity_hours": employee.capacity_hours,
+                "assigned_at": assignment.assigned_at,
+            }
+        )
+
     return [
         {
             "id": project.id,
@@ -48,9 +90,84 @@ def get_all_admin_projects(
             "owner_email": owner.email,
             "created_at": project.created_at,
             "updated_at": project.updated_at,
+            "team": teams_by_project.get(project.id, []),
+            "teamSize": len(teams_by_project.get(project.id, [])),
         }
         for project, owner in results
     ]
+
+
+# Admin: Assign or replace employees assigned to a project
+@router.put("/{project_id}/employees")
+def assign_project_employees(
+    project_id: int,
+    assignment_data: ProjectEmployeeAssignmentRequest,
+    current_admin: User = Depends(require_admin),
+    db: Session = Depends(get_db),
+):
+    project = db.get(Project, project_id)
+
+    if project is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Project not found",
+        )
+
+    employee_ids = assignment_data.employee_ids
+
+    # Reject duplicate IDs in the request
+    if len(employee_ids) != len(set(employee_ids)):
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+            detail="Duplicate employee IDs are not allowed",
+        )
+
+    # Verify that every requested employee exists
+    if employee_ids:
+        employees_statement = select(Employee.id).where(
+            Employee.id.in_(employee_ids)
+        )
+        existing_employee_ids = set(db.scalars(employees_statement).all())
+
+        missing_employee_ids = set(employee_ids) - existing_employee_ids
+
+        if missing_employee_ids:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail={
+                    "message": "One or more employees were not found",
+                    "employee_ids": sorted(missing_employee_ids),
+                },
+            )
+
+    try:
+        # Replace the project's current team with the submitted selection
+        db.execute(
+            delete(ProjectEmployeeAssignment).where(
+                ProjectEmployeeAssignment.project_id == project_id
+            )
+        )
+
+        for employee_id in employee_ids:
+            db.add(
+                ProjectEmployeeAssignment(
+                    project_id=project_id,
+                    employee_id=employee_id,
+                )
+            )
+
+        db.commit()
+
+    except Exception:
+        db.rollback()
+        raise
+
+    return {
+        "message": "Project employees assigned successfully",
+        "project_id": project_id,
+        "employee_ids": employee_ids,
+        "team_size": len(employee_ids),
+    }
 
 
 # Create a project

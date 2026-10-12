@@ -8,6 +8,7 @@ from app.api.routes.admin_dashboard import router as admin_dashboard_router
 from app.api.routes.project import router as project_router
 from app.api.routes.employee import router as employee_router
 from app.api.routes.admin_users import router as admin_users_router
+from app.api.routes.project_requests import router as project_requests_router
 
 
 app = FastAPI(
@@ -35,6 +36,7 @@ app.include_router(admin_dashboard_router)
 app.include_router(project_router)
 app.include_router(employee_router)
 app.include_router(admin_users_router)
+app.include_router(project_requests_router)
 
 
 @app.get("/")

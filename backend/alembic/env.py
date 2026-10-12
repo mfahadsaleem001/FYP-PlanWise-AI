@@ -1,14 +1,12 @@
 from logging.config import fileConfig
-
 from sqlalchemy import create_engine
 from sqlalchemy import pool
-
 from alembic import context
-
 from app.core.config import settings
 from app.database.base import Base
 from app.models.user import User
 from app.models.project import Project
+from app.models.project_request import ProjectRequest
 
 
 # Alembic Config object

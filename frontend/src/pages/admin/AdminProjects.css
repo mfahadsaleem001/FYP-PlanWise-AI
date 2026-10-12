@@ -1938,3 +1938,705 @@
               border-color 0.2s ease,
               color 0.2s ease;
 }
+
+/* ================================
+   Employee Assignment Modal
+================================ */
+
+.project-assignment-modal {
+  width: min(680px, 95vw);
+  max-height: 88vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.project-assignment-modal .project-modal-header p {
+  margin: 6px 0 0;
+  color: #76665f;
+  font-size: 0.9rem;
+  overflow-wrap: anywhere;
+}
+
+.project-assignment-modal .project-modal-body {
+  overflow-y: auto;
+  padding: 24px;
+}
+
+.project-assignment-modal .project-modal-body > p {
+  margin: 0 0 16px;
+  color: #65534d;
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+
+.project-assignment-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 18px 0;
+}
+
+.project-assignment-option {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px;
+  border: 1px solid #e7dcd2;
+  border-radius: 10px;
+  background: #fffdf9;
+  cursor: pointer;
+  transition: border-color 0.2s ease, background-color 0.2s ease;
+}
+
+.project-assignment-option:hover {
+  border-color: #b18a52;
+  background: #faf4eb;
+}
+
+.project-assignment-option.selected {
+  border-color: #711d3c;
+  background: #f8edf1;
+}
+
+.project-assignment-option input[type="checkbox"] {
+  width: 17px;
+  height: 17px;
+  flex-shrink: 0;
+  accent-color: #711d3c;
+  cursor: pointer;
+}
+
+.project-assignment-employee-info {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 5px;
+  min-width: 0;
+}
+
+.project-assignment-employee-info strong {
+  color: #2c1b1b;
+  font-size: 0.93rem;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+.project-assignment-employee-info span {
+  color: #796a62;
+  font-size: 0.8rem;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+
+.project-assignment-status {
+  flex-shrink: 0;
+  padding: 5px 9px;
+  border-radius: 20px;
+  background: #f0e7d9;
+  color: #71562f;
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+.project-assignment-modal .project-modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 12px;
+  padding: 18px 24px;
+  border-top: 1px solid #eee3d9;
+  background: #fffdf9;
+}
+
+.project-assignment-modal .project-modal-actions button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* ================================
+   Responsive Assignment Modal
+================================ */
+
+@media (max-width: 600px) {
+  .project-assignment-modal {
+    width: 96vw;
+    max-height: 92vh;
+  }
+
+  .project-assignment-modal .project-modal-body {
+    padding: 16px;
+  }
+
+  .project-assignment-option {
+    gap: 9px;
+    padding: 11px;
+  }
+
+  .project-assignment-status {
+    padding: 4px 6px;
+    font-size: 0.65rem;
+  }
+
+  .project-assignment-modal .project-modal-actions {
+    padding: 14px 16px;
+    flex-wrap: wrap;
+  }
+}
+
+/* ============================================================
+   EMPLOYEE ASSIGNMENT MODAL — PLANWISE AI
+   Premium • Compact • Responsive • Theme Consistent
+============================================================ */
+
+.project-assignment-modal {
+  display: flex;
+  flex-direction: column;
+  width: min(620px, calc(100vw - 32px));
+  max-height: calc(100vh - 64px);
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  background: var(--color-surface);
+  box-shadow: 0 24px 65px rgba(44, 27, 27, 0.2);
+  overflow: hidden;
+}
+
+/* ------------------------------------------------------------
+   HEADER
+------------------------------------------------------------ */
+
+.project-assignment-modal .project-modal-header {
+  flex-shrink: 0;
+  padding: 18px 20px;
+  border-bottom: 1px solid var(--color-border);
+  background: var(--color-surface);
+}
+
+.project-assignment-modal .project-modal-label {
+  display: inline-flex;
+  margin-bottom: 6px;
+  color: var(--color-accent);
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+}
+
+.project-assignment-modal .project-modal-header h2 {
+  margin: 0;
+  color: var(--color-dark);
+  font-family: var(--font-heading);
+  font-size: 21px;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.project-assignment-modal .assignment-project-name {
+  margin: 5px 0 0;
+  color: var(--color-text-muted);
+  font-size: 11px;
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+}
+
+.project-assignment-modal .project-modal-close {
+  flex-shrink: 0;
+}
+
+/* ------------------------------------------------------------
+   SCROLLABLE CONTENT
+------------------------------------------------------------ */
+
+.project-assignment-modal .project-modal-body {
+  flex: 1;
+  min-height: 0;
+  max-height: none;
+  padding: 18px 20px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-border) transparent;
+}
+
+.project-assignment-modal .assignment-description {
+  margin: 0 0 15px;
+  color: var(--color-text-muted);
+  font-size: 11px;
+  line-height: 1.75;
+}
+
+/* ------------------------------------------------------------
+   SELECTED EMPLOYEES COUNTER
+------------------------------------------------------------ */
+
+.project-assignment-modal .assignment-selection-summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 14px;
+  padding: 11px 13px;
+  border: 1px solid var(--color-border);
+  border-left: 3px solid var(--color-primary);
+  border-radius: 7px;
+  background: var(--color-background);
+}
+
+.project-assignment-modal .assignment-summary-content {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.project-assignment-modal .assignment-summary-label {
+  color: var(--color-dark);
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.project-assignment-modal .assignment-summary-hint {
+  color: var(--color-text-muted);
+  font-size: 10px;
+  line-height: 1.5;
+}
+
+.project-assignment-modal .assignment-selection-count {
+  display: grid;
+  place-items: center;
+  flex: 0 0 34px;
+  width: 34px;
+  height: 34px;
+  border: 1px solid rgba(113, 29, 60, 0.15);
+  border-radius: 7px;
+  background: rgba(113, 29, 60, 0.07);
+  color: var(--color-primary);
+  font-size: 16px;
+  font-weight: 800;
+}
+
+/* ------------------------------------------------------------
+   EMPLOYEE LIST
+------------------------------------------------------------ */
+
+.project-assignment-modal .project-assignment-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-height: 330px;
+  margin: 0;
+  padding: 2px 3px 4px 1px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-border) transparent;
+}
+
+/* Employee row */
+
+.project-assignment-modal .project-assignment-option {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  min-width: 0;
+  padding: 11px 12px;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  background: var(--color-surface);
+  cursor: pointer;
+  transition:
+    border-color 0.18s ease,
+    background 0.18s ease,
+    box-shadow 0.18s ease;
+}
+
+.project-assignment-modal .project-assignment-option:hover {
+  border-color: rgba(177, 138, 82, 0.75);
+  background: var(--color-background);
+}
+
+.project-assignment-modal .project-assignment-option.selected {
+  border-color: var(--color-primary);
+  background: rgba(113, 29, 60, 0.045);
+  box-shadow: inset 3px 0 0 var(--color-primary);
+}
+
+.project-assignment-modal .project-assignment-option.disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.project-assignment-modal
+  .project-assignment-option.disabled:hover {
+  border-color: var(--color-border);
+  background: var(--color-surface);
+  box-shadow: none;
+}
+
+/* Checkbox */
+
+.project-assignment-modal
+  .project-assignment-option
+  input[type="checkbox"] {
+  flex: 0 0 15px;
+  width: 15px;
+  height: 15px;
+  margin: 0;
+  accent-color: var(--color-primary);
+  cursor: pointer;
+}
+
+.project-assignment-modal
+  .project-assignment-option
+  input[type="checkbox"]:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 3px;
+}
+
+/* Employee avatar */
+
+.project-assignment-modal .assignment-employee-avatar {
+  display: grid;
+  place-items: center;
+  flex: 0 0 36px;
+  width: 36px;
+  height: 36px;
+  border: 1px solid rgba(113, 29, 60, 0.13);
+  border-radius: 8px;
+  background: rgba(113, 29, 60, 0.07);
+  color: var(--color-primary);
+  font-size: 12px;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.project-assignment-modal
+  .project-assignment-option.selected
+  .assignment-employee-avatar {
+  border-color: var(--color-primary);
+  background: var(--color-primary);
+  color: #ffffff;
+}
+
+/* Employee details */
+
+.project-assignment-modal .project-assignment-employee-info {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+
+.project-assignment-modal .assignment-employee-name {
+  color: var(--color-dark);
+  font-size: 11px;
+  font-weight: 800;
+  line-height: 1.45;
+  overflow-wrap: anywhere;
+}
+
+.project-assignment-modal .assignment-employee-role,
+.project-assignment-modal .assignment-employee-email {
+  color: var(--color-text-muted);
+  font-size: 10px;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+
+/* Availability label */
+
+.project-assignment-modal .project-assignment-status {
+  display: inline-flex;
+  align-self: flex-start;
+  width: fit-content;
+  max-width: 100%;
+  margin-top: 2px;
+  padding: 3px 7px;
+  border: 1px solid rgba(177, 138, 82, 0.2);
+  border-radius: 5px;
+  background: rgba(177, 138, 82, 0.08);
+  color: var(--color-accent);
+  font-size: 9px;
+  font-weight: 750;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+
+/* Selected indicator — if included in JSX */
+
+.project-assignment-modal .assignment-selected-indicator {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+  color: var(--color-primary);
+  font-size: 9px;
+  font-weight: 800;
+}
+
+.project-assignment-modal .assignment-selected-indicator svg {
+  flex-shrink: 0;
+}
+
+/* ------------------------------------------------------------
+   LOADING STATE
+------------------------------------------------------------ */
+
+.project-assignment-modal .assignment-loading {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  padding: 20px 15px;
+  border: 1px dashed var(--color-border);
+  border-radius: 8px;
+  background: var(--color-background);
+  color: var(--color-primary);
+}
+
+.project-assignment-modal .assignment-loading > div {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.project-assignment-modal .assignment-loading strong {
+  color: var(--color-dark);
+  font-size: 11px;
+}
+
+.project-assignment-modal .assignment-loading span {
+  color: var(--color-text-muted);
+  font-size: 10px;
+  line-height: 1.6;
+}
+
+/* ------------------------------------------------------------
+   EMPTY STATE
+------------------------------------------------------------ */
+
+.project-assignment-modal .assignment-empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 9px;
+  padding: 25px 15px;
+  border: 1px dashed var(--color-border);
+  border-radius: 8px;
+  background: var(--color-background);
+  text-align: center;
+}
+
+.project-assignment-modal .assignment-empty-icon {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  background: rgba(113, 29, 60, 0.07);
+  color: var(--color-primary);
+}
+
+.project-assignment-modal .assignment-empty-state h3 {
+  margin: 0;
+  color: var(--color-dark);
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.project-assignment-modal .assignment-empty-state p {
+  max-width: 340px;
+  margin: 0;
+  color: var(--color-text-muted);
+  font-size: 10px;
+  line-height: 1.7;
+}
+
+/* ------------------------------------------------------------
+   ERROR AND SUCCESS MESSAGES
+------------------------------------------------------------ */
+
+.project-assignment-modal .assignment-error,
+.project-assignment-modal .assignment-success {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin: 0 0 13px;
+  padding: 10px 12px;
+  border-radius: 7px;
+  font-size: 10px;
+  line-height: 1.65;
+  overflow-wrap: anywhere;
+}
+
+.project-assignment-modal .assignment-error {
+  border: 1px solid rgba(163, 59, 59, 0.2);
+  background: rgba(163, 59, 59, 0.06);
+  color: var(--color-danger);
+}
+
+.project-assignment-modal .assignment-success {
+  border: 1px solid rgba(63, 115, 85, 0.2);
+  background: rgba(63, 115, 85, 0.07);
+  color: var(--color-success);
+}
+
+.project-assignment-modal .assignment-error svg {
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+/* ------------------------------------------------------------
+   FOOTER AND BUTTONS
+------------------------------------------------------------ */
+
+.project-assignment-modal .project-modal-actions {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 9px;
+  padding: 13px 20px;
+  border-top: 1px solid var(--color-border);
+  background: var(--color-surface);
+}
+
+.project-assignment-modal .project-primary-btn,
+.project-assignment-modal .project-secondary-btn {
+  min-height: 35px;
+  padding: 0 13px;
+  border-radius: 7px;
+  font-size: 10px;
+}
+
+.project-assignment-modal .project-primary-btn {
+  border-color: var(--color-primary);
+  background: var(--color-primary);
+  color: #ffffff;
+}
+
+.project-assignment-modal .project-primary-btn:hover:not(:disabled) {
+  border-color: var(--color-primary-dark);
+  background: var(--color-primary-dark);
+  color: #ffffff;
+}
+
+.project-assignment-modal .project-secondary-btn {
+  border-color: var(--color-border);
+  background: var(--color-background);
+  color: var(--color-dark);
+}
+
+.project-assignment-modal .project-secondary-btn:hover:not(:disabled) {
+  border-color: var(--color-accent);
+  background: var(--color-surface-muted);
+  color: var(--color-primary);
+}
+
+.project-assignment-modal button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* ------------------------------------------------------------
+   DARK MODE
+------------------------------------------------------------ */
+
+:root[data-theme="dark"]
+  .project-assignment-modal
+  .project-assignment-option {
+  background: var(--color-background);
+}
+
+:root[data-theme="dark"]
+  .project-assignment-modal
+  .project-assignment-option.selected {
+  background: rgba(154, 61, 95, 0.12);
+}
+
+:root[data-theme="dark"]
+  .project-assignment-modal
+  .assignment-selection-count {
+  border-color: var(--color-border);
+  background: var(--color-surface-muted);
+}
+
+:root[data-theme="dark"]
+  .project-assignment-modal
+  .assignment-empty-state,
+:root[data-theme="dark"]
+  .project-assignment-modal
+  .assignment-loading {
+  background: var(--color-background);
+}
+
+/* ------------------------------------------------------------
+   RESPONSIVE
+------------------------------------------------------------ */
+
+@media (max-width: 600px) {
+  .project-assignment-modal {
+    width: 100%;
+    max-height: calc(100vh - 16px);
+    border-radius: 10px;
+  }
+
+  .project-assignment-modal .project-modal-header {
+    padding: 15px 16px;
+  }
+
+  .project-assignment-modal .project-modal-header h2 {
+    font-size: 19px;
+  }
+
+  .project-assignment-modal .project-modal-body {
+    padding: 15px 16px;
+  }
+
+  .project-assignment-modal .project-assignment-list {
+    max-height: 42vh;
+  }
+
+  .project-assignment-modal .project-assignment-option {
+    gap: 9px;
+    padding: 10px;
+  }
+
+  .project-assignment-modal .assignment-employee-avatar {
+    flex-basis: 33px;
+    width: 33px;
+    height: 33px;
+  }
+
+  .project-assignment-modal .assignment-selected-indicator span {
+    display: none;
+  }
+
+  .project-assignment-modal .project-modal-actions {
+    padding: 12px 16px;
+  }
+}
+
+@media (max-width: 400px) {
+  .project-assignment-modal .project-modal-actions {
+    flex-direction: column-reverse;
+    align-items: stretch;
+  }
+
+  .project-assignment-modal .project-modal-actions button {
+    width: 100%;
+  }
+
+  .project-assignment-modal .assignment-summary-hint {
+    font-size: 9px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .project-assignment-modal .project-assignment-option {
+    transition: none;
+  }
+}
