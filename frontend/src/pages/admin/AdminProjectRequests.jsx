@@ -1,4 +1,3 @@
-
 import React, {
   useCallback,
   useEffect,
@@ -36,11 +35,14 @@ import {
 import {
   getProjectRequests,
   reviewProjectRequest,
+  getProjectMessages,
+  sendProjectMessage,
 } from "../../services/api";
 
 import "./AdminProjectRequests.css";
 
 const ITEMS_PER_PAGE = 10;
+const OWNER_NAME_FALLBACK = "User name unavailable";
 
 const STATUS_OPTIONS = [
   { value: "all", label: "All Status" },
@@ -53,11 +55,17 @@ const STATUS_OPTIONS = [
 ];
 
 /* =========================================================
-   HELPERS
+   GENERAL HELPERS
 ========================================================= */
 
 const normalizeStatus = (status = "") =>
   String(status).trim().toLowerCase().replace(/\s+/g, "_");
+
+const normalizeRole = (role = "") =>
+  String(role)
+    .trim()
+    .toLowerCase()
+    .replace(/[\s_-]+/g, "");
 
 const getApiError = (
   error,
@@ -71,6 +79,10 @@ const getApiError = (
 
   if (typeof responseData?.message === "string") {
     return responseData.message;
+  }
+
+  if (typeof error?.detail === "string") {
+    return error.detail;
   }
 
   if (typeof error?.message === "string" && error.message) {
@@ -96,6 +108,23 @@ const formatDate = (date) => {
   });
 };
 
+const formatMessageDate = (date) => {
+  if (!date) return "";
+
+  const parsed = new Date(date);
+
+  if (Number.isNaN(parsed.getTime())) {
+    return String(date);
+  }
+
+  return parsed.toLocaleString("en-US", {
+    month: "short",
+    day: "numeric",
+    hour: "numeric",
+    minute: "2-digit",
+  });
+};
+
 const getStatusLabel = (status) => {
   const labels = {
     pending: "Pending Review",
@@ -113,9 +142,7 @@ const getStatusClass = (status) => {
   const normalized = normalizeStatus(status);
 
   if (
-    ["accepted", "in_development", "completed"].includes(
-      normalized
-    )
+    ["accepted", "in_development", "completed"].includes(normalized)
   ) {
     return "success";
   }
@@ -143,10 +170,6 @@ const displayValue = (value, fallback = "Not available") => {
   return value;
 };
 
-/*
- * Supports common API response shapes.
- * Never generates demo or fallback records.
- */
 const extractRequests = (response) => {
   const candidates = [
     response,
@@ -160,43 +183,287 @@ const extractRequests = (response) => {
   ];
 
   for (const candidate of candidates) {
-    if (Array.isArray(candidate)) {
-      return candidate;
-    }
+    if (Array.isArray(candidate)) return candidate;
   }
 
   return null;
 };
 
-const mapProjectRequest = (item) => ({
-  ...item,
+const extractMessages = (response) => {
+  const candidates = [
+    response,
+    response?.data,
+    response?.messages,
+    response?.items,
+    response?.results,
+    response?.data?.messages,
+    response?.data?.items,
+    response?.data?.results,
+  ];
 
-  project_name:
-    item.name ?? item.project_name ?? "Untitled Project",
+  for (const candidate of candidates) {
+    if (Array.isArray(candidate)) return candidate;
+  }
 
-  user_name:
-    item.user_name ??
-    item.owner?.name ??
-    (item.owner_id != null
-      ? `User #${item.owner_id}`
-      : "Unknown Owner"),
+  return null;
+};
 
-  user_email:
-    item.user_email ?? item.owner?.email ?? "",
+/* =========================================================
+   PROJECT OWNER HELPERS
+========================================================= */
 
-  requested_at:
-    item.created_at ?? item.requested_at ?? null,
+const getOwner = (item) =>
+  item?.owner ?? item?.user ?? item?.requester ?? {};
 
-  team_size: item.team_size ?? null,
-  estimated_cost: item.estimated_cost ?? null,
-  estimated_duration: item.estimated_duration ?? null,
-  complexity: item.complexity ?? null,
-  risk_level: item.risk_level ?? null,
+const getProjectOwnerName = (item) => {
+  const owner = getOwner(item);
 
-  required_resources: Array.isArray(item.required_resources)
-    ? item.required_resources
-    : [],
-});
+  const possibleNames = [
+    item?.owner_name,
+    item?.user_name,
+    item?.requester_name,
+    item?.full_name,
+    item?.fullName,
+    owner?.name,
+    owner?.full_name,
+    owner?.fullName,
+  ];
+
+  for (const value of possibleNames) {
+    if (typeof value === "string" && value.trim()) {
+      return value.trim();
+    }
+  }
+
+  return "";
+};
+
+const getProjectOwnerEmail = (item) => {
+  const owner = getOwner(item);
+
+  const possibleEmails = [
+    item?.owner_email,
+    item?.user_email,
+    item?.requester_email,
+    owner?.email,
+  ];
+
+  for (const value of possibleEmails) {
+    if (typeof value === "string" && value.trim()) {
+      return value.trim();
+    }
+  }
+
+  return "";
+};
+
+const getProjectOwnerId = (item) => {
+  const owner = getOwner(item);
+
+  return (
+    item?.owner_id ??
+    owner?.id ??
+    item?.user_id ??
+    item?.requester_id ??
+    null
+  );
+};
+
+const mapProjectRequest = (item) => {
+  const ownerName = getProjectOwnerName(item);
+  const ownerEmail = getProjectOwnerEmail(item);
+
+  return {
+    ...item,
+    project_name:
+      item?.name ?? item?.project_name ?? "Untitled Project",
+    user_name: ownerName || OWNER_NAME_FALLBACK,
+    user_email: ownerEmail,
+    owner_id: getProjectOwnerId(item),
+    requested_at: item?.created_at ?? item?.requested_at ?? null,
+    team_size: item?.team_size ?? null,
+    estimated_cost: item?.estimated_cost ?? null,
+    estimated_duration: item?.estimated_duration ?? null,
+    complexity: item?.complexity ?? null,
+    risk_level: item?.risk_level ?? null,
+    required_resources: Array.isArray(item?.required_resources)
+      ? item.required_resources
+      : [],
+  };
+};
+
+/* =========================================================
+   CHAT HELPERS
+========================================================= */
+
+const getSenderId = (message) => {
+  const sender =
+    message?.sender ??
+    message?.author ??
+    message?.user ??
+    {};
+
+  return (
+    message?.sender_id ??
+    message?.senderId ??
+    message?.author_id ??
+    message?.authorId ??
+    message?.user_id ??
+    message?.userId ??
+    sender?.id ??
+    sender?.user_id ??
+    sender?.userId ??
+    null
+  );
+};
+
+/*
+ * The backend now returns sender_role and sender_name.
+ * Nested fields remain supported for compatibility.
+ */
+
+const getSenderRole = (message) => {
+  const sender =
+    message?.sender ??
+    message?.author ??
+    message?.user ??
+    {};
+
+  const role =
+    message?.sender_role ??
+    message?.senderRole ??
+    message?.author_role ??
+    message?.authorRole ??
+    message?.user_role ??
+    message?.userRole ??
+    sender?.role ??
+    sender?.user_role ??
+    sender?.userRole ??
+    message?.role ??
+    "";
+
+  return normalizeRole(role);
+};
+
+const getSenderName = (message) => {
+  const sender =
+    message?.sender ??
+    message?.author ??
+    message?.user ??
+    {};
+
+  const possibleNames = [
+    message?.sender_name,
+    message?.senderName,
+    message?.author_name,
+    message?.authorName,
+    message?.user_name,
+    message?.userName,
+    message?.full_name,
+    message?.fullName,
+    sender?.name,
+    sender?.full_name,
+    sender?.fullName,
+  ];
+
+  for (const value of possibleNames) {
+    if (typeof value === "string" && value.trim()) {
+      return value.trim();
+    }
+  }
+
+  return "";
+};
+
+const getMessageText = (message) =>
+  message?.message ??
+  message?.content ??
+  message?.body ??
+  message?.text ??
+  "";
+
+const getMessageTimestamp = (message) =>
+  message?.created_at ??
+  message?.sent_at ??
+  message?.timestamp ??
+  null;
+
+const isAdminRole = (role) =>
+  ["admin", "administrator", "superadmin"].includes(
+    normalizeRole(role)
+  );
+
+const isOwnerRole = (role) =>
+  ["user", "customer", "client"].includes(
+    normalizeRole(role)
+  );
+
+/*
+ * Sender classification priority:
+ *
+ * 1. Explicit backend role.
+ * 2. Match with the project's owner ID.
+ * 3. Different known sender ID on this admin-only page.
+ * 4. Unknown if identity cannot be established.
+ *
+ * The backend sender_role is the primary source of truth.
+ */
+
+const getMessageSenderType = (message, request) => {
+  const senderId = getSenderId(message);
+  const senderRole = getSenderRole(message);
+  const ownerId = request?.owner_id;
+
+  if (isAdminRole(senderRole)) {
+    return "admin";
+  }
+
+  if (isOwnerRole(senderRole)) {
+    return "owner";
+  }
+
+  if (
+    ownerId != null &&
+    senderId != null &&
+    String(ownerId) === String(senderId)
+  ) {
+    return "owner";
+  }
+
+  /*
+   * Fallback for older API responses without sender_role.
+   * This fallback is only safe when owner_id is accurate.
+   */
+  if (
+    ownerId != null &&
+    senderId != null &&
+    String(ownerId) !== String(senderId)
+  ) {
+    return "admin";
+  }
+
+  return "unknown";
+};
+
+const getDisplayOwnerName = (request, message) => {
+  const requestName = String(request?.user_name ?? "").trim();
+
+  if (
+    requestName &&
+    requestName !== OWNER_NAME_FALLBACK &&
+    requestName.toLowerCase() !== "unknown sender"
+  ) {
+    return requestName;
+  }
+
+  const messageName = getSenderName(message);
+
+  if (messageName) {
+    return messageName;
+  }
+
+  return OWNER_NAME_FALLBACK;
+};
 
 /* =========================================================
    COMPONENT
@@ -212,28 +479,24 @@ function AdminProjectRequests() {
   const [modalType, setModalType] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
 
+  /* CHAT STATE */
+
   const [chatMessage, setChatMessage] = useState("");
+  const [messages, setMessages] = useState([]);
+  const [messagesLoading, setMessagesLoading] = useState(false);
+  const [messagesError, setMessagesError] = useState("");
+  const [sendingMessage, setSendingMessage] = useState(false);
+
+  /* PAGE STATE */
 
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
-
   const [loadError, setLoadError] = useState("");
   const [actionError, setActionError] = useState("");
-
   const [actionLoadingId, setActionLoadingId] = useState(null);
 
   /* =======================================================
-     LOAD REAL BACKEND REQUESTS
-
-     Initial load:
-       loading = true
-
-     Manual refresh:
-       refreshing = true
-
-     The refresh button calls loadRequests with an explicit
-     object so a React click event is never mistaken for
-     the refresh option.
+     LOAD PROJECT REQUESTS
   ======================================================= */
 
   const loadRequests = useCallback(
@@ -266,22 +529,15 @@ function AdminProjectRequests() {
 
           return (
             normalizedRequests.find(
-              (item) => item.id === previous.id
-            ) ?? null
+              (item) => String(item.id) === String(previous.id)
+            ) ?? previous
           );
         });
       } catch (error) {
         setLoadError(
-          getApiError(
-            error,
-            "Could not load project requests."
-          )
+          getApiError(error, "Could not load project requests.")
         );
 
-        /*
-         * Keep previously loaded records during a failed
-         * manual refresh. Initial load starts with [].
-         */
         if (!refresh) {
           setRequests([]);
           setSelectedRequest(null);
@@ -352,7 +608,7 @@ function AdminProjectRequests() {
   }, [totalPages]);
 
   /* =======================================================
-     SUMMARY CARDS
+     SUMMARY
   ======================================================= */
 
   const summary = useMemo(() => {
@@ -366,15 +622,12 @@ function AdminProjectRequests() {
 
     return {
       total: requests.length,
-
       pending: requests.filter((request) =>
         pendingStatuses.includes(normalizeStatus(request.status))
       ).length,
-
       accepted: requests.filter((request) =>
         acceptedStatuses.includes(normalizeStatus(request.status))
       ).length,
-
       rejected: requests.filter(
         (request) =>
           normalizeStatus(request.status) === "rejected"
@@ -391,13 +644,114 @@ function AdminProjectRequests() {
     setModalType(type);
     setActionError("");
     setChatMessage("");
+
+    if (type === "chat") {
+      setMessages([]);
+      setMessagesError("");
+      setMessagesLoading(false);
+    }
   };
 
   const closeModal = () => {
     setSelectedRequest(null);
     setModalType(null);
     setChatMessage("");
+    setMessages([]);
+    setMessagesError("");
+    setMessagesLoading(false);
     setActionError("");
+  };
+
+  /* =======================================================
+     LOAD MESSAGES
+  ======================================================= */
+
+  const loadMessages = useCallback(async (requestId) => {
+    if (requestId == null) return;
+
+    setMessagesLoading(true);
+    setMessagesError("");
+
+    try {
+      const response = await getProjectMessages(requestId);
+      const backendMessages = extractMessages(response);
+
+      if (!backendMessages) {
+        throw new Error(
+          "The messaging API returned an unexpected response."
+        );
+      }
+
+      const orderedMessages = [...backendMessages].sort(
+        (a, b) => {
+          const timestampA = getMessageTimestamp(a);
+          const timestampB = getMessageTimestamp(b);
+
+          const timeA = timestampA
+            ? new Date(timestampA).getTime()
+            : 0;
+
+          const timeB = timestampB
+            ? new Date(timestampB).getTime()
+            : 0;
+
+          if (timeA !== timeB) return timeA - timeB;
+
+          return Number(a.id ?? 0) - Number(b.id ?? 0);
+        }
+      );
+
+      setMessages(orderedMessages);
+    } catch (error) {
+      setMessagesError(
+        getApiError(error, "Could not load conversation messages.")
+      );
+    } finally {
+      setMessagesLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (modalType !== "chat" || selectedRequest?.id == null) {
+      return;
+    }
+
+    loadMessages(selectedRequest.id);
+  }, [modalType, selectedRequest?.id, loadMessages]);
+
+  /* =======================================================
+     SEND MESSAGE
+  ======================================================= */
+
+  const sendMessage = async () => {
+    const text = chatMessage.trim();
+
+    if (
+      !text ||
+      selectedRequest?.id == null ||
+      sendingMessage ||
+      messagesLoading
+    ) {
+      return;
+    }
+
+    const requestId = selectedRequest.id;
+
+    setSendingMessage(true);
+    setMessagesError("");
+
+    try {
+      await sendProjectMessage(requestId, text);
+      setChatMessage("");
+
+      await loadMessages(requestId);
+    } catch (error) {
+      setMessagesError(
+        getApiError(error, "Could not send your message.")
+      );
+    } finally {
+      setSendingMessage(false);
+    }
   };
 
   /* =======================================================
@@ -408,20 +762,13 @@ function AdminProjectRequests() {
     if (!request || request.id == null) return;
     if (actionLoadingId !== null) return;
 
-    const currentStatus = normalizeStatus(request.status);
-
-    if (currentStatus === newStatus) return;
+    if (normalizeStatus(request.status) === newStatus) return;
 
     setActionError("");
     setActionLoadingId(request.id);
 
     try {
       await reviewProjectRequest(request.id, newStatus);
-
-      /*
-       * Reload from the backend after the action.
-       * The backend remains the source of truth.
-       */
       await loadRequests({ refresh: true });
     } catch (error) {
       setActionError(
@@ -445,18 +792,6 @@ function AdminProjectRequests() {
     changeStatus(request, "accepted");
 
   /* =======================================================
-     CHAT STATUS
-
-     No connected messaging API is available yet.
-  ======================================================= */
-
-  const sendMessage = () => {
-    setActionError(
-      "Messaging is unavailable until a backend messaging endpoint is connected."
-    );
-  };
-
-  /* =======================================================
      STATUS BADGE
   ======================================================= */
 
@@ -477,10 +812,7 @@ function AdminProjectRequests() {
   const renderActions = (request) => {
     const status = normalizeStatus(request.status);
 
-    const isPending = ["pending", "under_review"].includes(
-      status
-    );
-
+    const isPending = ["pending", "under_review"].includes(status);
     const isRejected = status === "rejected";
     const isBusy = actionLoadingId === request.id;
 
@@ -561,8 +893,6 @@ function AdminProjectRequests() {
 
   return (
     <div className="admin-project-requests">
-      {/* HEADER */}
-
       <header className="admin-project-requests-header">
         <div className="project-requests-header-content">
           <span className="project-requests-eyebrow">
@@ -577,8 +907,6 @@ function AdminProjectRequests() {
           </p>
         </div>
 
-        {/* PROFESSIONAL REFRESH BUTTON */}
-
         <div className="project-requests-header-actions">
           <button
             type="button"
@@ -586,17 +914,13 @@ function AdminProjectRequests() {
               refreshing ? " is-refreshing" : ""
             }`}
             onClick={() => loadRequests({ refresh: true })}
-            disabled={loading || refreshing || actionLoadingId !== null}
-            title={
-              refreshing
-                ? "Refreshing project requests..."
-                : "Refresh project requests"
+            disabled={
+              loading ||
+              refreshing ||
+              actionLoadingId !== null
             }
-            aria-label={
-              refreshing
-                ? "Refreshing project requests"
-                : "Refresh project requests"
-            }
+            title="Refresh project requests"
+            aria-label="Refresh project requests"
           >
             <RefreshCw
               size={15}
@@ -607,14 +931,10 @@ function AdminProjectRequests() {
               aria-hidden="true"
             />
 
-            <span>
-              {refreshing ? "Refreshing..." : "Refresh"}
-            </span>
+            <span>{refreshing ? "Refreshing..." : "Refresh"}</span>
           </button>
         </div>
       </header>
-
-      {/* LOAD ERROR */}
 
       {loadError && (
         <div className="request-demo-notice" role="alert">
@@ -635,8 +955,6 @@ function AdminProjectRequests() {
         </div>
       )}
 
-      {/* ACTION ERROR */}
-
       {actionError && (
         <div className="request-demo-notice" role="alert">
           <AlertCircle size={15} />
@@ -656,7 +974,7 @@ function AdminProjectRequests() {
         </div>
       )}
 
-      {/* SUMMARY */}
+      {/* SUMMARY CARDS */}
 
       <section className="project-request-summary">
         <div className="request-summary-card">
@@ -704,11 +1022,9 @@ function AdminProjectRequests() {
         </div>
       </section>
 
-      {/* MAIN PANEL */}
+      {/* REQUEST TABLE */}
 
       <section className="admin-project-request-panel">
-        {/* TOOLBAR */}
-
         <div className="admin-project-request-toolbar">
           <div className="request-toolbar-title">
             <strong>Development Requests</strong>
@@ -720,8 +1036,6 @@ function AdminProjectRequests() {
           </div>
 
           <div className="request-toolbar-controls">
-            {/* SEARCH */}
-
             <div className="project-request-search-box">
               <Search size={14} aria-hidden="true" />
 
@@ -740,8 +1054,6 @@ function AdminProjectRequests() {
               />
             </div>
 
-            {/* STATUS FILTER */}
-
             <div className="admin-request-filter">
               <Filter size={14} aria-hidden="true" />
 
@@ -755,10 +1067,7 @@ function AdminProjectRequests() {
                 aria-label="Filter requests by status"
               >
                 {STATUS_OPTIONS.map((option) => (
-                  <option
-                    key={option.value}
-                    value={option.value}
-                  >
+                  <option key={option.value} value={option.value}>
                     {option.label}
                   </option>
                 ))}
@@ -766,8 +1075,6 @@ function AdminProjectRequests() {
             </div>
           </div>
         </div>
-
-        {/* TABLE */}
 
         <div className="admin-project-request-table-wrapper">
           <table className="admin-project-request-table">
@@ -812,18 +1119,13 @@ function AdminProjectRequests() {
                         <AlertCircle size={25} />
                       </div>
 
-                      <strong>
-                        Could not load project requests
-                      </strong>
-
+                      <strong>Could not load project requests</strong>
                       <span>{loadError}</span>
 
                       <button
                         type="button"
                         className="request-modal-secondary-btn"
-                        onClick={() =>
-                          loadRequests({ refresh: true })
-                        }
+                        onClick={() => loadRequests({ refresh: true })}
                         disabled={refreshing}
                       >
                         <RefreshCw
@@ -834,7 +1136,6 @@ function AdminProjectRequests() {
                               : ""
                           }
                         />
-
                         Try Again
                       </button>
                     </div>
@@ -922,25 +1223,19 @@ function AdminProjectRequests() {
                       </td>
 
                       <td>{renderStatusBadge(request)}</td>
-
                       <td>{renderActions(request)}</td>
                     </tr>
                   ))}
 
                   {paginatedRequests.length === 0 && (
                     <tr>
-                      <td
-                        colSpan={8}
-                        className="project-request-state-cell"
-                      >
+                      <td colSpan={8} className="project-request-state-cell">
                         <div className="request-empty-state">
                           <div className="request-empty-icon">
                             <FolderKanban size={25} />
                           </div>
 
-                          <strong>
-                            No project requests found
-                          </strong>
+                          <strong>No project requests found</strong>
 
                           <span>
                             {search || statusFilter !== "all"
@@ -956,8 +1251,6 @@ function AdminProjectRequests() {
             </tbody>
           </table>
         </div>
-
-        {/* PAGINATION */}
 
         {filteredRequests.length > 0 &&
           !loading &&
@@ -983,9 +1276,7 @@ function AdminProjectRequests() {
                   type="button"
                   disabled={currentPage === 1}
                   onClick={() =>
-                    setCurrentPage((page) =>
-                      Math.max(1, page - 1)
-                    )
+                    setCurrentPage((page) => Math.max(1, page - 1))
                   }
                   aria-label="Previous page"
                 >
@@ -1015,20 +1306,16 @@ function AdminProjectRequests() {
           )}
       </section>
 
-      {/* VIEW PROJECT MODAL */}
+      {/* VIEW REQUEST MODAL */}
 
       {modalType === "view" && selectedRequest && (
         <div
           className="project-request-modal-overlay project-request-modal-overlay-left"
           onMouseDown={(event) => {
-            if (event.target === event.currentTarget) {
-              closeModal();
-            }
+            if (event.target === event.currentTarget) closeModal();
           }}
           onKeyDown={(event) => {
-            if (event.key === "Escape") {
-              closeModal();
-            }
+            if (event.key === "Escape") closeModal();
           }}
         >
           <div
@@ -1059,18 +1346,14 @@ function AdminProjectRequests() {
               <div className="request-detail-status-row">
                 <div className="request-status-with-icon">
                   {renderStatusBadge(selectedRequest)}
-
                   <span>Request #{selectedRequest.id}</span>
                 </div>
 
                 <span className="request-date-detail">
                   <CalendarDays size={13} />
-
                   {formatDate(selectedRequest.requested_at)}
                 </span>
               </div>
-
-              {/* PROJECT DESCRIPTION */}
 
               <div className="request-detail-description">
                 <div className="request-detail-heading">
@@ -1085,8 +1368,6 @@ function AdminProjectRequests() {
                   )}
                 </p>
               </div>
-
-              {/* PROJECT DETAILS */}
 
               <div className="request-detail-grid">
                 <div className="request-detail-item">
@@ -1206,8 +1487,6 @@ function AdminProjectRequests() {
                 </div>
               </div>
 
-              {/* RESOURCE REQUIREMENTS */}
-
               <div className="request-modal-section">
                 <div className="request-section-heading">
                   <div>
@@ -1235,9 +1514,7 @@ function AdminProjectRequests() {
                               {resource.role || "Role unavailable"}
                             </strong>
 
-                            <span>
-                              {resource.purpose || "—"}
-                            </span>
+                            <span>{resource.purpose || "—"}</span>
                           </div>
 
                           <div className="required-resource-quantity">
@@ -1264,15 +1541,11 @@ function AdminProjectRequests() {
               </div>
             </div>
 
-            {/* MODAL ACTIONS */}
-
             <div className="project-request-modal-footer">
               <button
                 type="button"
                 className="request-modal-secondary-btn"
-                onClick={() =>
-                  openModal("chat", selectedRequest)
-                }
+                onClick={() => openModal("chat", selectedRequest)}
               >
                 <MessageCircle size={15} />
                 Contact User
@@ -1296,7 +1569,6 @@ function AdminProjectRequests() {
                     ) : (
                       <X size={15} />
                     )}
-
                     Reject
                   </button>
 
@@ -1314,14 +1586,12 @@ function AdminProjectRequests() {
                     ) : (
                       <Check size={15} />
                     )}
-
                     Accept
                   </button>
                 </>
               )}
 
-              {normalizeStatus(selectedRequest.status) ===
-                "rejected" && (
+              {normalizeStatus(selectedRequest.status) === "rejected" && (
                 <button
                   type="button"
                   className="request-modal-primary-btn"
@@ -1343,9 +1613,7 @@ function AdminProjectRequests() {
         <div
           className="project-request-modal-overlay project-request-modal-overlay-left"
           onMouseDown={(event) => {
-            if (event.target === event.currentTarget) {
-              closeModal();
-            }
+            if (event.target === event.currentTarget) closeModal();
           }}
         >
           <div
@@ -1359,8 +1627,14 @@ function AdminProjectRequests() {
                 <span>DIRECT CONVERSATION</span>
 
                 <h2 id="request-chat-title">
-                  {selectedRequest.user_name}
+                  {getDisplayOwnerName(selectedRequest)}
                 </h2>
+
+                {selectedRequest.user_email && (
+                  <p className="request-chat-user-email">
+                    {selectedRequest.user_email}
+                  </p>
+                )}
               </div>
 
               <button
@@ -1381,43 +1655,163 @@ function AdminProjectRequests() {
               </div>
             </div>
 
-            <div className="request-chat-body">
-              <div className="chat-empty">
-                <div className="chat-empty-icon">
-                  <MessageCircle size={21} />
+            <div className="request-chat-body" aria-live="polite">
+              {messagesLoading && messages.length === 0 ? (
+                <div className="chat-empty">
+                  <RefreshCw
+                    size={22}
+                    className="request-refresh-spinning"
+                  />
+
+                  <strong>Loading conversation...</strong>
+                  <span>Fetching messages from the backend.</span>
                 </div>
+              ) : messagesError && messages.length === 0 ? (
+                <div className="chat-empty">
+                  <AlertCircle size={22} />
 
-                <strong>Messaging is not connected</strong>
+                  <strong>Unable to load conversation</strong>
+                  <span>{messagesError}</span>
 
-                <span>
-                  Connect a backend messaging endpoint to load
-                  conversation history and send messages.
-                </span>
-              </div>
+                  <button
+                    type="button"
+                    className="request-modal-secondary-btn"
+                    onClick={() => loadMessages(selectedRequest.id)}
+                    disabled={messagesLoading}
+                  >
+                    <RefreshCw
+                      size={14}
+                      className={
+                        messagesLoading
+                          ? "request-refresh-spinning"
+                          : ""
+                      }
+                    />
+                    Try Again
+                  </button>
+                </div>
+              ) : messages.length === 0 ? (
+                <div className="chat-empty">
+                  <div className="chat-empty-icon">
+                    <MessageCircle size={21} />
+                  </div>
+
+                  <strong>No messages yet</strong>
+                  <span>
+                    Start the conversation about this project.
+                  </span>
+                </div>
+              ) : (
+                <div className="request-chat-message-list">
+                  {messages.map((message, index) => {
+                    const senderType = getMessageSenderType(
+                      message,
+                      selectedRequest
+                    );
+
+                    const messageText = getMessageText(message);
+                    const createdAt = getMessageTimestamp(message);
+                    const senderName = getSenderName(message);
+
+                    const displaySenderName =
+                      senderType === "admin"
+                        ? "Admin"
+                        : senderType === "owner"
+                          ? getDisplayOwnerName(
+                              selectedRequest,
+                              message
+                            )
+                          : senderName || "Unknown Sender";
+
+                    const alignmentClass =
+                      senderType === "admin"
+                        ? "is-admin-message"
+                        : senderType === "owner"
+                          ? "is-owner-message"
+                          : "is-unknown-message";
+
+                    return (
+                      <div
+                        key={
+                          message.id ??
+                          `${createdAt ?? "message"}-${index}`
+                        }
+                        className={`request-chat-message-row ${alignmentClass}`}
+                      >
+                        <div className="request-chat-message">
+                          <span className="request-chat-sender">
+                            {displaySenderName}
+                          </span>
+
+                          <p>{messageText}</p>
+
+                          {createdAt && (
+                            <time dateTime={String(createdAt)}>
+                              {formatMessageDate(createdAt)}
+                            </time>
+                          )}
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
             </div>
 
-            <div className="request-chat-composer">
+            {messagesError && messages.length > 0 && (
+              <div className="request-chat-inline-error" role="alert">
+                <AlertCircle size={14} />
+                <span>{messagesError}</span>
+
+                <button
+                  type="button"
+                  onClick={() => loadMessages(selectedRequest.id)}
+                  disabled={messagesLoading}
+                >
+                  Retry
+                </button>
+              </div>
+            )}
+
+            <form
+              className="request-chat-composer"
+              onSubmit={(event) => {
+                event.preventDefault();
+                sendMessage();
+              }}
+            >
               <textarea
                 value={chatMessage}
                 onChange={(event) =>
                   setChatMessage(event.target.value)
                 }
-                placeholder="Messaging backend is not connected"
+                placeholder="Write a message..."
                 rows={2}
-                disabled
+                disabled={sendingMessage}
                 aria-label="Chat message"
+                maxLength={5000}
               />
 
               <button
-                type="button"
-                onClick={sendMessage}
-                disabled
-                title="Messaging backend unavailable"
+                type="submit"
+                disabled={
+                  !chatMessage.trim() ||
+                  sendingMessage ||
+                  messagesLoading
+                }
+                title="Send message"
                 aria-label="Send message"
               >
-                <Send size={16} />
+                {sendingMessage ? (
+                  <RefreshCw
+                    size={16}
+                    className="request-refresh-spinning"
+                  />
+                ) : (
+                  <Send size={16} />
+                )}
               </button>
-            </div>
+            </form>
           </div>
         </div>
       )}

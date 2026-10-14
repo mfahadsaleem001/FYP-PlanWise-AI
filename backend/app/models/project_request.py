@@ -1,9 +1,8 @@
 from datetime import datetime
-
 from sqlalchemy import DateTime, ForeignKey, String, Text
 from sqlalchemy.orm import Mapped, mapped_column
-
 from app.database.base import Base
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 
 class ProjectRequest(Base):
@@ -56,4 +55,15 @@ class ProjectRequest(Base):
     reviewed_at: Mapped[datetime | None] = mapped_column(
         DateTime,
         nullable=True,
+    )
+    
+    
+    owner: Mapped["User"] = relationship(
+        "User",
+        foreign_keys=[owner_id],
+    )
+
+    reviewer: Mapped["User | None"] = relationship(
+        "User",
+        foreign_keys=[reviewed_by],
     )

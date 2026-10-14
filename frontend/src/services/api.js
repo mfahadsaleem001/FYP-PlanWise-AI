@@ -333,3 +333,41 @@ export async function reviewProjectRequest(
     `Failed to ${status} project request.`
   );
 }
+
+
+/* ========================================
+   PROJECT MESSAGES
+======================================== */
+
+// GET: Fetch messages for a project request
+export async function getProjectMessages(requestId) {
+  const response = await apiRequest(
+    `/api/project-requests/${requestId}/messages`
+  );
+
+  return handleResponse(
+    response,
+    "Failed to load project messages."
+  );
+}
+
+// POST: Send a message for a project request
+export async function sendProjectMessage(
+  requestId,
+  message
+) {
+  const response = await apiRequest(
+    `/api/project-requests/${requestId}/messages`,
+    {
+      method: "POST",
+      body: {
+        message: message.trim(),
+      },
+    }
+  );
+
+  return handleResponse(
+    response,
+    "Failed to send project message."
+  );
+}

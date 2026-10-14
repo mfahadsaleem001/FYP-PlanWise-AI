@@ -14,6 +14,8 @@ class ProjectRequestReview(BaseModel):
     status: Literal["accepted", "rejected"]
 
 
+
+
 class ProjectRequestResponse(BaseModel):
     id: int
     name: str
@@ -21,10 +23,10 @@ class ProjectRequestResponse(BaseModel):
     project_type: str
     status: str
     owner_id: int
+    owner_name: str | None = None
+    owner_email: str | None = None
     reviewed_by: int | None
     created_at: datetime
     reviewed_at: datetime | None
 
-    model_config = {
-        "from_attributes": True,
-    }
+    model_config = {"from_attributes": True}
