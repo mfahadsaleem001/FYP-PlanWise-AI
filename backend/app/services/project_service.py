@@ -11,8 +11,6 @@ from app.schemas.project_request import (
     ProjectRequestReview,
 )
 
-
-
 def create_project(
     db: Session,
     project_data: ProjectCreate,
