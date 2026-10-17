@@ -17,6 +17,7 @@ from app.services.task_service import (
     get_task_by_id,
     get_tasks,
     update_task,
+    carry_forward_task,
 )
 
 router = APIRouter(
@@ -24,7 +25,6 @@ router = APIRouter(
     tags=["Admin - Tasks"],
     dependencies=[Depends(require_admin)],
 )
-
 
 @router.post(
     "",
@@ -128,3 +128,30 @@ def get_admin_task_assignment_history(
         )
 
     return history
+
+
+@router.post("/{task_id}/carry-forward", response_model=TaskResponse)
+def carry_forward_admin_task(
+    task_id: int,
+    weekly_plan_id: int = Query(gt=0),
+    db: Session = Depends(get_db),
+    admin: User = Depends(require_admin),
+):
+    try:
+        return carry_forward_task(
+            db=db,
+            task_id=task_id,
+            weekly_plan_id=weekly_plan_id,
+            admin_id=admin.id,
+        )
+    except ValueError as exc:
+        message = str(exc)
+        error_status = (
+            status.HTTP_404_NOT_FOUND
+            if message in {"Task not found.", "Project not found.", "Weekly plan not found."}
+            else status.HTTP_400_BAD_REQUEST
+        )
+        raise HTTPException(
+            status_code=error_status,
+            detail=message,
+        ) from exc

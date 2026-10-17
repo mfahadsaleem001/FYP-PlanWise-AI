@@ -114,6 +114,10 @@ async function apiRequest(
   return response;
 }
 
+// ========================================
+// AUTHENTICATION
+// ========================================
+
 // Admin Login
 export async function adminLogin(email, password) {
   const response = await apiRequest(
@@ -125,11 +129,12 @@ export async function adminLogin(email, password) {
     }
   );
 
-  return handleResponse(
-    response,
-    "Admin login failed"
-  );
+  return handleResponse(response, "Admin login failed.");
 }
+
+// ========================================
+// EMPLOYEE SETUP
+// ========================================
 
 // Get Employee Setup Details
 export async function getEmployeeSetupDetails(token) {
@@ -139,7 +144,7 @@ export async function getEmployeeSetupDetails(token) {
 
   return handleResponse(
     response,
-    "Unable to verify the setup link"
+    "Unable to verify the setup link."
   );
 }
 
@@ -161,9 +166,13 @@ export async function completeEmployeePasswordSetup(
 
   return handleResponse(
     response,
-    "Unable to create your password"
+    "Unable to create your password."
   );
 }
+
+// ========================================
+// EMPLOYEES
+// ========================================
 
 // GET: Fetch all employees
 export async function getEmployees() {
@@ -243,8 +252,6 @@ export async function getAdminProjects() {
   );
 }
 
-
- 
 // PUT: Assign employees to a project
 export async function assignProjectEmployees(
   projectId,
@@ -266,10 +273,146 @@ export async function assignProjectEmployees(
   );
 }
 
+// ========================================
+// ADMIN TASKS
+// ========================================
 
-/* ========================================
-   PROJECT REQUESTS
-======================================== */
+// GET: Fetch tasks, optionally filtered by project or week
+export async function getAdminTasks(filters = {}) {
+  const params = new URLSearchParams();
+
+  if (filters.project_id) {
+    params.set("project_id", filters.project_id);
+  }
+
+  if (filters.weekly_plan_id) {
+    params.set("weekly_plan_id", filters.weekly_plan_id);
+  }
+
+  const query = params.toString();
+
+  const response = await apiRequest(
+    `/api/admin/tasks${query ? `?${query}` : ""}`
+  );
+
+  return handleResponse(
+    response,
+    "Failed to load tasks."
+  );
+}
+
+// GET: Fetch one task by ID
+export async function getAdminTask(taskId) {
+  const response = await apiRequest(
+    `/api/admin/tasks/${taskId}`
+  );
+
+  return handleResponse(
+    response,
+    "Failed to load task details."
+  );
+}
+
+// POST: Create a task
+export async function createAdminTask(taskData) {
+  const response = await apiRequest(
+    "/api/admin/tasks",
+    {
+      method: "POST",
+      body: taskData,
+    }
+  );
+
+  return handleResponse(
+    response,
+    "Failed to create task."
+  );
+}
+
+// PATCH: Update a task
+export async function updateAdminTask(
+  taskId,
+  taskData
+) {
+  const response = await apiRequest(
+    `/api/admin/tasks/${taskId}`,
+    {
+      method: "PATCH",
+      body: taskData,
+    }
+  );
+
+  return handleResponse(
+    response,
+    "Failed to update task."
+  );
+}
+
+// GET: Fetch assignment history for a task
+export async function getAdminTaskAssignmentHistory(taskId) {
+  const response = await apiRequest(
+    `/api/admin/tasks/${taskId}/assignment-history`
+  );
+
+  return handleResponse(
+    response,
+    "Failed to load assignment history."
+  );
+}
+
+// POST: Carry a task forward to another weekly plan
+export async function carryForwardAdminTask(
+  taskId,
+  weeklyPlanId
+) {
+  const response = await apiRequest(
+    `/api/admin/tasks/${taskId}/carry-forward?weekly_plan_id=${encodeURIComponent(weeklyPlanId)}`,
+    {
+      method: "POST",
+    }
+  );
+
+  return handleResponse(
+    response,
+    "Failed to carry forward task."
+  );
+}
+
+// ========================================
+// ADMIN WEEKLY PLANS
+// ========================================
+
+// GET: Fetch weekly plans for a project
+export async function getAdminWeeklyPlans(projectId) {
+  const response = await apiRequest(
+    `/api/admin/weekly-plans?project_id=${encodeURIComponent(projectId)}`
+  );
+
+  return handleResponse(
+    response,
+    "Failed to load weekly plans."
+  );
+}
+
+// POST: Create a weekly plan
+export async function createAdminWeeklyPlan(planData) {
+  const response = await apiRequest(
+    "/api/admin/weekly-plans",
+    {
+      method: "POST",
+      body: planData,
+    }
+  );
+
+  return handleResponse(
+    response,
+    "Failed to create weekly plan."
+  );
+}
+
+// ========================================
+// PROJECT REQUESTS
+// ========================================
 
 // GET: Fetch all project requests
 export async function getProjectRequests(statusFilter) {
@@ -334,10 +477,9 @@ export async function reviewProjectRequest(
   );
 }
 
-
-/* ========================================
-   PROJECT MESSAGES
-======================================== */
+// ========================================
+// PROJECT MESSAGES
+// ========================================
 
 // GET: Fetch messages for a project request
 export async function getProjectMessages(requestId) {
