@@ -8,6 +8,7 @@ from app.models.task import Task, TaskAssignment
 from app.models.user import User
 from app.models.weekly_plan import WeeklyPlan
 from app.models.task_weekly_plan import TaskWeeklyPlan
+from app.models.task_assignment_history import TaskAssignmentHistory
 
 __all__ = [
     "ActivityLog",

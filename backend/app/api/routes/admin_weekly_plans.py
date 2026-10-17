@@ -13,9 +13,7 @@ from app.services.weekly_plan_service import (
 router = APIRouter(
     prefix="/admin/weekly-plans",
     tags=["Admin - Weekly Plans"],
-    dependencies=[Depends(require_admin)],
 )
-
 
 @router.post(
     "",

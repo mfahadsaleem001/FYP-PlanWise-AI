@@ -161,6 +161,17 @@ class TaskAssignmentResponse(BaseModel):
 
     model_config = ConfigDict(from_attributes=True)
 
+class TaskAssignmentHistoryResponse(BaseModel):
+    id: int
+    task_id: int
+    employee_id: int
+    action: str
+    changed_by: int
+    changed_at: datetime
+    reason: str | None = None
+
+    model_config = ConfigDict(from_attributes=True)
+
 
 class TaskResponse(BaseModel):
     id: int
@@ -168,6 +179,8 @@ class TaskResponse(BaseModel):
     description: str
     project_id: int
     weekly_plan_id: int
+    weekly_plan_ids: list[int] = Field(default_factory=list)
+    is_overdue: bool = False
     priority: str
     status: str
     due_date: datetime
