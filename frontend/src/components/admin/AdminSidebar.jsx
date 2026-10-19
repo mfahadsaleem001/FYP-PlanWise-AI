@@ -4,7 +4,6 @@ import {
   UserRoundCog,
   FolderKanban,
   ClipboardList,
-  ListTodo,
   Activity,
   BrainCircuit,
   Bell,
@@ -24,19 +23,10 @@ function AdminSidebar() {
 
   return (
     <aside className="app-sidebar">
-
-      {/* =====================================================
-          BRAND
-      ===================================================== */}
-
+      {/* BRAND */}
       <div className="sidebar-brand">
-        <a
-          href="/admin/dashboard"
-          className="sidebar-logo"
-        >
-          <span className="sidebar-logo-mark">
-            P
-          </span>
+        <a href="/admin/dashboard" className="sidebar-logo">
+          <span className="sidebar-logo-mark">P</span>
 
           <span className="sidebar-logo-text">
             PlanWise <span>AI</span>
@@ -44,300 +34,149 @@ function AdminSidebar() {
         </a>
       </div>
 
-
-      {/* =====================================================
-          NAVIGATION
-      ===================================================== */}
-
+      {/* NAVIGATION */}
       <nav className="sidebar-navigation">
-
-        {/* ===================================================
-            MAIN
-        =================================================== */}
-
+        {/* MAIN */}
         <div className="sidebar-group">
-
-          <span className="sidebar-group-title">
-            MAIN
-          </span>
-
-
-          {/* DASHBOARD */}
+          <span className="sidebar-group-title">MAIN</span>
 
           <a
             href="/admin/dashboard"
             className={`sidebar-link ${
-              currentPath === "/admin/dashboard"
-                ? "active"
-                : ""
+              currentPath === "/admin/dashboard" ? "active" : ""
             }`}
           >
             <span className="sidebar-link-icon">
               <LayoutDashboard />
             </span>
-
-            <span>
-              Dashboard
-            </span>
+            <span>Dashboard</span>
           </a>
-
         </div>
 
-
-        {/* ===================================================
-            MANAGEMENT
-        =================================================== */}
-
+        {/* MANAGEMENT */}
         <div className="sidebar-group">
-
-          <span className="sidebar-group-title">
-            MANAGEMENT
-          </span>
-
-
-          {/* USERS */}
+          <span className="sidebar-group-title">MANAGEMENT</span>
 
           <a
             href="/admin/users"
             className={`sidebar-link ${
-              currentPath === "/admin/users"
-                ? "active"
-                : ""
+              currentPath === "/admin/users" ? "active" : ""
             }`}
           >
             <span className="sidebar-link-icon">
               <Users />
             </span>
-
-            <span>
-              Users
-            </span>
+            <span>Users</span>
           </a>
-
-
-          {/* EMPLOYEES & RESOURCES */}
 
           <a
             href="/admin/employees"
             className={`sidebar-link ${
-              currentPath === "/admin/employees"
-                ? "active"
-                : ""
+              currentPath === "/admin/employees" ? "active" : ""
             }`}
           >
             <span className="sidebar-link-icon">
               <UserRoundCog />
             </span>
-
-            <span>
-              Employees & Resources
-            </span>
+            <span>Employees & Resources</span>
           </a>
-
-
-          {/* PROJECTS */}
 
           <a
             href="/admin/projects"
             className={`sidebar-link ${
-              currentPath === "/admin/projects"
-                ? "active"
-                : ""
+              currentPath === "/admin/projects" ? "active" : ""
             }`}
           >
             <span className="sidebar-link-icon">
               <FolderKanban />
             </span>
-
-            <span>
-              Projects
-            </span>
+            <span>Projects</span>
           </a>
-
-
-          {/* PROJECT REQUESTS */}
 
           <a
             href="/admin/project-requests"
             className={`sidebar-link ${
-              currentPath === "/admin/project-requests"
-                ? "active"
-                : ""
+              currentPath === "/admin/project-requests" ? "active" : ""
             }`}
           >
             <span className="sidebar-link-icon">
               <ClipboardList />
             </span>
-
-            <span>
-              Project Requests
-            </span>
+            <span>Project Requests</span>
           </a>
-
-
-          {/* TASKS & ASSIGNMENTS */}
-
-          <a
-            href="/admin/tasks"
-            className={`sidebar-link ${
-              currentPath === "/admin/tasks"
-                ? "active"
-                : ""
-            }`}
-          >
-            <span className="sidebar-link-icon">
-              <ListTodo />
-            </span>
-
-            <span>
-              Tasks & Assignments
-            </span>
-          </a>
-
         </div>
 
-
-        {/* ===================================================
-            INTELLIGENCE
-        =================================================== */}
-
+        {/* INTELLIGENCE */}
         <div className="sidebar-group">
-
-          <span className="sidebar-group-title">
-            INTELLIGENCE
-          </span>
-
-
-          {/* MODEL MONITORING */}
+          <span className="sidebar-group-title">INTELLIGENCE</span>
 
           <a
             href="/admin/models"
             className={`sidebar-link ${
-              currentPath === "/admin/models"
-                ? "active"
-                : ""
+              currentPath === "/admin/models" ? "active" : ""
             }`}
           >
             <span className="sidebar-link-icon">
               <BrainCircuit />
             </span>
-
-            <span>
-              Model Monitoring
-            </span>
+            <span>Model Monitoring</span>
           </a>
-
         </div>
 
-
-        {/* ===================================================
-            SYSTEM
-        =================================================== */}
-
+        {/* SYSTEM */}
         <div className="sidebar-group">
-
-          <span className="sidebar-group-title">
-            SYSTEM
-          </span>
-
-
-          {/* ACTIVITY LOGS */}
+          <span className="sidebar-group-title">SYSTEM</span>
 
           <a
             href="/admin/activity"
             className={`sidebar-link ${
-              currentPath === "/admin/activity"
-                ? "active"
-                : ""
+              currentPath === "/admin/activity" ? "active" : ""
             }`}
           >
             <span className="sidebar-link-icon">
               <Activity />
             </span>
-
-            <span>
-              Activity Logs
-            </span>
+            <span>Activity Logs</span>
           </a>
-
-
-          {/* NOTIFICATIONS */}
 
           <a
             href="/admin/notifications"
             className={`sidebar-link ${
-              currentPath === "/admin/notifications"
-                ? "active"
-                : ""
+              currentPath === "/admin/notifications" ? "active" : ""
             }`}
           >
             <span className="sidebar-link-icon">
               <Bell />
             </span>
-
-            <span>
-              Notifications
-            </span>
+            <span>Notifications</span>
           </a>
-
-
-          {/* SETTINGS */}
 
           <a
             href="/admin/settings"
             className={`sidebar-link ${
-              currentPath === "/admin/settings"
-                ? "active"
-                : ""
+              currentPath === "/admin/settings" ? "active" : ""
             }`}
           >
             <span className="sidebar-link-icon">
               <Settings />
             </span>
-
-            <span>
-              Settings
-            </span>
+            <span>Settings</span>
           </a>
-
         </div>
-
       </nav>
 
-
-      {/* =====================================================
-          ADMIN AREA
-      ===================================================== */}
-
+      {/* ADMIN AREA */}
       <div className="sidebar-bottom">
-
-        {/* ADMIN USER */}
-
         <div className="sidebar-user">
-
-          <div className="sidebar-user-avatar">
-            A
-          </div>
+          <div className="sidebar-user-avatar">A</div>
 
           <div className="sidebar-user-info">
-
-            <strong>
-              Admin
-            </strong>
-
-            <span>
-              PlanWise Administration
-            </span>
-
+            <strong>Admin</strong>
+            <span>PlanWise Administration</span>
           </div>
-
         </div>
 
-
-        {/* =================================================
-            LOGOUT
-        ================================================= */}
-
+        {/* LOGOUT */}
         <button
           type="button"
           className="sidebar-logout"
@@ -346,14 +185,9 @@ function AdminSidebar() {
           <span className="logout-icon">
             <LogOut />
           </span>
-
-          <span>
-            Logout
-          </span>
+          <span>Logout</span>
         </button>
-
       </div>
-
     </aside>
   );
 }

@@ -1,7 +1,7 @@
+
 import {
   LayoutDashboard,
   FolderKanban,
-  ListTodo,
   CalendarDays,
   Users,
   MessageSquare,
@@ -36,7 +36,6 @@ function EmployeeSidebar() {
 
       {/* NAVIGATION */}
       <nav className="employee-sidebar-navigation">
-
         {/* MAIN */}
         <div className="employee-sidebar-group">
           <span className="employee-sidebar-group-title">
@@ -78,21 +77,6 @@ function EmployeeSidebar() {
             </span>
 
             <span>My Projects</span>
-          </a>
-
-          <a
-            href="/employee/tasks"
-            className={`employee-sidebar-link ${
-              currentPath === "/employee/tasks"
-                ? "active"
-                : ""
-            }`}
-          >
-            <span className="employee-sidebar-link-icon">
-              <ListTodo />
-            </span>
-
-            <span>My Tasks</span>
           </a>
 
           <a
@@ -199,12 +183,10 @@ function EmployeeSidebar() {
             <span>Settings</span>
           </a>
         </div>
-
       </nav>
 
       {/* BOTTOM */}
       <div className="employee-sidebar-bottom">
-
         <div className="employee-sidebar-user">
           <div className="employee-sidebar-user-avatar">
             F
@@ -226,7 +208,6 @@ function EmployeeSidebar() {
 
           <span>Logout</span>
         </a>
-
       </div>
     </aside>
   );

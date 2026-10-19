@@ -1,3 +1,4 @@
+
 import {
   Bell,
   Eye,
@@ -21,7 +22,6 @@ function EmployeeSettings() {
   );
 
   const [preferences, setPreferences] = useState({
-    taskAssignments: true,
     deadlineReminders: true,
     projectUpdates: true,
     messages: true,
@@ -53,10 +53,7 @@ function EmployeeSettings() {
         prefersDark ? "dark" : "light"
       );
 
-      localStorage.setItem(
-        "planwise-theme",
-        "system"
-      );
+      localStorage.setItem("planwise-theme", "system");
 
       return;
     }
@@ -66,10 +63,7 @@ function EmployeeSettings() {
       theme
     );
 
-    localStorage.setItem(
-      "planwise-theme",
-      theme
-    );
+    localStorage.setItem("planwise-theme", theme);
   }, [theme]);
 
   const handlePreferenceChange = (name) => {
@@ -145,18 +139,14 @@ function EmployeeSettings() {
       return;
     }
 
-    if (
-      newPassword !== confirmPassword
-    ) {
+    if (newPassword !== confirmPassword) {
       setSaveMessage(
         "New password and confirmation do not match."
       );
       return;
     }
 
-    if (
-      currentPassword === newPassword
-    ) {
+    if (currentPassword === newPassword) {
       setSaveMessage(
         "New password must be different from your current password."
       );
@@ -175,9 +165,7 @@ function EmployeeSettings() {
       confirmPassword: false,
     });
 
-    setSaveMessage(
-      "Password updated successfully."
-    );
+    setSaveMessage("Password updated successfully.");
 
     window.setTimeout(() => {
       setSaveMessage("");
@@ -186,10 +174,7 @@ function EmployeeSettings() {
 
   return (
     <section className="employee-settings-page">
-
-      {/* =====================================================
-          PAGE HEADER
-          ===================================================== */}
+      {/* PAGE HEADER */}
 
       <header className="employee-settings-header">
         <div>
@@ -207,9 +192,7 @@ function EmployeeSettings() {
         </div>
       </header>
 
-      {/* =====================================================
-          SAVE MESSAGE
-          ===================================================== */}
+      {/* SAVE MESSAGE */}
 
       {saveMessage && (
         <div className="employee-settings-feedback">
@@ -218,18 +201,12 @@ function EmployeeSettings() {
         </div>
       )}
 
-      {/* =====================================================
-          SETTINGS GRID
-          ===================================================== */}
+      {/* SETTINGS GRID */}
 
       <div className="employee-settings-grid">
-
-        {/* ===================================================
-            APPEARANCE
-            =================================================== */}
+        {/* APPEARANCE */}
 
         <section className="employee-settings-card">
-
           <div className="employee-settings-card-header">
             <div>
               <span>APPEARANCE</span>
@@ -247,7 +224,6 @@ function EmployeeSettings() {
           </p>
 
           <div className="employee-settings-theme-options">
-
             <button
               type="button"
               className={`employee-settings-theme-option ${
@@ -298,17 +274,12 @@ function EmployeeSettings() {
                 </span>
               </div>
             </button>
-
           </div>
-
         </section>
 
-        {/* ===================================================
-            NOTIFICATIONS
-            =================================================== */}
+        {/* NOTIFICATIONS */}
 
         <section className="employee-settings-card">
-
           <div className="employee-settings-card-header">
             <div>
               <span>NOTIFICATIONS</span>
@@ -326,34 +297,6 @@ function EmployeeSettings() {
           </p>
 
           <div className="employee-settings-toggle-list">
-
-            <div className="employee-settings-toggle-row">
-              <div>
-                <strong>Task assignments</strong>
-                <span>
-                  Get notified when a task is assigned
-                  to you.
-                </span>
-              </div>
-
-              <button
-                type="button"
-                className={`employee-settings-toggle ${
-                  preferences.taskAssignments
-                    ? "active"
-                    : ""
-                }`}
-                onClick={() =>
-                  handlePreferenceChange(
-                    "taskAssignments"
-                  )
-                }
-                aria-label="Toggle task assignment notifications"
-              >
-                <span></span>
-              </button>
-            </div>
-
             <div className="employee-settings-toggle-row">
               <div>
                 <strong>Deadline reminders</strong>
@@ -376,6 +319,7 @@ function EmployeeSettings() {
                   )
                 }
                 aria-label="Toggle deadline reminders"
+                aria-pressed={preferences.deadlineReminders}
               >
                 <span></span>
               </button>
@@ -398,11 +342,10 @@ function EmployeeSettings() {
                     : ""
                 }`}
                 onClick={() =>
-                  handlePreferenceChange(
-                    "projectUpdates"
-                  )
+                  handlePreferenceChange("projectUpdates")
                 }
                 aria-label="Toggle project updates"
+                aria-pressed={preferences.projectUpdates}
               >
                 <span></span>
               </button>
@@ -420,21 +363,17 @@ function EmployeeSettings() {
               <button
                 type="button"
                 className={`employee-settings-toggle ${
-                  preferences.messages
-                    ? "active"
-                    : ""
+                  preferences.messages ? "active" : ""
                 }`}
                 onClick={() =>
-                  handlePreferenceChange(
-                    "messages"
-                  )
+                  handlePreferenceChange("messages")
                 }
                 aria-label="Toggle message notifications"
+                aria-pressed={preferences.messages}
               >
                 <span></span>
               </button>
             </div>
-
           </div>
 
           <button
@@ -445,17 +384,12 @@ function EmployeeSettings() {
             <Save />
             <span>Save Preferences</span>
           </button>
-
         </section>
 
-        {/* ===================================================
-            SECURITY
-            =================================================== */}
+        {/* SECURITY */}
 
         <section className="employee-settings-card employee-settings-security-card">
-
           <div className="employee-settings-card-header">
-
             <div>
               <span>SECURITY</span>
               <h2>Password & Security</h2>
@@ -464,7 +398,6 @@ function EmployeeSettings() {
             <div className="employee-settings-card-icon">
               <LockKeyhole />
             </div>
-
           </div>
 
           <p className="employee-settings-description">
@@ -476,17 +409,14 @@ function EmployeeSettings() {
             className="employee-settings-password-form"
             onSubmit={handlePasswordUpdate}
           >
-
             {/* CURRENT PASSWORD */}
 
             <div className="employee-settings-field">
-
               <label htmlFor="currentPassword">
                 Current Password
               </label>
 
               <div className="employee-settings-password-input">
-
                 <input
                   id="currentPassword"
                   name="currentPassword"
@@ -495,12 +425,8 @@ function EmployeeSettings() {
                       ? "text"
                       : "password"
                   }
-                  value={
-                    passwords.currentPassword
-                  }
-                  onChange={
-                    handlePasswordChange
-                  }
+                  value={passwords.currentPassword}
+                  onChange={handlePasswordChange}
                   placeholder="Enter current password"
                   minLength={4}
                   maxLength={12}
@@ -526,23 +452,18 @@ function EmployeeSettings() {
                     <Eye />
                   )}
                 </button>
-
               </div>
-
             </div>
 
             {/* NEW + CONFIRM PASSWORD */}
 
             <div className="employee-settings-password-row">
-
               <div className="employee-settings-field">
-
                 <label htmlFor="newPassword">
                   New Password
                 </label>
 
                 <div className="employee-settings-password-input">
-
                   <input
                     id="newPassword"
                     name="newPassword"
@@ -551,12 +472,8 @@ function EmployeeSettings() {
                         ? "text"
                         : "password"
                     }
-                    value={
-                      passwords.newPassword
-                    }
-                    onChange={
-                      handlePasswordChange
-                    }
+                    value={passwords.newPassword}
+                    onChange={handlePasswordChange}
                     placeholder="Enter new password"
                     minLength={4}
                     maxLength={12}
@@ -566,9 +483,7 @@ function EmployeeSettings() {
                     type="button"
                     className="employee-settings-password-toggle"
                     onClick={() =>
-                      togglePasswordVisibility(
-                        "newPassword"
-                      )
+                      togglePasswordVisibility("newPassword")
                     }
                     aria-label={
                       passwordVisibility.newPassword
@@ -582,23 +497,19 @@ function EmployeeSettings() {
                       <Eye />
                     )}
                   </button>
-
                 </div>
 
                 <span className="employee-settings-password-hint">
                   4–12 characters
                 </span>
-
               </div>
 
               <div className="employee-settings-field">
-
                 <label htmlFor="confirmPassword">
                   Confirm Password
                 </label>
 
                 <div className="employee-settings-password-input">
-
                   <input
                     id="confirmPassword"
                     name="confirmPassword"
@@ -607,12 +518,8 @@ function EmployeeSettings() {
                         ? "text"
                         : "password"
                     }
-                    value={
-                      passwords.confirmPassword
-                    }
-                    onChange={
-                      handlePasswordChange
-                    }
+                    value={passwords.confirmPassword}
+                    onChange={handlePasswordChange}
                     placeholder="Confirm new password"
                     minLength={4}
                     maxLength={12}
@@ -638,11 +545,8 @@ function EmployeeSettings() {
                       <Eye />
                     )}
                   </button>
-
                 </div>
-
               </div>
-
             </div>
 
             <button
@@ -652,19 +556,13 @@ function EmployeeSettings() {
               <LockKeyhole />
               <span>Update Password</span>
             </button>
-
           </form>
-
         </section>
 
-        {/* ===================================================
-            ACCOUNT ACCESS
-            =================================================== */}
+        {/* ACCOUNT ACCESS */}
 
         <section className="employee-settings-card">
-
           <div className="employee-settings-card-header">
-
             <div>
               <span>ACCOUNT ACCESS</span>
               <h2>Employee Access</h2>
@@ -673,11 +571,9 @@ function EmployeeSettings() {
             <div className="employee-settings-card-icon">
               <ShieldCheck />
             </div>
-
           </div>
 
           <div className="employee-settings-access-list">
-
             <div>
               <span>Account Type</span>
               <strong>Employee</strong>
@@ -697,7 +593,6 @@ function EmployeeSettings() {
               <span>Administrative Access</span>
               <strong>Not Available</strong>
             </div>
-
           </div>
 
           <div className="employee-settings-access-note">
@@ -709,11 +604,8 @@ function EmployeeSettings() {
               changed from the employee workspace.
             </p>
           </div>
-
         </section>
-
       </div>
-
     </section>
   );
 }

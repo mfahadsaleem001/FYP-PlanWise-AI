@@ -314,6 +314,8 @@ function AdminProjects() {
 
     try {
       const response = await getAdminProjects();
+      console.log("Admin Projects API response:", response);
+      console.log("Number of projects received:", response?.length);
 
       const projectList = Array.isArray(response)
         ? response

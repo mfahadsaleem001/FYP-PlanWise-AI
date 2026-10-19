@@ -35,10 +35,8 @@ import AdminRoutes from "./routes/AdminRoutes";
 import EmployeeLayout from "./layouts/EmployeeLayout";
 import EmployeeDashboard from "./pages/employee/EmployeeDashboard";
 import EmployeeProjects from "./pages/employee/EmployeeProjects";
-import EmployeeTasks from "./pages/employee/EmployeeTasks";
 import EmployeeCalendar from "./pages/employee/EmployeeCalendar";
 import EmployeeProjectDetails from "./pages/employee/EmployeeProjectDetails";
-import EmployeeTaskDetails from "./pages/employee/EmployeeTaskDetails";
 import EmployeeTeam from "./pages/employee/EmployeeTeam";
 import EmployeeMessages from "./pages/employee/EmployeeMessages";
 import EmployeeNotifications from "./pages/employee/EmployeeNotifications";
@@ -65,14 +63,12 @@ import Notifications from "./pages/app/Notifications";
 import Profile from "./pages/app/Profile";
 import Settings from "./pages/app/Settings";
 
-
 // ============================================================
-// APP Content
+// APP CONTENT
 // ============================================================
 
 function AppContent() {
   const path = window.location.pathname;
-
 
   // ==========================================================
   // ADMIN PANEL
@@ -86,123 +82,100 @@ function AppContent() {
   // EMPLOYEE PANEL
   // ==========================================================
 
-if (
-  path.startsWith("/employee/projects/") &&
-  path !== "/employee/projects"
-) {
-  return (
-    <EmployeeLayout>
-      <EmployeeProjectDetails />
-    </EmployeeLayout>
-  );
-}
+  if (
+    path.startsWith("/employee/projects/") &&
+    path !== "/employee/projects"
+  ) {
+    return (
+      <EmployeeLayout>
+        <EmployeeProjectDetails />
+      </EmployeeLayout>
+    );
+  }
 
-if (path === "/employee/login") {
-  return <EmployeeLogin />;
-}
+  if (path === "/employee/login") {
+    return <EmployeeLogin />;
+  }
 
-if (path === "/employee/forgot-password") {
-  return <EmployeeForgotPassword />;
-}
+  if (path === "/employee/forgot-password") {
+    return <EmployeeForgotPassword />;
+  }
 
-if (path.startsWith("/employee/setup")) {
-  return <EmployeeSetup />;
-}
+  if (path.startsWith("/employee/setup")) {
+    return <EmployeeSetup />;
+  }
 
-if (path === "/employee/dashboard") {
-  return (
-    <EmployeeLayout>
-      <EmployeeDashboard />
-    </EmployeeLayout>
-  );
-}
+  if (path === "/employee/dashboard") {
+    return (
+      <EmployeeLayout>
+        <EmployeeDashboard />
+      </EmployeeLayout>
+    );
+  }
 
-if (path === "/employee/projects") {
-  return (
-    <EmployeeLayout>
-      <EmployeeProjects />
-    </EmployeeLayout>
-  );
-}
+  if (path === "/employee/projects") {
+    return (
+      <EmployeeLayout>
+        <EmployeeProjects />
+      </EmployeeLayout>
+    );
+  }
 
-if (
-  path.startsWith("/employee/tasks/") &&
-  path !== "/employee/tasks"
-) {
-  return (
-    <EmployeeLayout>
-      <EmployeeTaskDetails />
-    </EmployeeLayout>
-  );
-}
+  if (path === "/employee/calendar") {
+    return (
+      <EmployeeLayout>
+        <EmployeeCalendar />
+      </EmployeeLayout>
+    );
+  }
 
-if (path === "/employee/tasks") {
-  return (
-    <EmployeeLayout>
-      <EmployeeTasks />
-    </EmployeeLayout>
-  );
-}
+  if (path === "/employee/team") {
+    return (
+      <EmployeeLayout>
+        <EmployeeTeam />
+      </EmployeeLayout>
+    );
+  }
 
-if (path === "/employee/calendar") {
-  return (
-    <EmployeeLayout>
-      <EmployeeCalendar />
-    </EmployeeLayout>
-  );
-}
+  if (path === "/employee/messages") {
+    return (
+      <EmployeeLayout>
+        <EmployeeMessages />
+      </EmployeeLayout>
+    );
+  }
 
-if (path === "/employee/team") {
-  return (
-    <EmployeeLayout>
-      <EmployeeTeam />
-    </EmployeeLayout>
-  );
-}
+  if (path === "/employee/notifications") {
+    return (
+      <EmployeeLayout>
+        <EmployeeNotifications />
+      </EmployeeLayout>
+    );
+  }
 
-if (path === "/employee/messages") {
-  return (
-    <EmployeeLayout>
-      <EmployeeMessages />
-    </EmployeeLayout>
-  );
-}
+  if (path === "/employee/profile") {
+    return (
+      <EmployeeLayout>
+        <EmployeeProfile />
+      </EmployeeLayout>
+    );
+  }
 
-if (path === "/employee/notifications") {
-  return (
-    <EmployeeLayout>
-      <EmployeeNotifications />
-    </EmployeeLayout>
-  );
-}
+  if (path === "/employee/settings") {
+    return (
+      <EmployeeLayout>
+        <EmployeeSettings />
+      </EmployeeLayout>
+    );
+  }
 
-if (path === "/employee/profile") {
-  return (
-    <EmployeeLayout>
-      <EmployeeProfile />
-    </EmployeeLayout>
-  );
-}
-
-if (path === "/employee/settings") {
-  return (
-    <EmployeeLayout>
-      <EmployeeSettings />
-    </EmployeeLayout>
-  );
-}
-
-if (path === "/employee/reset-password") {
-  return <EmployeeResetPassword />;
-}
+  if (path === "/employee/reset-password") {
+    return <EmployeeResetPassword />;
+  }
 
   // ==========================================================
   // USER APP
   // ==========================================================
-
-  // ----------------------------------------------------------
-  // USER DASHBOARD
-  // ----------------------------------------------------------
 
   if (path === "/app/dashboard") {
     return (
@@ -212,11 +185,6 @@ if (path === "/employee/reset-password") {
     );
   }
 
-
-  // ----------------------------------------------------------
-  // NEW ESTIMATE
-  // ----------------------------------------------------------
-
   if (path === "/app/estimate/new") {
     return (
       <AppLayout>
@@ -224,11 +192,6 @@ if (path === "/employee/reset-password") {
       </AppLayout>
     );
   }
-
-
-  // ----------------------------------------------------------
-  // PROJECTS
-  // ----------------------------------------------------------
 
   if (path === "/app/projects") {
     return (
@@ -238,11 +201,6 @@ if (path === "/employee/reset-password") {
     );
   }
 
-
-  // ----------------------------------------------------------
-  // PROJECT DETAILS
-  // ----------------------------------------------------------
-
   if (path.startsWith("/app/projects/")) {
     return (
       <AppLayout>
@@ -250,11 +208,6 @@ if (path === "/employee/reset-password") {
       </AppLayout>
     );
   }
-
-
-  // ----------------------------------------------------------
-  // RISKS
-  // ----------------------------------------------------------
 
   if (path === "/app/risks") {
     return (
@@ -264,11 +217,6 @@ if (path === "/employee/reset-password") {
     );
   }
 
-
-  // ----------------------------------------------------------
-  // RECOMMENDATIONS
-  // ----------------------------------------------------------
-
   if (path === "/app/recommendations") {
     return (
       <AppLayout>
@@ -276,11 +224,6 @@ if (path === "/employee/reset-password") {
       </AppLayout>
     );
   }
-
-
-  // ----------------------------------------------------------
-  // REPORTS
-  // ----------------------------------------------------------
 
   if (path === "/app/reports") {
     return (
@@ -290,11 +233,6 @@ if (path === "/employee/reset-password") {
     );
   }
 
-
-  // ----------------------------------------------------------
-  // NOTIFICATIONS
-  // ----------------------------------------------------------
-
   if (path === "/app/notifications") {
     return (
       <AppLayout>
@@ -302,11 +240,6 @@ if (path === "/employee/reset-password") {
       </AppLayout>
     );
   }
-
-
-  // ----------------------------------------------------------
-  // PROFILE
-  // ----------------------------------------------------------
 
   if (path === "/app/profile") {
     return (
@@ -316,11 +249,6 @@ if (path === "/employee/reset-password") {
     );
   }
 
-
-  // ----------------------------------------------------------
-  // SETTINGS
-  // ----------------------------------------------------------
-
   if (path === "/app/settings") {
     return (
       <AppLayout>
@@ -329,37 +257,21 @@ if (path === "/employee/reset-password") {
     );
   }
 
-
   // ==========================================================
   // AUTHENTICATION
   // ==========================================================
-
-  // ----------------------------------------------------------
-  // SIGN IN
-  // ----------------------------------------------------------
 
   if (path === "/auth/signin") {
     return <SignIn />;
   }
 
-
-  // ----------------------------------------------------------
-  // SIGN UP
-  // ----------------------------------------------------------
-
   if (path === "/auth/signup") {
     return <Signup />;
   }
 
-
-  // ----------------------------------------------------------
-  // FORGOT PASSWORD
-  // ----------------------------------------------------------
-
   if (path === "/auth/forgot-password") {
     return <ForgotPassword />;
   }
-
 
   // ==========================================================
   // LANDING PAGE

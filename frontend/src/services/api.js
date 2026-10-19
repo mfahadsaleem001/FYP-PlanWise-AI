@@ -1,6 +1,9 @@
 const API_BASE_URL = "http://127.0.0.1:8000";
 
-// Common API response handler
+// ========================================
+// COMMON API RESPONSE HANDLER
+// ========================================
+
 async function handleResponse(response, defaultMessage) {
   if (response.status === 204) {
     return null;
@@ -71,7 +74,10 @@ async function handleResponse(response, defaultMessage) {
   return data;
 }
 
-// Common API request helper
+// ========================================
+// COMMON API REQUEST HELPER
+// ========================================
+
 async function apiRequest(
   endpoint,
   {
@@ -118,16 +124,12 @@ async function apiRequest(
 // AUTHENTICATION
 // ========================================
 
-// Admin Login
 export async function adminLogin(email, password) {
-  const response = await apiRequest(
-    "/api/auth/login",
-    {
-      method: "POST",
-      authenticated: false,
-      body: { email, password },
-    }
-  );
+  const response = await apiRequest("/api/auth/login", {
+    method: "POST",
+    authenticated: false,
+    body: { email, password },
+  });
 
   return handleResponse(response, "Admin login failed.");
 }
@@ -136,7 +138,6 @@ export async function adminLogin(email, password) {
 // EMPLOYEE SETUP
 // ========================================
 
-// Get Employee Setup Details
 export async function getEmployeeSetupDetails(token) {
   const response = await fetch(
     `${API_BASE_URL}/api/admin/employees/setup-details?token=${encodeURIComponent(token)}`
@@ -148,7 +149,6 @@ export async function getEmployeeSetupDetails(token) {
   );
 }
 
-// Complete Employee Password Setup
 export async function completeEmployeePasswordSetup(
   token,
   password
@@ -174,7 +174,6 @@ export async function completeEmployeePasswordSetup(
 // EMPLOYEES
 // ========================================
 
-// GET: Fetch all employees
 export async function getEmployees() {
   const response = await apiRequest(
     "/api/admin/employees"
@@ -186,7 +185,6 @@ export async function getEmployees() {
   );
 }
 
-// POST: Create a new employee
 export async function createEmployee(employeeData) {
   const response = await apiRequest(
     "/api/admin/employees",
@@ -202,7 +200,6 @@ export async function createEmployee(employeeData) {
   );
 }
 
-// PATCH: Update an existing employee
 export async function updateEmployee(
   employeeId,
   employeeData
@@ -221,7 +218,6 @@ export async function updateEmployee(
   );
 }
 
-// DELETE: Remove an employee
 export async function deleteEmployee(employeeId) {
   const response = await apiRequest(
     `/api/admin/employees/${employeeId}`,
@@ -240,19 +236,80 @@ export async function deleteEmployee(employeeId) {
 // ADMIN PROJECTS
 // ========================================
 
-// GET: Fetch all projects for the admin panel
+function extractProjects(response) {
+  if (Array.isArray(response)) {
+    return response;
+  }
+
+  if (Array.isArray(response?.items)) {
+    return response.items;
+  }
+
+  if (Array.isArray(response?.data)) {
+    return response.data;
+  }
+
+  if (Array.isArray(response?.results)) {
+    return response.results;
+  }
+
+  if (Array.isArray(response?.projects)) {
+    return response.projects;
+  }
+
+  if (Array.isArray(response?.data?.items)) {
+    return response.data.items;
+  }
+
+  if (Array.isArray(response?.data?.projects)) {
+    return response.data.projects;
+  }
+
+  return null;
+}
+
 export async function getAdminProjects() {
   const response = await apiRequest(
     "/api/projects/admin/all"
   );
 
-  return handleResponse(
+  const data = await handleResponse(
     response,
     "Failed to load projects."
   );
+
+  const projects = extractProjects(data);
+
+  if (projects === null) {
+    throw new Error(
+      "The projects API returned an unsupported response format."
+    );
+  }
+
+  if (projects.length > 0) {
+    return projects;
+  }
+
+  const fallbackResponse = await apiRequest(
+    "/api/projects"
+  );
+
+  const fallbackData = await handleResponse(
+    fallbackResponse,
+    "Failed to load projects from the fallback endpoint."
+  );
+
+  const fallbackProjects = extractProjects(fallbackData);
+
+  if (fallbackProjects === null) {
+    throw new Error(
+      "The fallback projects API returned an unsupported response format."
+    );
+  }
+
+  return fallbackProjects;
 }
 
-// PUT: Assign employees to a project
 export async function assignProjectEmployees(
   projectId,
   employeeIds
@@ -274,118 +331,20 @@ export async function assignProjectEmployees(
 }
 
 // ========================================
-// ADMIN TASKS
+// ADMIN WEEKLY PLANS
 // ========================================
 
-// GET: Fetch tasks, optionally filtered by project or week
-export async function getAdminTasks(filters = {}) {
+export async function getAdminWeeklyPlans(projectId) {
   const params = new URLSearchParams();
 
-  if (filters.project_id) {
-    params.set("project_id", filters.project_id);
-  }
-
-  if (filters.weekly_plan_id) {
-    params.set("weekly_plan_id", filters.weekly_plan_id);
+  if (projectId != null && projectId !== "") {
+    params.set("project_id", projectId);
   }
 
   const query = params.toString();
 
   const response = await apiRequest(
-    `/api/admin/tasks${query ? `?${query}` : ""}`
-  );
-
-  return handleResponse(
-    response,
-    "Failed to load tasks."
-  );
-}
-
-// GET: Fetch one task by ID
-export async function getAdminTask(taskId) {
-  const response = await apiRequest(
-    `/api/admin/tasks/${taskId}`
-  );
-
-  return handleResponse(
-    response,
-    "Failed to load task details."
-  );
-}
-
-// POST: Create a task
-export async function createAdminTask(taskData) {
-  const response = await apiRequest(
-    "/api/admin/tasks",
-    {
-      method: "POST",
-      body: taskData,
-    }
-  );
-
-  return handleResponse(
-    response,
-    "Failed to create task."
-  );
-}
-
-// PATCH: Update a task
-export async function updateAdminTask(
-  taskId,
-  taskData
-) {
-  const response = await apiRequest(
-    `/api/admin/tasks/${taskId}`,
-    {
-      method: "PATCH",
-      body: taskData,
-    }
-  );
-
-  return handleResponse(
-    response,
-    "Failed to update task."
-  );
-}
-
-// GET: Fetch assignment history for a task
-export async function getAdminTaskAssignmentHistory(taskId) {
-  const response = await apiRequest(
-    `/api/admin/tasks/${taskId}/assignment-history`
-  );
-
-  return handleResponse(
-    response,
-    "Failed to load assignment history."
-  );
-}
-
-// POST: Carry a task forward to another weekly plan
-export async function carryForwardAdminTask(
-  taskId,
-  weeklyPlanId
-) {
-  const response = await apiRequest(
-    `/api/admin/tasks/${taskId}/carry-forward?weekly_plan_id=${encodeURIComponent(weeklyPlanId)}`,
-    {
-      method: "POST",
-    }
-  );
-
-  return handleResponse(
-    response,
-    "Failed to carry forward task."
-  );
-}
-
-// ========================================
-// ADMIN WEEKLY PLANS
-// ========================================
-
-// GET: Fetch weekly plans for a project
-export async function getAdminWeeklyPlans(projectId) {
-  const response = await apiRequest(
-    `/api/admin/weekly-plans?project_id=${encodeURIComponent(projectId)}`
+    `/admin/weekly-plans${query ? `?${query}` : ""}`
   );
 
   return handleResponse(
@@ -394,10 +353,9 @@ export async function getAdminWeeklyPlans(projectId) {
   );
 }
 
-// POST: Create a weekly plan
 export async function createAdminWeeklyPlan(planData) {
   const response = await apiRequest(
-    "/api/admin/weekly-plans",
+    "/admin/weekly-plans",
     {
       method: "POST",
       body: planData,
@@ -414,7 +372,6 @@ export async function createAdminWeeklyPlan(planData) {
 // PROJECT REQUESTS
 // ========================================
 
-// GET: Fetch all project requests
 export async function getProjectRequests(statusFilter) {
   const query = statusFilter
     ? `?status=${encodeURIComponent(statusFilter)}`
@@ -430,7 +387,6 @@ export async function getProjectRequests(statusFilter) {
   );
 }
 
-// GET: Fetch requests submitted by current user
 export async function getMyProjectRequests() {
   const response = await apiRequest(
     "/api/project-requests/my"
@@ -442,7 +398,6 @@ export async function getMyProjectRequests() {
   );
 }
 
-// POST: Submit a new project request
 export async function createProjectRequest(requestData) {
   const response = await apiRequest(
     "/api/project-requests",
@@ -458,7 +413,6 @@ export async function createProjectRequest(requestData) {
   );
 }
 
-// PATCH: Accept or reject a project request
 export async function reviewProjectRequest(
   requestId,
   status
@@ -481,7 +435,6 @@ export async function reviewProjectRequest(
 // PROJECT MESSAGES
 // ========================================
 
-// GET: Fetch messages for a project request
 export async function getProjectMessages(requestId) {
   const response = await apiRequest(
     `/api/project-requests/${requestId}/messages`
@@ -493,7 +446,6 @@ export async function getProjectMessages(requestId) {
   );
 }
 
-// POST: Send a message for a project request
 export async function sendProjectMessage(
   requestId,
   message

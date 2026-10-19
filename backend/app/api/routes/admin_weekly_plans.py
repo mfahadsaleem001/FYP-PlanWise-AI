@@ -1,10 +1,11 @@
+
 from fastapi import APIRouter, Depends, HTTPException, Query, status
 from sqlalchemy.orm import Session
 
 from app.core.dependencies import require_admin
 from app.database.connection import get_db
 from app.models.user import User
-from app.schemas.task import WeeklyPlanCreate, WeeklyPlanResponse
+from app.schemas.weekly_plan import WeeklyPlanCreate, WeeklyPlanResponse
 from app.services.weekly_plan_service import (
     create_weekly_plan,
     get_weekly_plans,
@@ -14,6 +15,7 @@ router = APIRouter(
     prefix="/admin/weekly-plans",
     tags=["Admin - Weekly Plans"],
 )
+
 
 @router.post(
     "",

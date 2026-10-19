@@ -6,7 +6,6 @@ import AdminUsers from "../pages/admin/AdminUsers";
 import AdminEmployees from "../pages/admin/AdminEmployees";
 import AdminProjects from "../pages/admin/AdminProjects";
 import AdminProjectRequests from "../pages/admin/AdminProjectRequests";
-import AdminTasks from "../pages/admin/AdminTasks";
 import AdminModels from "../pages/admin/AdminModels";
 import AdminActivity from "../pages/admin/AdminActivity";
 import AdminNotifications from "../pages/admin/AdminNotifications";
@@ -55,14 +54,6 @@ function AdminRoutes() {
     return (
       <AdminLayout>
         <AdminProjectRequests />
-      </AdminLayout>
-    );
-  }
-
-  if (path === "/admin/tasks") {
-    return (
-      <AdminLayout>
-        <AdminTasks />
       </AdminLayout>
     );
   }

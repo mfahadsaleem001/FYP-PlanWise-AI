@@ -1,14 +1,13 @@
-from datetime import datetime, time, timedelta
 
-from sqlalchemy import func, select
+from datetime import datetime, timedelta
+
+from sqlalchemy import select
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
 from app.models.project import Project
-from app.models.task import Task
-from app.models.task_weekly_plan import TaskWeeklyPlan
 from app.models.weekly_plan import WeeklyPlan
-from app.schemas.task import WeeklyPlanCreate
+from app.schemas.weekly_plan import WeeklyPlanCreate
 
 
 INACTIVE_PROJECT_STATUSES = {
@@ -17,12 +16,6 @@ INACTIVE_PROJECT_STATUSES = {
     "canceled",
     "archived",
     "deleted",
-}
-
-COMPLETED_TASK_STATUSES = {
-    "completed",
-    "cancelled",
-    "canceled",
 }
 
 
@@ -36,31 +29,6 @@ def _weekly_plan_to_dict(plan: WeeklyPlan) -> dict:
         "created_at": plan.created_at,
         "updated_at": plan.updated_at,
     }
-
-
-def _ensure_task_weekly_link(
-    db: Session,
-    task: Task,
-    weekly_plan_id: int,
-    admin_id: int,
-    is_original: bool,
-) -> None:
-    existing_link = db.scalar(
-        select(TaskWeeklyPlan.id).where(
-            TaskWeeklyPlan.task_id == task.id,
-            TaskWeeklyPlan.weekly_plan_id == weekly_plan_id,
-        )
-    )
-
-    if existing_link is None:
-        db.add(
-            TaskWeeklyPlan(
-                task_id=task.id,
-                weekly_plan_id=weekly_plan_id,
-                is_original=is_original,
-                added_by=admin_id,
-            )
-        )
 
 
 def create_weekly_plan(
@@ -110,49 +78,13 @@ def create_weekly_plan(
 
     try:
         db.add(plan)
-        db.flush()
-
-        # Find unfinished tasks that were due before this week begins.
-        week_start_datetime = datetime.combine(week_start, time.min)
-
-        overdue_tasks = db.scalars(
-            select(Task).where(
-                Task.project_id == project.id,
-                Task.due_date < week_start_datetime,
-                Task.weekly_plan_id.is_not(None),
-                func.lower(Task.status).not_in(
-                    COMPLETED_TASK_STATUSES
-                ),
-            )
-        ).all()
-
-        for task in overdue_tasks:
-            # Preserve the task's original weekly-plan history.
-            _ensure_task_weekly_link(
-                db=db,
-                task=task,
-                weekly_plan_id=task.weekly_plan_id,
-                admin_id=admin_id,
-                is_original=True,
-            )
-
-            # Link the existing task to the newly created week.
-            # The task itself is not duplicated.
-            _ensure_task_weekly_link(
-                db=db,
-                task=task,
-                weekly_plan_id=plan.id,
-                admin_id=admin_id,
-                is_original=False,
-            )
-
         db.commit()
         db.refresh(plan)
 
     except IntegrityError as exc:
         db.rollback()
         raise ValueError(
-            "A weekly plan or task-week link already exists."
+            "A weekly plan already exists for this project and week."
         ) from exc
 
     except Exception:

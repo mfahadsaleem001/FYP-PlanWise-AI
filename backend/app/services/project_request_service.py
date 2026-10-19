@@ -3,6 +3,7 @@ from datetime import datetime, timezone
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
+from app.models.project import Project
 from app.models.project_request import ProjectRequest
 from app.schemas.project_request import (
     ProjectRequestCreate,
@@ -70,11 +71,36 @@ def review_project_request(
     if project_request.status == "accepted":
         raise ValueError("Accepted requests cannot be reviewed again")
 
-    project_request.status = review_data.status
-    project_request.reviewed_by = reviewer_id
-    project_request.reviewed_at = datetime.now(timezone.utc)
+    try:
+        if review_data.status == "accepted":
+            # Prevent duplicate projects for the same request.
+            existing_project = db.scalar(
+                select(Project).where(
+                    Project.owner_id == project_request.owner_id,
+                    Project.name == project_request.name,
+                    Project.description == project_request.description,
+                    Project.project_type == project_request.project_type,
+                )
+            )
 
-    db.commit()
-    db.refresh(project_request)
+            if existing_project is None:
+                project = Project(
+                    name=project_request.name,
+                    description=project_request.description,
+                    project_type=project_request.project_type,
+                    owner_id=project_request.owner_id,
+                )
+                db.add(project)
 
-    return project_request
+        project_request.status = review_data.status
+        project_request.reviewed_by = reviewer_id
+        project_request.reviewed_at = datetime.now(timezone.utc)
+
+        db.commit()
+        db.refresh(project_request)
+
+        return project_request
+
+    except Exception:
+        db.rollback()
+        raise

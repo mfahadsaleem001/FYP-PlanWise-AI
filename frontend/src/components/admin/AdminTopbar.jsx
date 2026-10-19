@@ -5,7 +5,6 @@ import {
   Users,
   FolderKanban,
   UserCog,
-  ListChecks,
   Activity,
   Settings,
   ClipboardCheck,
@@ -50,7 +49,8 @@ function AdminTopbar() {
       category: "Page",
       icon: UserCog,
       path: "/admin/employees",
-      keywords: "employees employee resources developers availability workload",
+      keywords:
+        "employees employee resources developers availability workload",
     },
 
     {
@@ -60,15 +60,6 @@ function AdminTopbar() {
       icon: ClipboardCheck,
       path: "/admin/project-requests",
       keywords: "requests project request development pending review",
-    },
-
-    {
-      title: "Tasks & Assignments",
-      description: "Manage project tasks and assignments",
-      category: "Page",
-      icon: ListChecks,
-      path: "/admin/tasks",
-      keywords: "tasks task assignments assigned work",
     },
 
     {
@@ -157,7 +148,8 @@ function AdminTopbar() {
       category: "Project",
       icon: FolderKanban,
       path: "/admin/projects",
-      keywords: "e commerce ecommerce platform web application development",
+      keywords:
+        "e commerce ecommerce platform web application development",
     },
 
     {
@@ -278,65 +270,8 @@ function AdminTopbar() {
       category: "Employee",
       icon: UserCog,
       path: "/admin/employees",
-      keywords: "bilal hassan frontend developer unavailable react typescript",
-    },
-
-    // =====================================================
-    // TASKS
-    // =====================================================
-
-    {
-      title: "Build Authentication API",
-      description: "E-Commerce Platform • Ali Raza",
-      category: "Task",
-      icon: ListChecks,
-      path: "/admin/tasks",
-      keywords: "authentication api backend ali raza ecommerce high in progress",
-    },
-
-    {
-      title: "Create Product Management UI",
-      description: "E-Commerce Platform • Ahmed Ali",
-      category: "Task",
-      icon: ListChecks,
-      path: "/admin/tasks",
-      keywords: "product management ui frontend ahmed ali assigned",
-    },
-
-    {
-      title: "API Testing & Validation",
-      description: "E-Commerce Platform • Sara Ahmed",
-      category: "Task",
-      icon: ListChecks,
-      path: "/admin/tasks",
-      keywords: "api testing validation qa sara ahmed pending",
-    },
-
-    {
-      title: "Recommendation Pipeline",
-      description: "AI Recommendation Engine • Usman Tariq",
-      category: "Task",
-      icon: ListChecks,
-      path: "/admin/tasks",
-      keywords: "recommendation pipeline ai ml usman tariq high",
-    },
-
-    {
-      title: "Mobile App Wireframes",
-      description: "Customer Mobile App • Mariam Iqbal",
-      category: "Task",
-      icon: ListChecks,
-      path: "/admin/tasks",
-      keywords: "mobile app wireframes ui ux mariam completed",
-    },
-
-    {
-      title: "Dashboard Analytics",
-      description: "Business Analytics Portal • Hamza Khan",
-      category: "Task",
-      icon: ListChecks,
-      path: "/admin/tasks",
-      keywords: "dashboard analytics business portal hamza completed",
+      keywords:
+        "bilal hassan frontend developer unavailable react typescript",
     },
   ];
 
@@ -344,9 +279,7 @@ function AdminTopbar() {
   // FILTER RESULTS
   // =====================================================
 
-  const normalizedQuery = searchQuery
-    .trim()
-    .toLowerCase();
+  const normalizedQuery = searchQuery.trim().toLowerCase();
 
   const filteredResults =
     normalizedQuery.length === 0
@@ -376,10 +309,7 @@ function AdminTopbar() {
       }
     };
 
-    document.addEventListener(
-      "mousedown",
-      handleOutsideClick
-    );
+    document.addEventListener("mousedown", handleOutsideClick);
 
     return () => {
       document.removeEventListener(
@@ -402,45 +332,26 @@ function AdminTopbar() {
 
   return (
     <header className="admin-topbar">
-
-      {/* ==================================================
-          LEFT
-      ================================================== */}
+      {/* LEFT */}
 
       <div className="admin-topbar-left">
-
         <div className="admin-topbar-heading">
+          <span>PLANWISE AI</span>
 
-          <span>
-            PLANWISE AI
-          </span>
-
-          <h2>
-            Administration Workspace
-          </h2>
-
+          <h2>Administration Workspace</h2>
         </div>
-
       </div>
 
-
-      {/* ==================================================
-          RIGHT
-      ================================================== */}
+      {/* RIGHT */}
 
       <div className="admin-topbar-right">
-
-        {/* ==================================================
-            SEARCH
-        ================================================== */}
+        {/* SEARCH */}
 
         <div
           className="admin-search-wrapper"
           ref={searchRef}
         >
-
           <div className="admin-search">
-
             <Search size={16} />
 
             <input
@@ -448,37 +359,26 @@ function AdminTopbar() {
               placeholder="Search..."
               value={searchQuery}
               onChange={(event) => {
-                setSearchQuery(
-                  event.target.value
-                );
+                setSearchQuery(event.target.value);
 
                 setShowResults(
                   event.target.value.trim().length > 0
                 );
               }}
               onFocus={() => {
-                if (
-                  searchQuery.trim().length > 0
-                ) {
+                if (searchQuery.trim().length > 0) {
                   setShowResults(true);
                 }
               }}
             />
-
           </div>
 
-
-          {/* ==================================================
-              SEARCH RESULTS
-          ================================================== */}
+          {/* SEARCH RESULTS */}
 
           {showResults && (
             <div className="admin-search-results">
-
               {filteredResults.length > 0 ? (
-
                 <>
-
                   <div className="admin-search-results-header">
                     Search Results
                   </div>
@@ -486,76 +386,47 @@ function AdminTopbar() {
                   {filteredResults
                     .slice(0, 8)
                     .map((item, index) => {
-
-                      const Icon =
-                        item.icon;
+                      const Icon = item.icon;
 
                       return (
                         <button
                           key={`${item.category}-${item.title}-${index}`}
                           className="admin-search-result"
                           onClick={() =>
-                            handleResultClick(
-                              item.path
-                            )
+                            handleResultClick(item.path)
                           }
                         >
-
                           <div className="admin-search-result-icon">
                             <Icon size={16} />
                           </div>
 
                           <div className="admin-search-result-content">
+                            <strong>{item.title}</strong>
 
-                            <strong>
-                              {item.title}
-                            </strong>
-
-                            <span>
-                              {item.description}
-                            </span>
-
+                            <span>{item.description}</span>
                           </div>
 
-                          <small>
-                            {item.category}
-                          </small>
-
+                          <small>{item.category}</small>
                         </button>
                       );
                     })}
-
                 </>
-
               ) : (
-
                 <div className="admin-search-no-results">
-
                   <Search size={18} />
 
                   <div>
-                    <strong>
-                      No results found
-                    </strong>
+                    <strong>No results found</strong>
 
-                    <span>
-                      Try another keyword
-                    </span>
+                    <span>Try another keyword</span>
                   </div>
-
                 </div>
-
               )}
-
             </div>
           )}
-
         </div>
 
-
-        {/* ==================================================
-            NOTIFICATIONS
-        ================================================== */}
+        {/* NOTIFICATIONS */}
 
         <button
           className="admin-topbar-icon-btn"
@@ -564,33 +435,20 @@ function AdminTopbar() {
           <Bell size={18} />
         </button>
 
-
-        {/* ==================================================
-            ADMIN USER
-        ================================================== */}
+        {/* ADMIN USER */}
 
         <div className="admin-topbar-user">
-
           <div className="admin-topbar-avatar">
             <ShieldCheck size={17} />
           </div>
 
           <div className="admin-topbar-user-info">
+            <strong>Administrator</strong>
 
-            <strong>
-              Administrator
-            </strong>
-
-            <span>
-              System Admin
-            </span>
-
+            <span>System Admin</span>
           </div>
-
         </div>
-
       </div>
-
     </header>
   );
 }
