@@ -1217,3 +1217,1162 @@
     animation: none;
   }
 }
+
+/* ============================================================
+   MODEL MONITORING — NEW FEATURES
+   Append below the existing AdminModels.css
+   ============================================================ */
+
+/* Demo environment label */
+
+.admin-models-demo-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  margin-top: 12px;
+  padding: 6px 9px;
+  border: 1px solid #e5d7bb;
+  border-radius: 6px;
+  background: #faf4e7;
+  color: #80633a;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.admin-models-demo-label svg {
+  flex-shrink: 0;
+}
+
+.admin-models-header-actions {
+  flex-wrap: wrap;
+}
+
+.admin-models-refresh-btn:disabled,
+.admin-models-export-btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Header buttons */
+
+.admin-models-export-btn,
+.admin-models-compare-btn,
+.admin-models-filter-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  min-height: 38px;
+  padding: 0 13px;
+  border: 1px solid #d8c8b9;
+  border-radius: 7px;
+  background: #fff;
+  color: #711d3c;
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.admin-models-export-btn:hover,
+.admin-models-compare-btn:hover:not(:disabled),
+.admin-models-filter-toggle:hover {
+  border-color: #711d3c;
+  background: #711d3c;
+  color: #fff;
+  transform: translateY(-1px);
+}
+
+.admin-models-compare-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.admin-models-inventory-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+/* Supporting text under section headings */
+
+.admin-models-section-heading > div > p {
+  margin: 5px 0 0;
+  color: #8d7b7b;
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+/* ============================================================
+   PERFORMANCE CHARTS
+   ============================================================ */
+
+.admin-models-chart-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+  margin-top: 15px;
+}
+
+.admin-models-chart-card {
+  min-width: 0;
+  padding: 18px;
+  border: 1px solid #e2d7ca;
+  border-radius: 9px;
+  background: #fff;
+  box-shadow: 0 3px 12px rgba(44, 27, 27, 0.03);
+}
+
+.admin-models-chart-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 22px;
+}
+
+.admin-models-chart-heading h3 {
+  margin: 0;
+  color: #2c1b1b;
+  font-size: 13px;
+  font-weight: 750;
+}
+
+.admin-models-chart-heading p {
+  margin: 5px 0 0;
+  color: #8d7b7b;
+  font-size: 10px;
+  line-height: 1.5;
+}
+
+.admin-models-chart-heading > svg {
+  flex-shrink: 0;
+  color: #b18a52;
+}
+
+.admin-models-bar-chart {
+  display: flex;
+  flex-direction: column;
+  gap: 19px;
+}
+
+.admin-models-bar-row {
+  display: grid;
+  grid-template-columns: minmax(95px, 1.1fr) minmax(60px, 1fr) 48px;
+  align-items: center;
+  gap: 10px;
+}
+
+.admin-models-bar-row > span {
+  overflow: hidden;
+  color: #6f5d5d;
+  font-size: 10px;
+  line-height: 1.4;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.admin-models-bar-track {
+  width: 100%;
+  height: 7px;
+  overflow: hidden;
+  border-radius: 20px;
+  background: #eee5dc;
+}
+
+.admin-models-bar-track > span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #711d3c, #b18a52);
+  transition: width 0.5s ease;
+}
+
+.admin-models-bar-row > strong {
+  color: #2c1b1b;
+  font-size: 10px;
+  font-weight: 750;
+  text-align: right;
+  white-space: nowrap;
+}
+
+.admin-models-chart-total {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 21px;
+  padding-top: 13px;
+  border-top: 1px solid #eee5dc;
+}
+
+.admin-models-chart-total span {
+  color: #806f6f;
+  font-size: 10px;
+}
+
+.admin-models-chart-total strong {
+  color: #711d3c;
+  font-size: 13px;
+}
+
+/* ============================================================
+   SEARCH, FILTERS AND SORTING
+   ============================================================ */
+
+.admin-models-toolbar {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 14px;
+  padding: 13px;
+  border: 1px solid #e2d7ca;
+  border-radius: 9px;
+  background: #fff;
+}
+
+.admin-models-search {
+  display: flex;
+  align-items: center;
+  flex: 1 1 260px;
+  gap: 9px;
+  min-width: 180px;
+  min-height: 38px;
+  padding: 0 11px;
+  border: 1px solid #e2d7ca;
+  border-radius: 6px;
+  background: #fdfbf8;
+  color: #927f7f;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.admin-models-search:focus-within {
+  border-color: #9c526b;
+  box-shadow: 0 0 0 3px rgba(113, 29, 60, 0.08);
+}
+
+.admin-models-search > svg {
+  flex-shrink: 0;
+}
+
+.admin-models-search input {
+  width: 100%;
+  min-width: 0;
+  padding: 9px 0;
+  outline: none;
+  border: none;
+  background: transparent;
+  color: #2c1b1b;
+  font: inherit;
+  font-size: 11px;
+}
+
+.admin-models-search input::placeholder {
+  color: #a29393;
+}
+
+.admin-models-search input::-webkit-search-cancel-button {
+  display: none;
+}
+
+.admin-models-search > button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 25px;
+  height: 25px;
+  flex-shrink: 0;
+  border: none;
+  border-radius: 5px;
+  background: transparent;
+  color: #806f6f;
+  cursor: pointer;
+}
+
+.admin-models-search > button:hover {
+  background: #f0e5e9;
+  color: #711d3c;
+}
+
+.admin-models-filter-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 125px;
+}
+
+.admin-models-filter-field > span {
+  color: #806f6f;
+  font-size: 9px;
+  font-weight: 700;
+}
+
+.admin-models-filter-field select {
+  width: 100%;
+  min-height: 36px;
+  padding: 0 27px 0 9px;
+  outline: none;
+  border: 1px solid #e2d7ca;
+  border-radius: 6px;
+  background: #fff;
+  color: #5e5050;
+  font-family: inherit;
+  font-size: 10px;
+  cursor: pointer;
+}
+
+.admin-models-filter-field select:focus {
+  border-color: #9c526b;
+  box-shadow: 0 0 0 3px rgba(113, 29, 60, 0.08);
+}
+
+.admin-models-clear-filters {
+  align-self: flex-end;
+  min-height: 36px;
+  padding: 0 9px;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  background: transparent;
+  color: #8c5367;
+  font-size: 10px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.admin-models-clear-filters:hover {
+  border-color: #e5d7dc;
+  background: #f8f0f3;
+  color: #711d3c;
+}
+
+.admin-models-sort-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 0;
+  border: none;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  font-size: inherit;
+  font-weight: inherit;
+  letter-spacing: inherit;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.admin-models-sort-btn:hover {
+  color: #711d3c;
+}
+
+.admin-models-sort-btn svg {
+  flex-shrink: 0;
+  color: #b18a52;
+}
+
+.admin-models-checkbox-heading {
+  font-size: 9px;
+}
+
+/* Selected models for comparison */
+
+.admin-models-selection-info {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 12px;
+  padding: 10px 12px;
+  border: 1px solid #e4d2da;
+  border-radius: 7px;
+  background: #faf3f6;
+}
+
+.admin-models-selection-info > span {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  color: #711d3c;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.admin-models-selection-info button {
+  border: none;
+  background: transparent;
+  color: #8b4b63;
+  font-size: 10px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.admin-models-selection-info button:hover {
+  text-decoration: underline;
+}
+
+.admin-models-table input[type="checkbox"] {
+  width: 15px;
+  height: 15px;
+  accent-color: #711d3c;
+  cursor: pointer;
+}
+
+.admin-models-table input[type="checkbox"]:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+
+/* ============================================================
+   PAGINATION
+   ============================================================ */
+
+.admin-models-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding: 13px 4px 0;
+}
+
+.admin-models-pagination > span,
+.admin-models-pagination > div > span {
+  color: #8d7b7b;
+  font-size: 10px;
+}
+
+.admin-models-pagination > div {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.admin-models-pagination button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 31px;
+  height: 31px;
+  border: 1px solid #e2d7ca;
+  border-radius: 6px;
+  background: #fff;
+  color: #711d3c;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.admin-models-pagination button:hover:not(:disabled) {
+  border-color: #711d3c;
+  background: #711d3c;
+  color: #fff;
+}
+
+.admin-models-pagination button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* ============================================================
+   EMPTY SEARCH RESULTS
+   ============================================================ */
+
+.admin-models-empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  min-height: 200px;
+  padding: 28px 15px;
+  text-align: center;
+}
+
+.admin-models-empty-state > svg {
+  color: #b18a52;
+}
+
+.admin-models-empty-state > strong {
+  color: #2c1b1b;
+  font-size: 13px;
+}
+
+.admin-models-empty-state > p {
+  margin: 0;
+  color: #8d7b7b;
+  font-size: 11px;
+}
+
+.admin-models-empty-state > button {
+  margin-top: 5px;
+  padding: 8px 12px;
+  border: 1px solid #d8c8b9;
+  border-radius: 6px;
+  background: #fff;
+  color: #711d3c;
+  font-size: 10px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.admin-models-empty-state > button:hover {
+  background: #711d3c;
+  color: #fff;
+}
+
+/* ============================================================
+   LAST UPDATED NOTICE
+   ============================================================ */
+
+.admin-models-alert > div:last-child > small {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-top: 8px;
+  color: #927c62;
+  font-size: 9px;
+}
+
+/* ============================================================
+   VERSION INFORMATION
+   ============================================================ */
+
+.admin-models-version-history {
+  margin-top: 16px;
+  padding: 15px;
+  border: 1px solid #e5dbd2;
+  border-radius: 7px;
+  background: #fdfbf8;
+}
+
+.admin-models-version-history h3 {
+  margin: 0;
+  color: #2c1b1b;
+  font-size: 12px;
+  font-weight: 750;
+}
+
+.admin-models-version-history > div:first-child > p {
+  margin: 5px 0 14px;
+  color: #8d7b7b;
+  font-size: 10px;
+  line-height: 1.5;
+}
+
+.admin-models-version-entry {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 11px;
+  border: 1px solid #e8ded4;
+  border-radius: 6px;
+  background: #fff;
+}
+
+.admin-models-version-dot {
+  width: 9px;
+  height: 9px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: #4d966a;
+  box-shadow: 0 0 0 4px #eaf4ee;
+}
+
+.admin-models-version-entry > div {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+  flex: 1;
+}
+
+.admin-models-version-entry > div > strong {
+  color: #2c1b1b;
+  font-size: 11px;
+}
+
+.admin-models-version-entry > div > span {
+  color: #8d7b7b;
+  font-size: 9px;
+}
+
+.admin-models-version-current {
+  flex-shrink: 0;
+  padding: 5px 7px;
+  border-radius: 5px;
+  background: #eaf4ee;
+  color: #397555;
+  font-size: 9px;
+  font-weight: 750;
+}
+
+/* ============================================================
+   RETRAINING CONFIRMATION
+   ============================================================ */
+
+.admin-models-confirm-overlay {
+  z-index: 1010;
+}
+
+.admin-models-confirm-dialog {
+  width: min(420px, 100%);
+  padding: 25px;
+  border: 1px solid #e2d7ca;
+  border-radius: 11px;
+  background: #fff;
+  box-shadow: 0 20px 60px rgba(44, 27, 27, 0.22);
+  animation: adminModelsModalIn 0.2s ease both;
+}
+
+.admin-models-confirm-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 45px;
+  height: 45px;
+  margin-bottom: 17px;
+  border-radius: 9px;
+  background: #f0e5e9;
+  color: #711d3c;
+}
+
+.admin-models-confirm-dialog h2 {
+  margin: 0;
+  color: #2c1b1b;
+  font-size: 18px;
+  font-weight: 750;
+}
+
+.admin-models-confirm-dialog > p {
+  margin: 10px 0 22px;
+  color: #766565;
+  font-size: 11px;
+  line-height: 1.7;
+}
+
+.admin-models-confirm-dialog > p strong {
+  color: #2c1b1b;
+}
+
+.admin-models-confirm-actions {
+  display: flex;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 9px;
+}
+
+/* ============================================================
+   COMPARISON MODAL
+   ============================================================ */
+
+.admin-models-comparison-modal {
+  width: min(1000px, 100%);
+}
+
+.admin-models-comparison-table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+  border: 1px solid #e5dbd2;
+  border-radius: 7px;
+}
+
+.admin-models-comparison-table {
+  width: 100%;
+  min-width: 540px;
+  border-collapse: collapse;
+}
+
+.admin-models-comparison-table th,
+.admin-models-comparison-table td {
+  padding: 12px;
+  border-bottom: 1px solid #eee5dc;
+  text-align: left;
+  font-size: 10px;
+  line-height: 1.5;
+}
+
+.admin-models-comparison-table th {
+  background: #fbf8f4;
+  color: #711d3c;
+  font-weight: 750;
+}
+
+.admin-models-comparison-table th:first-child {
+  min-width: 115px;
+}
+
+.admin-models-comparison-table td {
+  color: #655656;
+}
+
+.admin-models-comparison-table td:first-child {
+  background: #fdfbf8;
+  color: #806f6f;
+  font-weight: 700;
+}
+
+.admin-models-comparison-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.admin-models-comparison-table tbody tr:hover td {
+  background: #fcf7f9;
+}
+
+.admin-models-comparison-note {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin-top: 14px;
+  padding: 11px;
+  border: 1px solid #e7d9bd;
+  border-radius: 6px;
+  background: #fcf8ef;
+  color: #806e5b;
+  font-size: 10px;
+  line-height: 1.5;
+}
+
+.admin-models-comparison-note svg {
+  flex-shrink: 0;
+  margin-top: 1px;
+  color: #92703c;
+}
+
+/* ============================================================
+   KEYBOARD ACCESSIBILITY
+   ============================================================ */
+
+.admin-models button:focus-visible,
+.admin-models input:focus-visible,
+.admin-models select:focus-visible,
+.admin-models-modal button:focus-visible,
+.admin-models-confirm-dialog button:focus-visible {
+  outline: 2px solid #b18a52;
+  outline-offset: 3px;
+}
+
+.admin-models-modal-overlay {
+  overflow-y: auto;
+}
+
+.admin-models-modal-close:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* ============================================================
+   DARK MODE — NEW FEATURES
+   ============================================================ */
+
+:root[data-theme="dark"] .admin-models-demo-label {
+  border-color: #5b4b32;
+  background: #342d21;
+  color: #ddc18e;
+}
+
+:root[data-theme="dark"] .admin-models-export-btn,
+:root[data-theme="dark"] .admin-models-compare-btn,
+:root[data-theme="dark"] .admin-models-filter-toggle,
+:root[data-theme="dark"] .admin-models-pagination button,
+:root[data-theme="dark"] .admin-models-empty-state > button {
+  border-color: #544344;
+  background: #2d2222;
+  color: #d8c9bf;
+}
+
+:root[data-theme="dark"] .admin-models-export-btn:hover,
+:root[data-theme="dark"] .admin-models-compare-btn:hover:not(:disabled),
+:root[data-theme="dark"] .admin-models-filter-toggle:hover,
+:root[data-theme="dark"] .admin-models-pagination button:hover:not(:disabled),
+:root[data-theme="dark"] .admin-models-empty-state > button:hover {
+  border-color: #a64d6c;
+  background: #711d3c;
+  color: #fff;
+}
+
+:root[data-theme="dark"] .admin-models-chart-card,
+:root[data-theme="dark"] .admin-models-toolbar,
+:root[data-theme="dark"] .admin-models-confirm-dialog {
+  border-color: #493839;
+  background: #2d2222;
+}
+
+:root[data-theme="dark"] .admin-models-chart-heading h3,
+:root[data-theme="dark"] .admin-models-bar-row > strong,
+:root[data-theme="dark"] .admin-models-empty-state > strong,
+:root[data-theme="dark"] .admin-models-version-history h3,
+:root[data-theme="dark"] .admin-models-version-entry > div > strong,
+:root[data-theme="dark"] .admin-models-confirm-dialog h2,
+:root[data-theme="dark"] .admin-models-confirm-dialog > p strong {
+  color: #f2e9df;
+}
+
+:root[data-theme="dark"] .admin-models-chart-heading p,
+:root[data-theme="dark"] .admin-models-bar-row > span,
+:root[data-theme="dark"] .admin-models-chart-total span,
+:root[data-theme="dark"] .admin-models-pagination > span,
+:root[data-theme="dark"] .admin-models-pagination > div > span,
+:root[data-theme="dark"] .admin-models-empty-state > p,
+:root[data-theme="dark"] .admin-models-version-history > div:first-child > p,
+:root[data-theme="dark"] .admin-models-version-entry > div > span,
+:root[data-theme="dark"] .admin-models-confirm-dialog > p {
+  color: #b7a9a1;
+}
+
+:root[data-theme="dark"] .admin-models-bar-track {
+  background: #493c3c;
+}
+
+:root[data-theme="dark"] .admin-models-chart-total,
+:root[data-theme="dark"] .admin-models-comparison-table th,
+:root[data-theme="dark"] .admin-models-comparison-table td,
+:root[data-theme="dark"] .admin-models-version-history,
+:root[data-theme="dark"] .admin-models-version-entry {
+  border-color: #493839;
+}
+
+:root[data-theme="dark"] .admin-models-chart-total strong {
+  color: #d99caf;
+}
+
+:root[data-theme="dark"] .admin-models-search,
+:root[data-theme="dark"] .admin-models-filter-field select {
+  border-color: #544344;
+  background: #352929;
+  color: #e4d7cf;
+}
+
+:root[data-theme="dark"] .admin-models-search input {
+  color: #f2e9df;
+}
+
+:root[data-theme="dark"] .admin-models-search input::placeholder {
+  color: #a89992;
+}
+
+:root[data-theme="dark"] .admin-models-filter-field > span {
+  color: #b7a9a1;
+}
+
+:root[data-theme="dark"] .admin-models-clear-filters {
+  color: #d99caf;
+}
+
+:root[data-theme="dark"] .admin-models-clear-filters:hover {
+  border-color: #60404d;
+  background: #432832;
+}
+
+:root[data-theme="dark"] .admin-models-selection-info {
+  border-color: #60404d;
+  background: #35252b;
+}
+
+:root[data-theme="dark"] .admin-models-selection-info > span,
+:root[data-theme="dark"] .admin-models-selection-info button {
+  color: #e0a9bc;
+}
+
+:root[data-theme="dark"] .admin-models-empty-state > button {
+  background: #352929;
+}
+
+:root[data-theme="dark"] .admin-models-version-history {
+  background: #352929;
+}
+
+:root[data-theme="dark"] .admin-models-version-entry {
+  background: #2d2222;
+}
+
+:root[data-theme="dark"] .admin-models-confirm-icon {
+  background: #432832;
+  color: #d99caf;
+}
+
+:root[data-theme="dark"] .admin-models-comparison-table-wrapper {
+  border-color: #493839;
+}
+
+:root[data-theme="dark"] .admin-models-comparison-table th {
+  background: #352929;
+  color: #d99caf;
+}
+
+:root[data-theme="dark"] .admin-models-comparison-table td {
+  color: #c0b1aa;
+}
+
+:root[data-theme="dark"] .admin-models-comparison-table td:first-child {
+  background: #352929;
+  color: #d8c9bf;
+}
+
+:root[data-theme="dark"] .admin-models-comparison-table tbody tr:hover td {
+  background: #3a292f;
+}
+
+:root[data-theme="dark"] .admin-models-comparison-note {
+  border-color: #5b4b32;
+  background: #342d21;
+  color: #d0b98e;
+}
+
+/* ============================================================
+   RESPONSIVE — NEW FEATURES
+   ============================================================ */
+
+@media (max-width: 1000px) {
+  .admin-models-chart-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-models-toolbar {
+    align-items: stretch;
+  }
+
+  .admin-models-search {
+    flex-basis: 100%;
+  }
+
+  .admin-models-filter-field {
+    flex: 1 1 140px;
+  }
+
+  .admin-models-clear-filters {
+    align-self: flex-end;
+  }
+}
+
+@media (max-width: 700px) {
+  .admin-models-header-actions {
+    align-items: stretch;
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .admin-models-header-actions > button {
+    width: 100%;
+  }
+
+  .admin-models-inventory-actions {
+    justify-content: flex-start;
+  }
+
+  .admin-models-section-heading {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .admin-models-toolbar {
+    padding: 10px;
+  }
+
+  .admin-models-filter-field {
+    flex-basis: calc(50% - 6px);
+    min-width: 0;
+  }
+
+  .admin-models-clear-filters {
+    align-self: center;
+  }
+
+  .admin-models-pagination {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .admin-models-chart-card {
+    padding: 14px;
+  }
+
+  .admin-models-bar-row {
+    grid-template-columns: minmax(75px, 1fr) minmax(50px, 1fr) 44px;
+    gap: 7px;
+  }
+
+  .admin-models-confirm-dialog {
+    padding: 20px;
+  }
+}
+
+@media (max-width: 420px) {
+  .admin-models-filter-field {
+    flex-basis: 100%;
+  }
+
+  .admin-models-bar-row > span {
+    font-size: 9px;
+  }
+
+  .admin-models-bar-row > strong {
+    font-size: 9px;
+  }
+
+  .admin-models-inventory-actions {
+    width: 100%;
+  }
+
+  .admin-models-inventory-actions > button {
+    flex: 1;
+  }
+
+  .admin-models-selection-info {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .admin-models-version-entry {
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+
+  .admin-models-version-entry > div {
+    flex-basis: calc(100% - 25px);
+  }
+}
+
+/* ============================================================
+   REDUCED MOTION
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  .admin-models-bar-track > span {
+    transition: none;
+  }
+}
+
+
+
+/* Modal footer button alignment */
+.admin-models-modal-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  width: 100%;
+}
+
+/* Close button: burgundy all the time */
+.admin-models-modal-footer .admin-models-modal-secondary {
+  margin-right: auto;
+  background: #711d3c;
+  color: #ffffff;
+  border: 1px solid #711d3c;
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.admin-models-modal-footer .admin-models-modal-secondary:hover:not(:disabled) {
+  background: #58142d;
+  border-color: #58142d;
+}
+
+/* Primary action: burgundy only on hover */
+.admin-models-modal-footer .admin-models-modal-primary {
+  margin-left: auto;
+  background: transparent;
+  color: #711d3c;
+  border: 1px solid #711d3c;
+  transition:
+    background 0.2s ease,
+    color 0.2s ease,
+    border-color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.admin-models-modal-footer .admin-models-modal-primary:hover:not(:disabled) {
+  background: #711d3c;
+  color: #ffffff;
+  border-color: #711d3c;
+}
+
+.admin-models-modal-footer button:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+/* Keep buttons separated on smaller screens */
+@media (max-width: 520px) {
+  .admin-models-modal-footer {
+    gap: 12px;
+  }
+
+  .admin-models-modal-footer button {
+    flex: 1;
+    justify-content: center;
+  }
+}
+
+
+/* Fix: View and Compare modal buttons getting cut off */
+.admin-models-modal {
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.admin-models-modal-body {
+  min-height: 0;
+  overflow-y: auto;
+}
+
+.admin-models-modal-footer {
+  flex-shrink: 0;
+  padding-bottom: 20px;
+  margin-top: auto;
+  position: relative;
+  z-index: 2;
+}
+
+/* Only View and Compare modal scrollbars */
+.admin-models-modal-body {
+  scrollbar-width: thin;
+  scrollbar-color: transparent transparent;
+}
+
+.admin-models-modal-body::-webkit-scrollbar {
+  width: 6px;
+}
+
+.admin-models-modal-body::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.admin-models-modal-body::-webkit-scrollbar-thumb {
+  background: transparent;
+  border: none;
+}
+
+
+/* Subtle scrollbar for View and Compare modals */
+.admin-models-modal-body {
+  scrollbar-width: thin !important;
+  scrollbar-color: #e9e1d8 transparent !important;
+}
+
+.admin-models-modal-body::-webkit-scrollbar {
+  display: block !important;
+  width: 6px !important;
+}
+
+.admin-models-modal-body::-webkit-scrollbar-track {
+  background: transparent !important;
+}
+
+.admin-models-modal-body::-webkit-scrollbar-thumb {
+  background: #e9e1d8 !important;
+  border-radius: 10px;
+  border: 1px solid transparent;
+  background-clip: content-box;
+}
