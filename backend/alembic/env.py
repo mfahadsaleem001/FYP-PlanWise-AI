@@ -7,6 +7,7 @@ from app.database.base import Base
 from app.models.user import User
 from app.models.project import Project
 from app.models.project_request import ProjectRequest
+from app.models.model_training_run import ModelTrainingRun
 
 
 # Alembic Config object
